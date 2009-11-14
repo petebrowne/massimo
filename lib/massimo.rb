@@ -1,4 +1,5 @@
-$:.unshift File.dirname(__FILE__) # For use/testing when no gem is installed
+libdir = File.dirname(__FILE__)
+$LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 
 # Rubygems
 require "rubygems"
