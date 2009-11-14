@@ -4,6 +4,7 @@
 ## TEXTMATE
 *.tmproj
 tmtags
+.eprj
 
 ## EMACS
 *~
@@ -17,5 +18,7 @@ tmtags
 coverage
 rdoc
 pkg
+doc
+.yardoc
 
 ## PROJECT::SPECIFIC

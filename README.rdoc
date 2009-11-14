@@ -1,6 +1,6 @@
-= massimo
+= Massimo
 
-Description goes here.
+Massimo is a static website generator.
 
 == Note on Patches/Pull Requests
  
