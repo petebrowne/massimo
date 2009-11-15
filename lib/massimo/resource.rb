@@ -1,9 +1,10 @@
 module Massimo
   class Resource
-    attr_reader :source_path, :body
+    attr_reader :site, :source_path, :body
     
     # Creates a new page associated with the given file path.
-    def initialize(source_path)
+    def initialize(site, source_path)
+      @site        = site
       @source_path = ::Pathname.new(source_path)
       # read and parse the source file
       self.read_source!

@@ -1,6 +1,5 @@
 module Massimo
   class Page < View
-    attr_reader :site
     
     # Creates a new page associated with the given file path.
     def initialize(site, source_path)

@@ -2,7 +2,6 @@ require "rubygems"
 require "test/unit"
 require "redgreen"
 require "shoulda"
-require "rr"
 require "assertions"
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
@@ -10,7 +9,6 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require "massimo"
 
 class Test::Unit::TestCase
-  include RR::Adapters::TestUnit
   include Assertions
 
   #
@@ -38,13 +36,13 @@ class Test::Unit::TestCase
   
   #
   def page(*path)
-    @page ||= Massimo::Page.new site, source_dir("pages", *path)
+    @page ||= Massimo::Page.new(site, source_dir("pages", *path))
   end
   
   #
   def view(*path)
     return @view if defined?(@view)
     meta_data = path.extract_options!
-    @view = Massimo::View.new(source_dir("views", *path), meta_data)
+    @view = Massimo::View.new(site, source_dir("views", *path), meta_data)
   end
 end

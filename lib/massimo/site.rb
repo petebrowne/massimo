@@ -7,7 +7,7 @@ module Massimo
       :server_port => "1984"
     }.freeze
     
-    attr_accessor :options
+    attr_accessor :options, :template
     
     # 
     def initialize(options = {})
@@ -26,6 +26,8 @@ module Massimo
       
       # finally merge the given options.
       @options.merge!(options)
+      
+      @template = Massimo::Template.new(self.helper_modules)
     end
     
     # Processes all the Pages, Stylesheets, and Javascripts and outputs
@@ -60,7 +62,7 @@ module Massimo
     # Finds a view by the given name
     def find_view(name, meta_data = {})
       view_path = Dir.glob(self.views_dir("#{name}.*")).first
-      view_path && Massimo::View.new(view_path, meta_data)
+      view_path && Massimo::View.new(self, view_path, meta_data)
     end
     
     # Finds a view then renders it with the given locals
@@ -136,6 +138,14 @@ module Massimo
         
         # now add the directory back to the path
         files.collect { |file| File.join(type_dir, file) }
+      end
+      
+      # Find all the helper modules
+      def helper_modules
+        Dir.glob(source_dir("helpers", "*.rb")).collect do |file|
+          require file
+          File.basename(file).gsub(File.extname(file), "").classify.constantize
+        end
       end
   end
 end

@@ -80,6 +80,10 @@ class TestSite < Test::Unit::TestCase
     assert_equal_arrays page_paths, source_page_paths
   end
   
+  should "add helpers from the helpers directory" do
+    assert_equal site.render_view("with_helper"), "<p>working</p>\n"
+  end
+  
   context "processing Sites" do
     
     should "process each page in the pages dir" do

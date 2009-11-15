@@ -1,13 +1,5 @@
 module Massimo
   class Javascript < Resource
-    attr_reader :site
-    
-    #
-    def initialize(site, source_path)
-      @site = site
-      super(source_path)
-    end
-    
     # Concat the Javascript using Sprockets, then minify using JSmin
     def render
       secretary = Sprockets::Secretary.new(

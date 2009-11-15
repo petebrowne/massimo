@@ -1,13 +1,5 @@
 module Massimo
   class Stylesheet < Resource
-    attr_reader :site
-    
-    #
-    def initialize(site, source_path)
-      @site = site
-      super(source_path)
-    end
-    
     # Render the css based on the type of resource
     def render
       case resource_type.to_sym

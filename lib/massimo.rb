@@ -9,11 +9,13 @@ require "pathname"
 require "fileutils"
 require "yaml"
 require "active_support"
+require "sinatra_more"
 require "sprockets"
 require "jsmin"
 
 # Internal
 require "massimo/filters"
+require "massimo/template"
 require "massimo/site"
 require "massimo/resource"
 require "massimo/view"

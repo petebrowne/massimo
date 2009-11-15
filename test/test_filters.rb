@@ -4,7 +4,7 @@ class TestFilters < Test::Unit::TestCase
   
   context "adding filters" do
     should "be able to manipulate data through a filter" do
-      Massimo::Filters.register(:upcase) do |data, locals|
+      Massimo::Filters.register(:upcase) do |data, template, locals|
         data.to_s.upcase
       end
       assert_equal Massimo.filter("case", :upcase), "CASE"
@@ -12,7 +12,7 @@ class TestFilters < Test::Unit::TestCase
   
     should "be able to find a filter with multiple extensions" do
       extensions = %w{ext_a ext_b ext_c}
-      Massimo::Filters.register(extensions) do |data, locals|
+      Massimo::Filters.register(extensions) do |data, template, locals|
         data.to_s.downcase
       end
       extensions.each do |ext|
@@ -48,19 +48,25 @@ class TestFilters < Test::Unit::TestCase
     end
   
     should "have support for filtering haml" do
-      assert_equal Massimo.filter("%h1= title", :haml, :title => "Header"), "<h1>Header</h1>\n"
+      assert_equal Massimo.filter("%h1= title", :haml, nil, :title => "Header"), "<h1>Header</h1>\n"
+    end
+  
+    should "have support for using helpers in haml" do
+      assert_nothing_raised do
+        Massimo.filter(%{= stylesheet_link_tag "main"}, :haml, site.template)
+      end
     end
   
     should "have support for filtering erb" do
-      assert_equal Massimo.filter("<h1><%= title %></h1>", :erb, :title => "Header"), "<h1>Header</h1>"
+      assert_equal Massimo.filter("<h1><%= title %></h1>", :erb, nil, :title => "Header"), "<h1>Header</h1>"
     end
   
     should "have support for filtering textile" do
-      assert_equal Massimo.filter("h1. <%= title %>", :textile, :title => "Header"), "<h1>Header</h1>"
+      assert_equal Massimo.filter("h1. <%= title %>", :textile, nil, :title => "Header"), "<h1>Header</h1>"
     end
   
     should "have support for filtering markdown" do
-      assert_equal Massimo.filter("# <%= title %>", :markdown, :title => "Header"), "<h1>Header</h1>\n"
+      assert_equal Massimo.filter("# <%= title %>", :markdown, nil, :title => "Header"), "<h1>Header</h1>\n"
     end
   end
   

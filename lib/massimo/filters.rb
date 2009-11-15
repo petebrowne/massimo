@@ -2,10 +2,10 @@ module Massimo
   
   # Manipulates the given data by passing it through the filter
   # associated with the given extension.
-  def self.filter(data, extension, locals = {})
+  def self.filter(data, extension, template = nil, locals = {})
     filter = Massimo::Filters.find(extension)
     if filter && filter.respond_to?(:call)
-      filter.call(data, locals)
+      filter.call(data, template || Massimo::Template.new, locals)
     else
       data.to_s
     end
