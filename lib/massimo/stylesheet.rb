@@ -29,7 +29,7 @@ module Massimo
       # Determine the output file path
       def output_path
         @output_path ||= Pathname.new(@source_path.to_s.
-          sub(@site.source_dir, @site.output_dir). # move to output dir
+          sub(self.site.source_dir, self.site.output_dir). # move to output dir
           sub(/#{@source_path.extname}$/, ".css")) # replace extension with .css
       end
     

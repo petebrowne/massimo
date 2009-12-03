@@ -8,6 +8,7 @@ require "rubygems"
 require "pathname"
 require "fileutils"
 require "yaml"
+require "singleton"
 require "active_support"
 require "sinatra_more"
 require "sprockets"
@@ -15,6 +16,7 @@ require "jsmin"
 
 # Internal
 require "massimo/filters"
+require "massimo/helpers"
 require "massimo/template"
 require "massimo/site"
 require "massimo/resource"
@@ -28,6 +30,12 @@ module Massimo # :nodoc:
   
   MissingResource = Class.new(StandardError)
   InvalidResource = Class.new(StandardError)
+  
+  #
+  def self.Site(options = {})
+    return @site if defined?(@site) && options.empty?
+    @site = Massimo::Site.instance.setup(options)
+  end
 end
 
 # Filters

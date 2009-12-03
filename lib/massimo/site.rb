@@ -1,5 +1,7 @@
 module Massimo
   class Site
+    include Singleton
+    
     # Default options. Overriden by values in config.yml or command-line opts.
     DEFAULT_OPTIONS = {
       :source      => ".",
@@ -10,7 +12,7 @@ module Massimo
     attr_accessor :options, :template
     
     # 
-    def initialize(options = {})
+    def setup(options = {})
       options.symbolize_keys!
       
       # start with default options
@@ -27,7 +29,10 @@ module Massimo
       # finally merge the given options.
       @options.merge!(options)
       
-      @template = Massimo::Template.new(self.helper_modules)
+      # Create the basic template
+      @template ||= Massimo::Template.new(self.helper_modules)
+      
+      self
     end
     
     # Processes all the Pages, Stylesheets, and Javascripts and outputs
@@ -42,27 +47,27 @@ module Massimo
     def pages(reload = false)
       return @pages if defined?(@pages) && !reload
       page_paths = self.find_files_in(:pages, Massimo::Filters.extensions)
-      @pages = page_paths.collect { |path| Massimo::Page.new(self, path) }
+      @pages = page_paths.collect { |path| Massimo::Page.new(path) }
     end
     
     # Get all the Stylesheets in the stylesheets dir.
     def stylesheets(reload = false)
       return @stylesheets if defined?(@stylesheets) && !reload
       stylesheet_paths = self.find_files_in(:stylesheets, [ :css, :sass, :less ])
-      @stylesheets = stylesheet_paths.collect { |path| Massimo::Stylesheet.new(self, path) }
+      @stylesheets = stylesheet_paths.collect { |path| Massimo::Stylesheet.new(path) }
     end
     
     # Get all the Javascripts in the javascripts dir.
     def javascripts(reload = false)
       return @javascripts if defined?(@javascripts) && !reload
       javascript_paths = self.find_files_in(:javascripts, [ :js ])
-      @javascripts = javascript_paths.collect { |path| Massimo::Javascript.new(self, path) }
+      @javascripts = javascript_paths.collect { |path| Massimo::Javascript.new(path) }
     end
     
     # Finds a view by the given name
     def find_view(name, meta_data = {})
       view_path = Dir.glob(self.views_dir("#{name}.*")).first
-      view_path && Massimo::View.new(self, view_path, meta_data)
+      view_path && Massimo::View.new(view_path, meta_data)
     end
     
     # Finds a view then renders it with the given locals

@@ -3,7 +3,7 @@ module Massimo
     # Concat the Javascript using Sprockets, then minify using JSmin
     def render
       secretary = Sprockets::Secretary.new(
-        :assert_root  => @site.output_dir,
+        :assert_root  => self.site.output_dir,
         :source_files => [ @source_path.to_s ]
       )
       # install assets if necessary
@@ -27,7 +27,7 @@ module Massimo
       # Determine the output file path
       def output_path
         @output_path ||= Pathname.new(@source_path.to_s.
-          sub(@site.source_dir, @site.output_dir)) # move to output dir
+          sub(self.site.source_dir, self.site.output_dir)) # move to output dir
       end
   end
 end

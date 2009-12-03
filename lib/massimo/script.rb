@@ -12,7 +12,7 @@ module Massimo
       self.parse!
       
       # Initialize the Site
-      self.site    = Massimo::Site.new(self.options)
+      self.site    = Massimo::Site(self.options)
       self.options = self.site.options
       self.source  = self.options[:source]
       self.output  = self.options[:output]

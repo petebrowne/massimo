@@ -13,6 +13,7 @@ begin
     gem.add_development_dependency "shoulda",           ">= 2.10.2"
     gem.add_development_dependency "yard",              ">= 0.2.3.5"
     gem.add_dependency             "activesupport",     ">= 2.3.4"
+    gem.add_dependency             "sinatra_more",      ">= 0.3.18"
     gem.add_dependency             "directory_watcher", ">= 1.3.1"
     gem.add_dependency             "sprockets",         ">= 1.0.2"
     gem.add_dependency             "jsmin",             ">= 1.0.1"

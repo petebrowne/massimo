@@ -7,6 +7,7 @@ module Massimo
       include ::SinatraMore::FormHelpers
       include ::SinatraMore::FormatHelpers
     end
+    include ::Massimo::Helpers
     
     #
     def initialize(modules = [])
@@ -19,6 +20,11 @@ module Massimo
         self.class.send(:define_method, key) { value }
       end
       self.send(:binding)
+    end
+    
+    # Gets the site instance
+    def site
+      Massimo::Site()
     end
   end
 end

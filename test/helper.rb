@@ -1,11 +1,14 @@
+$LOAD_PATH.unshift(File.dirname(__FILE__))
+
 require "rubygems"
 require "test/unit"
-require "redgreen"
 require "shoulda"
+# begin require "redgreen"; rescue LoadError; end
+begin require "turn"; rescue LoadError; end
 require "assertions"
 
+# Load Massimo
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
-$LOAD_PATH.unshift(File.dirname(__FILE__))
 require "massimo"
 
 class Test::Unit::TestCase
@@ -28,7 +31,7 @@ class Test::Unit::TestCase
   
   #
   def site(options = {})
-    @site ||= Massimo::Site.new({
+    @site = Massimo::Site({
       :source => source_dir,
       :output => output_dir
     }.merge(options))
@@ -36,13 +39,13 @@ class Test::Unit::TestCase
   
   #
   def page(*path)
-    @page ||= Massimo::Page.new(site, source_dir("pages", *path))
+    @page ||= Massimo::Page.new(source_dir("pages", *path))
   end
   
   #
   def view(*path)
     return @view if defined?(@view)
     meta_data = path.extract_options!
-    @view = Massimo::View.new(site, source_dir("views", *path), meta_data)
+    @view = Massimo::View.new(source_dir("views", *path), meta_data)
   end
 end

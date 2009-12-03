@@ -2,13 +2,12 @@ module Massimo
   class Page < View
     
     # Creates a new page associated with the given file path.
-    def initialize(site, source_path)
-      @site        = site
+    def initialize(source_path)
       @source_path = ::Pathname.new(source_path)
       @meta_data   = {
         :title     => @source_path.basename.to_s.gsub(@source_path.extname, "").titleize, 
         :extension => ".html",
-        :url       => @source_path.to_s.gsub(@site.pages_dir, "").gsub(@source_path.extname, "").dasherize,
+        :url       => @source_path.to_s.gsub(self.site.pages_dir, "").gsub(@source_path.extname, "").dasherize,
         :layout    => "application"
       }
       # read and parse the source file
@@ -56,7 +55,7 @@ module Massimo
       
       # Determine the output file path
       def output_path
-        path  = @site.output_dir(self.url)
+        path  = self.site.output_dir(self.url)
         path << if index? or not html?
             self.extension unless path.match(/#{self.extension}$/)
           else
@@ -82,7 +81,7 @@ module Massimo
       
       # Finds the Layout View if it exists
       def find_layout
-        @layout_view ||= @site.find_view("layouts/#{self.layout}")
+        @layout_view ||= self.site.find_view("layouts/#{self.layout}")
       end
   end
 end

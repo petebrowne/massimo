@@ -20,5 +20,6 @@ rdoc
 pkg
 doc
 .yardoc
+.sass-cache
 
 ## PROJECT::SPECIFIC

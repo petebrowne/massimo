@@ -3,14 +3,14 @@ module Massimo
     attr_reader :meta_data
     
     # Creates a new page associated with the given file path.
-    def initialize(site, source_path, meta_data = {})
+    def initialize(source_path, meta_data = {})
       @meta_data = meta_data
-      super(site, source_path)
+      super(source_path)
     end
     
     # Renders the page using the registered filters.
     def render(locals = {})
-      Massimo.filter(@body, self.resource_type, @site.template, @meta_data.merge(locals))
+      Massimo.filter(@body, self.resource_type, self.site.template, @meta_data.merge(locals))
     end
     
     protected
