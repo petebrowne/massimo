@@ -16,8 +16,8 @@ module Massimo
     
     # Override render to wrap the result in the layout
     def render(with_layout = true)
-      if with_layout
-        self.find_layout.render(:page => self)
+      if with_layout && layout = self.find_layout
+        layout.render(:page => self)
       else
         super()
       end
@@ -81,7 +81,7 @@ module Massimo
       
       # Finds the Layout View if it exists
       def find_layout
-        @layout_view ||= self.site.find_view("layouts/#{self.layout}")
+        @layout_view ||= self.site.find_view("layouts/#{self.layout}") unless self.layout == false
       end
   end
 end

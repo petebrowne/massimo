@@ -69,7 +69,7 @@ class TestSite < Test::Unit::TestCase
       
       should "process each page in the pages dir" do
         output_page_paths = Dir.glob(output_dir("**", "*.{html,rss}"))
-        assert_equal output_page_paths.length, source_page_paths.length
+        assert_equal source_page_paths.length, output_page_paths.length
       end
     
       should "process each stylesheet file in the stylesheets dir" do
@@ -94,7 +94,7 @@ class TestSite < Test::Unit::TestCase
   end
 
   should "skip pages set in the :skip_pages option (as an Array)" do
-    skip_pages = %w{about_us.erb feed.haml index.erb}
+    skip_pages = %w{about_us.erb erb.erb erb_with_layout.erb feed.haml haml.haml html.html index.erb markdown.markdown}
     page_paths = Massimo::Site(:source => source_dir, :skip_pages => skip_pages).pages(true).collect { |page| page.source_path.basename }
     assert_equal_arrays [
       "with_extension.haml",
@@ -111,7 +111,7 @@ class TestSite < Test::Unit::TestCase
   should "skip pages set in the :skip_pages option (as a Proc)" do
     site_options = { :source => source_dir, :skip_pages => lambda { |file| file.include?("with") } }
     page_paths = Massimo::Site(site_options).pages(true).collect { |page| page.source_path.basename }
-    assert_equal_arrays %w{about_us.erb feed.haml index.erb}, page_paths
+    assert_equal_arrays %w{about_us.erb erb.erb feed.haml haml.haml html.html index.erb markdown.markdown}, page_paths
   end
     
 end

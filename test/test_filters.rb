@@ -22,7 +22,7 @@ class TestFilters < Test::Unit::TestCase
   end
   
   should "get filter extensions" do
-    assert_equal Massimo::Filters.extensions.map(&:to_s).sort, %w{erb haml markdown md rb ruby textile}
+    assert_equal Massimo::Filters.extensions.map(&:to_s).sort, %w{erb haml html markdown md php rb ruby textile}
   end
   
   context "filter support" do

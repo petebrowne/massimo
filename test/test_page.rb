@@ -28,7 +28,7 @@ class TestPage < Test::Unit::TestCase
     
       should "be able to write new meta_data dynamically" do
         @page.new_tag = "test"
-        assert_equal @page.new_tag, "test"
+        assert_equal "test", @page.new_tag
       end
     end
   
@@ -36,7 +36,7 @@ class TestPage < Test::Unit::TestCase
       setup { page("with_title.haml") }
     
       should "fetch the title from the meta_data" do
-        assert_equal @page.title, "A Title"
+        assert_equal "A Title", @page.title
       end
     end
   
@@ -44,7 +44,7 @@ class TestPage < Test::Unit::TestCase
       setup { page("without_title.haml") }
     
       should "create the title from the file name" do
-        assert_equal @page.title, "Without Title"
+        assert_equal "Without Title", @page.title
       end
     end
   
@@ -52,7 +52,7 @@ class TestPage < Test::Unit::TestCase
       setup { page("with_extension.haml") }
     
       should "fetch the extension from the meta_data" do
-        assert_equal @page.extension, ".rss"
+        assert_equal ".rss", @page.extension
       end
     end
   
@@ -60,7 +60,7 @@ class TestPage < Test::Unit::TestCase
       setup { page("without_extension.haml") }
     
       should "default to .html" do
-        assert_equal @page.extension, ".html"
+        assert_equal ".html", @page.extension
       end
     end
   
@@ -68,7 +68,7 @@ class TestPage < Test::Unit::TestCase
       setup { page("with_url.haml") }
     
       should "fetch the extension from the meta_data" do
-        assert_equal @page.url, "/page-with-url"
+        assert_equal "/page-with-url", @page.url
       end
     end
   
@@ -76,26 +76,38 @@ class TestPage < Test::Unit::TestCase
       setup { page("without_url.haml") }
     
       should "default to .html" do
-        assert_equal @page.url, "/without-url"
+        assert_equal "/without-url", @page.url
       end
     end
     
     should "fetch the body from the page file" do
-      assert_equal page("about_us.erb").body, %{<h1>An <%= "HTML" %> Page</h1>}
+      assert_equal %{<h1>An <%= "HTML" %> Page</h1>}, page("about_us.erb").body
     end
   
     context "rendering Pages" do
       context "without layouts" do
       
-        should "filter the content from the page file correctly" do
-          assert_equal page("about_us.erb").render(false), "<h1>An HTML Page</h1>"
+        should "render erb content from the page file correctly" do
+          assert_equal "<h1>ERB</h1>", page("erb.erb").render
+        end
+        
+        should "render haml content from the page file correctly" do
+          assert_equal "<h1>Haml</h1>\n", page("haml.haml").render
+        end
+        
+        should "render markdown content from the page file correctly" do
+          assert_equal "<h1>Markdown</h1>\n", page("markdown.markdown").render
+        end
+        
+        should "render html content from the page file correctly" do
+          assert_equal "<h1>HTML</h1>", page("html.html").render
         end
       
       end
       context "with layouts" do
       
         should "filter the content from the page file correctly" do
-          assert_equal page("index.erb").render, "<div><h1>Home</h1></div>\n"
+          assert_equal "<div><h1>ERB With Layout</h1></div>\n", page("erb_with_layout.erb").render
         end
       end
     end
