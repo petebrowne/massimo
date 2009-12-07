@@ -13,11 +13,12 @@ require "active_support"
 require "sinatra_more"
 require "sprockets"
 require "jsmin"
+require "tilt"
 
 # Internal
-require "massimo/filters"
 require "massimo/helpers"
-require "massimo/template"
+require "massimo/template_scope"
+require "massimo/templates"
 require "massimo/site"
 require "massimo/resource"
 require "massimo/view"
@@ -37,10 +38,3 @@ module Massimo # :nodoc:
     @site = Massimo::Site.instance.setup(options)
   end
 end
-
-# Filters
-require "massimo/filters/erb"
-require "massimo/filters/haml"
-require "massimo/filters/ruby"
-require "massimo/filters/textile"
-require "massimo/filters/markdown"

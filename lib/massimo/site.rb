@@ -9,7 +9,7 @@ module Massimo
       :server_port => "1984"
     }.freeze
     
-    attr_accessor :options, :template
+    attr_accessor :options, :template_scope
     
     # 
     def setup(options = {})
@@ -30,7 +30,7 @@ module Massimo
       @options.merge!(options)
       
       # Create the basic template
-      @template ||= Massimo::Template.new(self.helper_modules)
+      @template_scope ||= Massimo::TemplateScope.new(self.helper_modules)
       
       self
     end
@@ -46,7 +46,7 @@ module Massimo
     # Get all the Pages in the pages dir.
     def pages(reload = false)
       return @pages if defined?(@pages) && !reload
-      page_paths = self.find_files_in(:pages, Massimo::Filters.extensions)
+      page_paths = self.find_files_in(:pages)
       @pages = page_paths.collect { |path| Massimo::Page.new(path) }
     end
     
@@ -109,7 +109,7 @@ module Massimo
     protected
     
       #
-      def find_files_in(type, extensions)
+      def find_files_in(type, extensions = nil)
         # the directory where these files will be found
         type_dir = self.send("#{type}_dir")
         
@@ -119,7 +119,8 @@ module Massimo
         unless files && files.is_a?(Array)
           # If files aren't listed in the options, get them
           # from the given block
-          files = Dir.glob(File.join(type_dir, "**", "*.{#{extensions.join(",")}}"))
+          glob  = (extensions.nil? || extensions.empty?) ? "*" : "*.{#{extensions.join(",")}}"
+          files = Dir.glob(File.join(type_dir, "**", glob))
           
           # normalize the files by removing the directory from the path
           files.collect! { |file| file.gsub("#{type_dir}/", "") }
