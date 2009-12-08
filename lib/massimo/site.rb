@@ -83,38 +83,27 @@ module Massimo
     
     # The path to the pages directory.
     def pages_dir(*path)
-      if pages_path = @options[:pages_path]
-        File.join(pages_path, *path)
-      else
-        self.source_dir("pages", *path)
-      end
+      dir_for(:pages, *path)
     end
     
     # The path to the views directory.
     def views_dir(*path)
-      if views_path = @options[:views_path]
-        File.join(views_path, *path)
-      else
-        self.source_dir("views", *path)
-      end
+      dir_for(:views, *path)
     end
     
     # The path to the stylesheets directory.
     def stylesheets_dir(*path)
-      if stylesheets_path = @options[:stylesheets_path]
-        File.join(stylesheets_path, *path)
-      else
-        self.source_dir("stylesheets", *path)
-      end
+      dir_for(:stylesheets, *path)
     end
     
     # The path to the javascripts directory.
     def javascripts_dir(*path)
-      if javascripts_path = @options[:javascripts_path]
-        File.join(javascripts_path, *path)
-      else
-        self.source_dir("javascripts", *path)
-      end
+      dir_for(:javascripts, *path)
+    end
+    
+    # The path to the javascripts directory.
+    def helpers_dir(*path)
+      dir_for(:helpers, *path)
     end
     
     # The path to the output dir
@@ -124,10 +113,23 @@ module Massimo
     
     protected
     
-      #
+      # Get the directory to the given resource type (pages, views, etc.).
+      # If the path has been manually set in the options, you will get that
+      # path. Otherwise you will get the path relative to the source directory.
+      def dir_for(type, *path)
+        if type_path = @options["#{type}_path".to_sym]
+          File.join(type_path, *path)
+        else
+          self.source_dir(type.to_s, *path)
+        end
+      end
+    
+      # Find all the files in the given resouce type's directory, optionally
+      # selecting only those with the given extensions. This will return
+      # an array with the full path to the files.
       def find_files_in(type, extensions = nil)
         # the directory where these files will be found
-        type_dir = self.send("#{type}_dir")
+        type_dir = self.dir_for(type)
         
         # By default get the file list from the options
         files = @options[type]
@@ -164,7 +166,7 @@ module Massimo
       
       # Find all the helper modules
       def helper_modules
-        Dir.glob(source_dir("helpers", "*.rb")).collect do |file|
+        Dir.glob(helpers_dir("*.rb")).collect do |file|
           require file
           File.basename(file).gsub(File.extname(file), "").classify.constantize
         end
