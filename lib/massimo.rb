@@ -17,7 +17,6 @@ require "tilt"
 
 # Internal
 require "massimo/helpers"
-require "massimo/template_scope"
 require "massimo/templates"
 require "massimo/site"
 require "massimo/resource"

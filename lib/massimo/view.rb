@@ -9,9 +9,9 @@ module Massimo
     end
     
     # Renders the page using the registered filters.
-    def render(locals = {})
-      template = ::Tilt.new(@source_path.basename.to_s) { @body }
-      template.render(self.site.template_scope, @meta_data.merge(locals))
+    def render(locals = {}, &block)
+      template = ::Tilt.new(self.file_name) { @body }
+      template.render(self.site.helpers, @meta_data.merge(locals), &block)
     end
     
     protected

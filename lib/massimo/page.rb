@@ -17,7 +17,7 @@ module Massimo
     # Override render to wrap the result in the layout
     def render(with_layout = true)
       if with_layout && layout = self.find_layout
-        layout.render(:page => self)
+        layout.render { self.render(false) }
       else
         super()
       end

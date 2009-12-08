@@ -14,6 +14,11 @@ module Massimo
       @body
     end
     
+    # Gets the resource's file name.
+    def file_name
+      @source_path.basename.to_s
+    end
+    
     # Gets the resource type, based on the file's extension
     def resource_type
       @source_path.extname.to_s[1..-1]

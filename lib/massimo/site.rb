@@ -9,7 +9,7 @@ module Massimo
       :server_port => "1984"
     }.freeze
     
-    attr_accessor :options, :template_scope
+    attr_accessor :options, :helpers
     
     # 
     def setup(options = {})
@@ -30,7 +30,7 @@ module Massimo
       @options.merge!(options)
       
       # Create the basic template
-      @template_scope ||= Massimo::TemplateScope.new(self.helper_modules)
+      @helpers ||= Massimo::Helpers.new(self.helper_modules)
       
       self
     end
@@ -71,9 +71,9 @@ module Massimo
     end
     
     # Finds a view then renders it with the given locals
-    def render_view(name, locals = {})
+    def render_view(name, locals = {}, &block)
       view = self.find_view(name)
-      view && view.render(locals)
+      view && view.render(locals, &block)
     end
     
     # The path to the source dir
@@ -83,22 +83,38 @@ module Massimo
     
     # The path to the pages directory.
     def pages_dir(*path)
-      self.source_dir("pages", *path)
+      if pages_path = @options[:pages_path]
+        File.join(pages_path, *path)
+      else
+        self.source_dir("pages", *path)
+      end
     end
     
     # The path to the views directory.
     def views_dir(*path)
-      self.source_dir("views", *path)
+      if views_path = @options[:views_path]
+        File.join(views_path, *path)
+      else
+        self.source_dir("views", *path)
+      end
     end
     
     # The path to the stylesheets directory.
     def stylesheets_dir(*path)
-      self.source_dir("stylesheets", *path)
+      if stylesheets_path = @options[:stylesheets_path]
+        File.join(stylesheets_path, *path)
+      else
+        self.source_dir("stylesheets", *path)
+      end
     end
     
     # The path to the javascripts directory.
     def javascripts_dir(*path)
-      self.source_dir("javascripts", *path)
+      if javascripts_path = @options[:javascripts_path]
+        File.join(javascripts_path, *path)
+      else
+        self.source_dir("javascripts", *path)
+      end
     end
     
     # The path to the output dir
