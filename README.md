@@ -4,7 +4,7 @@ Massimo is a full static website generator. While making [Rails](http://rubyonra
 
 * It renders templates and views using [Tilt](http://github.com/rtomayko/tilt)
 * It uses familiar helper methods from [Sinatra::More](http://github.com/nesquena/sinatra_more)
-* It supports custom helper methods like Rails and Sinatra
+* It supports custom helper methods like [Rails](http://rubyonrails.org/) and [Sinatra](http://www.sinatrarb.com/)
 * It concats javascripts using [Sprockets](http://getsprockets.org/)
   and then minifies them using [JSMin](http://github.com/rgrove/jsmin)
 * It renders stylesheets using either [Sass](http://sass-lang.com/) or [Less](http://lesscss.org/)
@@ -23,6 +23,7 @@ A basic Massimo Site looks something like this, though each directory's path can
 
     .
     |-- source
+    |   |
     |   |-- config.yml
     |   |
     |   |-- helpers
