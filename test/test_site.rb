@@ -4,7 +4,7 @@ class TestSite < Test::Unit::TestCase
   
   def source_page_paths
     @source_page_paths ||= Pathname.glob(source_dir("pages", "**", "*")).
-      reject  { |p| p.to_s =~ /\.rtf$/ || p.basename.to_s =~ /^_/ }.
+      reject  { |p| p.basename.to_s =~ /^_/ || File.directory?(p) }.
       collect { |p| p.basename }
   end
   
@@ -94,7 +94,7 @@ class TestSite < Test::Unit::TestCase
   end
 
   should "skip pages set in the :skip_pages option (as an Array)" do
-    skip_pages = %w{about_us.erb erb.erb erb_with_layout.erb feed.haml haml.haml html.html index.erb markdown.markdown}
+    skip_pages = %w{about_us.erb erb.erb erb_with_layout.erb feed.haml posts/first-post.haml haml.haml html.html index.erb markdown.markdown}
     page_paths = Massimo::Site(:source => source_dir, :skip_pages => skip_pages).pages(true).collect { |page| page.source_path.basename }
     assert_equal_arrays [
       "with_extension.haml",
@@ -111,7 +111,7 @@ class TestSite < Test::Unit::TestCase
   should "skip pages set in the :skip_pages option (as a Proc)" do
     site_options = { :source => source_dir, :skip_pages => lambda { |file| file.include?("with") } }
     page_paths = Massimo::Site(site_options).pages(true).collect { |page| page.source_path.basename }
-    assert_equal_arrays %w{about_us.erb erb.erb feed.haml haml.haml html.html index.erb markdown.markdown}, page_paths
+    assert_equal_arrays %w{about_us.erb erb.erb feed.haml first-post.haml haml.haml html.html index.erb markdown.markdown}, page_paths
   end
     
 end

@@ -132,7 +132,7 @@ module Massimo
         type_dir = self.dir_for(type)
         
         # By default get the file list from the options
-        files = @options[type]
+        files = @options[type] && @options[type].dup
         
         unless files && files.is_a?(Array)
           # If files aren't listed in the options, get them
@@ -157,11 +157,15 @@ module Massimo
           end
         end
         
-        # Reject all files that begin with _ (like partials)
+        # Reject all files that begin with _ (like partials) and directories
         files.reject! { |file| File.basename(file) =~ /^_/ }
         
         # now add the directory back to the path
-        files.collect { |file| File.join(type_dir, file) }
+        files.collect! { |file| File.join(type_dir, file) }
+        
+        # And make sure we don't find directories
+        files.reject! { |file| File.directory?(file) }
+        files
       end
       
       # Find all the helper modules

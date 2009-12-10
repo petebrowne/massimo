@@ -10,7 +10,7 @@ module Massimo
     
     #
     def initialize(modules = nil)
-      self.extend(*modules) unless modules.nil?
+      self.extend(*modules) unless modules.nil? || modules.empty?
     end
     
     # Gets the site instance

@@ -107,7 +107,7 @@ class TestPage < Test::Unit::TestCase
       context "with layouts" do
       
         should "filter the content from the page file correctly" do
-          assert_equal "<div><h1>ERB With Layout</h1></div>\n", page("erb_with_layout.erb").render
+          assert_equal "<title>ERB With Layout</title>\n<body><h1>ERB With Layout</h1></body>\n", page("erb_with_layout.erb").render
         end
       end
     end

@@ -80,7 +80,7 @@ Usually this is done through the massimo executable, which is installed with the
 
 ## YAML Front Matter
 
-Pages can contain YAML front matter blocks for either predefined configuration options or custom variables.. The front matter must be the first thing in the file and takes the form of:
+Pages can contain YAML front matter blocks for either predefined configuration options or custom variables. The front matter must be the first thing in the file and takes the form of:
 
     ---
     title: Using YAML Front Matter

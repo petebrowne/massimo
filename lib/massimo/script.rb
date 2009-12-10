@@ -78,7 +78,7 @@ module Massimo
         
         # Make sure the output dir exists
         FileUtils.mkdir_p(output)
-      
+        
         server = WEBrick::HTTPServer.new(
           :Port         => options[:server_port],
           :DocumentRoot => output
@@ -130,9 +130,15 @@ HELP
             options[:watch] = true
           end
         
-          opts.on("--server [PORT]", "Start web server (default port 1984)") do |port|
+          opts.on("--server", "Start web server with default port.") do |port|
+            options[:watch]  = true
             options[:server] = true
-            options[:server_port] = port unless port.nil?
+          end
+          
+          opts.on("--port [PORT]", "Select the port to start the web server on (defaults to 1984)") do |port|
+            options[:watch]       = true
+            options[:server]      = true
+            options[:server_port] = port
           end
         
           opts.on("--version", "Display current version") do
