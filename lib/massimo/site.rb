@@ -29,16 +29,14 @@ module Massimo
       # finally merge the given options.
       @options.merge!(options)
       
-      # Create the basic template
-      @helpers ||= Massimo::Helpers.new(self.helper_modules)
-      require_libs
-      
       self
     end
     
     # Processes all the Pages, Stylesheets, and Javascripts and outputs
     # them to the output dir.
     def process!
+      reload_helpers
+      reload_libs
       pages(true).each(&:process!)
       stylesheets(true).each(&:process!)
       javascripts(true).each(&:process!)
@@ -174,18 +172,31 @@ module Massimo
         files
       end
       
-      # Find all the helper modules
-      def helper_modules
-        Dir.glob(helpers_dir("*.rb")).collect do |file|
-          require file
-          File.basename(file).gsub(File.extname(file), "").classify.constantize
-        end
+      # Reload the Helpers instance with the helper modules
+      def reload_helpers
+        @helpers = Massimo::Helpers.new(self.helper_modules.compact)
       end
       
-      # Require all the files in the source lib dir.
-      def require_libs
-        Dir.glob(lib_dir("**", "*.rb")).each do |file|
-          require file
+      # Find all the helper modules
+      def helper_modules
+        reload_files(Dir.glob(helpers_dir("*.rb")))
+      end
+      
+      # Reload all the files in the source lib dir.
+      def reload_libs
+        reload_files Dir.glob(lib_dir("**", "*.rb"))
+      end
+      
+      #
+      def reload_files(files)
+        files.collect do |file|
+          class_name = File.basename(file).gsub(File.extname(file), "").classify
+          # Unload the constant if it already exists
+          Object.class_eval { remove_const(class_name) if const_defined?(class_name) }
+          # Load the constant
+          load(file)
+          # return the constant
+          class_name.constantize rescue nil
         end
       end
   end

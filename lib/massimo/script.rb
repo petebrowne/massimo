@@ -131,13 +131,10 @@ HELP
           end
         
           opts.on("--server", "Start web server with default port.") do |port|
-            options[:watch]  = true
             options[:server] = true
           end
           
           opts.on("--port [PORT]", "Select the port to start the web server on (defaults to 1984)") do |port|
-            options[:watch]       = true
-            options[:server]      = true
             options[:server_port] = port
           end
         
