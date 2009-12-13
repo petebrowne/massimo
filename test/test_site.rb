@@ -63,6 +63,10 @@ class TestSite < Test::Unit::TestCase
     should "add helpers from the helpers directory" do
       assert_equal "<p>working</p>\n", @site.render_view("with_helper")
     end
+    
+    should "require the lib directory for further customization" do
+      assert_equal "working", @site.new_method
+    end
   
     context "processing Sites" do
       setup { @site.process! }

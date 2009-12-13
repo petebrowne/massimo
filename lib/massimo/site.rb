@@ -101,9 +101,14 @@ module Massimo
       dir_for(:javascripts, *path)
     end
     
-    # The path to the javascripts directory.
+    # The path to the helpers directory.
     def helpers_dir(*path)
       dir_for(:helpers, *path)
+    end
+    
+    # The path to the lib directory.
+    def lib_dir(*path)
+      dir_for(:lib, *path)
     end
     
     # The path to the output dir
@@ -173,6 +178,13 @@ module Massimo
         Dir.glob(helpers_dir("*.rb")).collect do |file|
           require file
           File.basename(file).gsub(File.extname(file), "").classify.constantize
+        end
+      end
+      
+      # Require all the files in the source lib dir.
+      def require_libs
+        Dir.glob(lib_dir("**", "*.rb")).each do |file|
+          require file
         end
       end
   end

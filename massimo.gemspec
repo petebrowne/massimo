@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{massimo}
-  s.version = "0.3.1"
+  s.version = "0.3.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Peter Browne"]
@@ -36,6 +36,7 @@ Gem::Specification.new do |s|
      "lib/massimo/stylesheet.rb",
      "lib/massimo/templates.rb",
      "lib/massimo/view.rb",
+     "massimo.gemspec",
      "test/assertions.rb",
      "test/helper.rb",
      "test/source/config.yml",
@@ -52,6 +53,7 @@ Gem::Specification.new do |s|
      "test/source/pages/html.html",
      "test/source/pages/index.erb",
      "test/source/pages/markdown.markdown",
+     "test/source/pages/posts/first-post.haml",
      "test/source/pages/with_extension.haml",
      "test/source/pages/with_meta_data.haml",
      "test/source/pages/with_title.haml",
