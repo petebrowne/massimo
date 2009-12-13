@@ -31,6 +31,7 @@ module Massimo
       
       # Create the basic template
       @helpers ||= Massimo::Helpers.new(self.helper_modules)
+      require_libs
       
       self
     end
