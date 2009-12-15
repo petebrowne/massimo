@@ -14,8 +14,6 @@ module Massimo
     # 
     def setup(options = {})
       options.symbolize_keys!
-      
-      # start with default options
       @options = DEFAULT_OPTIONS.dup
       
       # get source from options
@@ -26,9 +24,7 @@ module Massimo
       config = YAML.load_file(config_path) if File.exist?(config_path)
       @options.merge!(config.symbolize_keys) if config.is_a?(Hash)
       
-      # finally merge the given options.
       @options.merge!(options)
-      
       self
     end
     

@@ -32,6 +32,7 @@ module Massimo
       return 0
     rescue Exception => e
       message "Massimo Error: #{e.message}"
+      puts e.backtrace
       return 1
     end
     

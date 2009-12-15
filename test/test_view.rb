@@ -1,6 +1,20 @@
 require File.join(File.dirname(__FILE__), "helper")
 
 class TestView < Test::Unit::TestCase
+  context "A View with options" do
+    setup do
+      site(:haml => { :format => :xhtml })
+      view("without_locals.haml")
+    end
+    
+    should "render through Tilt with the Site's options for the resource type" do
+      tilt = {}
+      stub(tilt).render
+      mock(Tilt).new(@view.file_name, nil, :format => :xhtml) { tilt }
+      @view.render
+    end
+  end
+  
   context "View without locals" do
     setup { view("without_locals.haml") }
     

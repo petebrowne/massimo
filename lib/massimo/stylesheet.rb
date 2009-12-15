@@ -7,7 +7,9 @@ module Massimo
         @body.to_s
       when :sass
         require "sass" unless defined? ::Sass
-        Sass::Files.tree_for(@source_path, { :css_filename => self.output_path }).render
+        options = self.site.options[:sass] || {}
+        options.merge!(:css_filename => self.output_path)
+        Sass::Files.tree_for(@source_path, options).render
       when :less
         require "less" unless defined? ::Less
         Less.parse(@body)

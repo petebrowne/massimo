@@ -6,6 +6,7 @@ require "shoulda"
 # begin require "redgreen"; rescue LoadError; end
 begin require "turn"; rescue LoadError; end
 require "assertions"
+require "rr"
 
 # Load Massimo
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
@@ -13,6 +14,7 @@ require "massimo"
 
 class Test::Unit::TestCase
   include Assertions
+  include RR::Adapters::TestUnit
 
   #
   def source_dir(*subdirs)

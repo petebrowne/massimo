@@ -42,5 +42,10 @@ module Massimo
           raise Massimo::InvalidResource
         end
       end
+      
+      # Get the options from the Site's config for the current resource type.
+      def options_for_resource_type
+        self.site.options[self.resource_type.to_sym]
+      end
   end
 end
