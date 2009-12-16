@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{massimo}
-  s.version = "0.3.5"
+  s.version = "0.3.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Peter Browne"]
-  s.date = %q{2009-12-15}
+  s.date = %q{2009-12-16}
   s.default_executable = %q{massimo}
   s.description = %q{Massimo builds HTML, Javascript, and CSS Files from your source.}
   s.email = %q{peter@peterbrowne.net}

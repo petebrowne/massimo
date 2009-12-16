@@ -31,8 +31,7 @@ module Massimo
       message "Massimo is done watching you.", :newline => true
       return 0
     rescue Exception => e
-      message "Massimo Error: #{e.message}"
-      puts e.backtrace
+      report_error(e)
       return 1
     end
     
@@ -56,8 +55,12 @@ module Massimo
         watcher.add_observer do |*args|
           time   = Time.now.strftime("%H:%M:%S %m/%d/%y")
           change = args.size == 1 ? "1 file" : "#{args.size} files"
-          message "(#{time}) Massimo has rebuilt your site, #{change} changed."
-          site.process!
+          begin
+            site.process!
+            message "(#{time}) Massimo has rebuilt your site, #{change} changed."
+          rescue Exception => e
+            report_error(e)
+          end
         end
         
         watcher.start
@@ -109,6 +112,14 @@ module Massimo
       # Determine if the server should be started.
       def server?
         options[:server] == true
+      end
+      
+      # Report the given error. This could eventually log the backtrace.
+      def report_error(error = nil)
+        error ||= $!
+        massimo "Massimo Error:", :newline => true
+        puts error.message
+        puts error.backtrace
       end
     
       # Parse the options
