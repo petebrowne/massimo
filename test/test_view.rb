@@ -10,7 +10,7 @@ class TestView < Test::Unit::TestCase
     should "render through Tilt with the Site's options for the resource type" do
       tilt = {}
       stub(tilt).render
-      mock(Tilt).new(@view.file_name, nil, :format => :xhtml) { tilt }
+      mock(Tilt).new(@view.file_name, 1, :format => :xhtml) { tilt }
       @view.render
     end
   end

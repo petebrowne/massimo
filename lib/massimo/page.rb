@@ -1,5 +1,6 @@
 module Massimo
   class Page < View
+    META_SEP = %r/\A---\s*(?:\r\n|\n)?\z/ # :nodoc:
     
     # Creates a new page associated with the given file path.
     def initialize(source_path)
@@ -44,13 +45,32 @@ module Massimo
       # Reads the source page file, and populates the meta_data and
       # body attributes.
       def read_source!
-        source = super
-        if meta_data_match = source.match(/^---\s*(.*)---\s*(.*)$/m)
-          @meta_data.merge! YAML.load(meta_data_match[1]).symbolize_keys
-          @body = meta_data_match[2]
-        else
-          @body = source
+        # read the source file and setup some values for the loop
+        source       = super()
+        @line        = nil
+        front_matter = false
+        meta_data    = ""
+        body         = ""
+        
+        # Loop through source to get meta data
+        # and the correct line number for the body
+        source.each_with_index do |line, line_num|
+          if line =~ META_SEP
+            front_matter = !front_matter
+          else
+            if front_matter
+              meta_data << line
+            else
+              @line ||= line_num
+              body   << line
+            end
+          end
         end
+        
+        # finally get the meta_data as a hash and set the body
+        meta_data = YAML.load(meta_data)
+        @meta_data.merge!(meta_data.symbolize_keys) if meta_data
+        @body = body
       end
       
       # Determine the output file path

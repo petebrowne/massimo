@@ -76,6 +76,11 @@ module Massimo
       File.join(@options[:source], *path)
     end
     
+    # Get all the source directories as an array.
+    def all_source_dirs
+      [ :pages, :views, :stylesheets, :javascripts, :helpers, :lib ].collect { |p| dir_for(p) }
+    end
+    
     # The path to the pages directory.
     def pages_dir(*path)
       dir_for(:pages, *path)
@@ -175,7 +180,7 @@ module Massimo
       
       # Find all the helper modules
       def helper_modules
-        reload_files(Dir.glob(helpers_dir("*.rb")))
+        reload_files Dir.glob(helpers_dir("*.rb"))
       end
       
       # Reload all the files in the source lib dir.

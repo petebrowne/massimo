@@ -37,6 +37,7 @@ module Massimo
         raise Massimo::MissingResource unless @source_path.exist?
         # try to read it now
         begin
+          @line = 1
           @body = @source_path.read
         rescue
           raise Massimo::InvalidResource

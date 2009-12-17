@@ -22,32 +22,33 @@ Massimo is a full static website generator. While making [Rails](http://rubyonra
 A basic Massimo Site looks something like this, though each directory's path can be customized:
 
     .
-    |-- source
-    |   |
-    |   |-- config.yml
-    |   |
-    |   |-- helpers
-    |   |   `-- my_helpers.rb
-    |   |
-    |   |-- javascripts
-    |   |   |-- _plugin.js
-    |   |   `-- application.js
-    |   |
-    |   |-- pages
-    |   |   |-- index.haml
-    |   |   |-- contact.haml
-    |   |   `-- about-us.haml
-    |   |
-    |   |-- stylesheets
-    |   |   |-- _base.sass
-    |   |   `-- application.sass
-    |   |
-    |   `-- views
-    |       |-- partial.haml
-    |       `-- layouts
-    |           `-- applcation.haml
+    |-- config.yml
     |
-    `-- output
+    |-- helpers
+    |   `-- my_helpers.rb
+    |
+    |-- javascripts
+    |   |-- _plugin.js
+    |   `-- application.js
+    |
+    |-- lib
+    |   `-- post.rb
+    |
+    |-- pages
+    |   |-- index.haml
+    |   |-- contact.haml
+    |   `-- about-us.haml
+    |
+    |-- stylesheets
+    |   |-- _base.sass
+    |   `-- application.sass
+    |
+    |-- views
+    |   |-- partial.haml
+    |   `-- layouts
+    |       `-- applcation.haml
+    |
+    `-- public
   
 #### config.yml
 
@@ -61,9 +62,13 @@ This is where you put helper modules (like Rails). This modules will automatical
 
 This is where you put the working copies of your javascripts. They will be concatenated, minified, and moved to your output directory when the site is processed.
 
+#### lib
+
+This is where you put additional libraries. You can customize the default Massimo classes or add your own here. This is where you would add additional Tilt Templates.
+
 #### pages
 
-These are the actual pages (content) of your site. Anything here will be transformed into HTML and moved to the appropriate place in the output directory.
+These are the actual pages (content) of your site. Anything here that is registered by a Tilt Template will be transformed into HTML and moved to the appropriate place in the output directory.
 
 #### stylesheets
 

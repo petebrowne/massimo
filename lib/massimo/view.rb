@@ -10,7 +10,7 @@ module Massimo
     
     # Renders the page using the registered filters.
     def render(locals = {}, &block)
-      template = ::Tilt.new(self.file_name, nil, self.options_for_resource_type) { @body }
+      template = ::Tilt.new(self.file_name, @line || 1, self.options_for_resource_type) { @body }
       template.render(self.site.helpers, @meta_data.merge(locals), &block)
     end
     

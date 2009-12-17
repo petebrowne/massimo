@@ -13,6 +13,10 @@ module Massimo
       self.options = {}
       self.parse!
       
+      # The location of the config file. This is needed because the source
+      # directory may change once the it is read.
+      @config_file = File.join(self.options[:source] || ".", "config.yml")
+      
       # Initialize the Site
       self.site    = Massimo::Site(self.options)
       self.options = self.site.options
@@ -21,17 +25,19 @@ module Massimo
       
       # Setup Backtrace Cleaner
       @cleaner = ActiveSupport::BacktraceCleaner.new
-      @cleaner.add_silencer { |l| l !~ %r{^#{site.options[:source]}} }
+      @cleaner.add_silencer { |line| line =~ /^(\/|\\)/ } # Remove full File path traces
     end
     
     # Run the script, based on the command line options.
     def run!
-      if self.watch?
-        self.watch_source!
+      if generate?
+        generate_layout!
+      elsif watch?
+        watch_source!
       else
-        self.process_site!
+        process_site!
       end
-      self.run_server! if self.server?
+      run_server! if server?
       return 0
     rescue Interrupt
       message "Massimo is done watching you.", :newline => true
@@ -42,6 +48,21 @@ module Massimo
     end
     
     protected
+      
+      # Generate the default layout of the site.
+      def generate_layout!
+        require "fileutils"
+        message "Massimo is generating the default site layout"
+        [ site.source_dir, site.all_source_dirs, site.output_dir ].flatten.each do |dir|
+          full_dir = File.expand_path(dir)
+          if File.exists?(full_dir)
+            puts indent_body("exists: #{full_dir}")
+          else
+            FileUtils.mkdir_p(full_dir)
+            puts indent_body("created: #{full_dir}")
+          end
+        end
+      end
     
       # Watch the source for changes.
       def watch_source!
@@ -49,21 +70,18 @@ module Massimo
       
         message %{Massimo is watching "#{source}" for changes. Press Ctrl-C to Stop.}
       
-        watcher = DirectoryWatcher.new(source)
-        watcher.interval = 1
-        watcher.glob = Dir.chdir(source) do
-          d  = Dir.glob("*").select { |x| File.directory?(x) }
-          d -= [ File.basename(output) ]
-          d  = d.map { |x| File.join(x, *%w{** *}) }
-          d += [ "config.yml" ]
-        end
+        watcher = DirectoryWatcher.new(
+          ".",
+          :interval => 1,
+          :glob     => [ @config_file ] + site.all_source_dirs.collect { |dir| File.join(dir, *%w{** *}) }
+        )
       
         watcher.add_observer do |*args|
-          time   = Time.now.strftime("%H:%M:%S %m/%d/%y")
-          change = args.size == 1 ? "1 file" : "#{args.size} files"
           begin
             site.process!
-            message "Massimo has rebuilt your site, #{change} changed. (#{time})"
+            time   = Time.now.strftime("%H:%M")
+            change = args.size == 1 ? "1 file" : "#{args.size} files"
+            message "Massimo has rebuilt your site. #{change} changed. (#{time})"
           rescue Exception => e
             report_error(e)
           end
@@ -103,6 +121,21 @@ module Massimo
         server.start
         message "Massimo is serving up your site at http://localhost:#{options[:server_port]}/"
       end
+    
+      # Determine if we should watch the source directory for changes.
+      def watch?
+        options[:watch] == true
+      end
+      
+      # Determine if we should generate the default layout of the site.
+      def generate?
+        options[:generate] == true
+      end
+      
+      # Determine if the server should be started.
+      def server?
+        options[:server] == true
+      end
       
       #
       def message(string, options = {})
@@ -111,28 +144,31 @@ module Massimo
         puts "== #{string}"
         Growl.notify(string, :title => "Massimo") if options[:growl] && defined?(::Growl)
       end
-    
-      # Determine if we should watch the source directory for changes.
-      def watch?
-        options[:watch] == true
-      end
-      
-      # Determine if the server should be started.
-      def server?
-        options[:server] == true
-      end
       
       # Report the given error. This could eventually log the backtrace.
       def report_error(error = nil)
         error ||= $!
-        message "Massimo Error:", :newline => true, :growl => false
-        puts error.message
-        if options[:verbose]
-          puts error.backtrace
+        
+        # Show full backtrace if verbose
+        backtrace = if options[:verbose]
+          error.backtrace
         else
-          puts @cleaner.clean(error.backtrace)
+          @cleaner.clean(error.backtrace)
         end
-        Growl.notify(@cleaner.clean(error.backtrace), :title => "Massimo Error") if defined?(::Growl)
+        
+        # show the message
+        message "Massimo Error:", :newline => true, :growl => false
+        puts indent_body(error.message)
+        puts indent_body(backtrace)
+        puts "\n"
+        
+        # Format the message differently for growl
+        Growl.notify(error.message, :title => "Massimo Error") if defined?(::Growl)
+      end
+      
+      # Returns the string with each line indented.
+      def indent_body(string)
+        string.collect { |line| "  #{line}" }
       end
     
       # Parse the options
@@ -151,6 +187,10 @@ Basic Command Line Usage:
 
 HELP
         
+          opts.on("--generate", "Generate the default layout of the site.") do
+            options[:generate] = true
+          end
+        
           opts.on("--watch", "Auto-regenerate the site as files are changed.") do
             options[:watch] = true
           end
@@ -163,11 +203,11 @@ HELP
             options[:server_port] = port
           end
         
-          opts.on("--verbose", "-V", "Show full backtrace on errors. Defaults to false.") do
+          opts.on("--verbose", "-v", "Show full backtrace on errors. Defaults to false.") do
             options[:verbose] = true
           end
         
-          opts.on("--version", "Display current version") do
+          opts.on("--version", "-V", "Display current version") do
             puts "Massimo " + Massimo::VERSION
             exit 0
           end
@@ -176,15 +216,15 @@ HELP
 
         # Get source and destintation from command line
         case args.size
-          when 0
-          when 1
-            options[:source] = args[0]
-          when 2
-            options[:source] = args[0]
-            options[:output] = args[1]
-          else
-            puts %{Invalid options. Run "massimo --help" for assistance.}
-            exit 1
+        when 0
+        when 1
+          options[:source] = args[0]
+        when 2
+          options[:source] = args[0]
+          options[:output] = args[1]
+        else
+          puts %{Invalid options. Run "massimo --help" for assistance.}
+          exit 1
         end
       end
     
