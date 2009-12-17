@@ -1,4 +1,6 @@
 require "optparse"
+require "active_support"
+begin require "growl"; rescue LoadError; end
 
 module Massimo
   class Script
@@ -16,6 +18,10 @@ module Massimo
       self.options = self.site.options
       self.source  = self.options[:source]
       self.output  = self.options[:output]
+      
+      # Setup Backtrace Cleaner
+      @cleaner = ActiveSupport::BacktraceCleaner.new
+      @cleaner.add_silencer { |l| l !~ %r{^#{site.options[:source]}} }
     end
     
     # Run the script, based on the command line options.
@@ -57,7 +63,7 @@ module Massimo
           change = args.size == 1 ? "1 file" : "#{args.size} files"
           begin
             site.process!
-            message "(#{time}) Massimo has rebuilt your site, #{change} changed."
+            message "Massimo has rebuilt your site, #{change} changed. (#{time})"
           rescue Exception => e
             report_error(e)
           end
@@ -100,8 +106,10 @@ module Massimo
       
       #
       def message(string, options = {})
+        options.reverse_merge!(:growl => true)
         puts "\n" if options[:newline]
         puts "== #{string}"
+        Growl.notify(string, :title => "Massimo") if options[:growl] && defined?(::Growl)
       end
     
       # Determine if we should watch the source directory for changes.
@@ -117,9 +125,14 @@ module Massimo
       # Report the given error. This could eventually log the backtrace.
       def report_error(error = nil)
         error ||= $!
-        massimo "Massimo Error:", :newline => true
+        message "Massimo Error:", :newline => true, :growl => false
         puts error.message
-        puts error.backtrace
+        if options[:verbose]
+          puts error.backtrace
+        else
+          puts @cleaner.clean(error.backtrace)
+        end
+        Growl.notify(@cleaner.clean(error.backtrace), :title => "Massimo Error") if defined?(::Growl)
       end
     
       # Parse the options
@@ -146,8 +159,12 @@ HELP
             options[:server] = true
           end
           
-          opts.on("--port [PORT]", "Select the port to start the web server on (defaults to 1984)") do |port|
+          opts.on("--port [PORT]", "Select the port to start the web server on. Defaults to 1984") do |port|
             options[:server_port] = port
+          end
+        
+          opts.on("--verbose", "-V", "Show full backtrace on errors. Defaults to false.") do
+            options[:verbose] = true
           end
         
           opts.on("--version", "Display current version") do
