@@ -26,7 +26,7 @@ module Massimo
     
     # Gets the site instance
     def site
-      Massimo::Site()
+      ::Massimo::Site()
     end
     
     protected
@@ -34,13 +34,13 @@ module Massimo
       # Reads the source page file, and populates the meta_data and
       # body attributes.
       def read_source!
-        raise Massimo::MissingResource unless @source_path.exist?
+        raise ::Massimo::MissingResource unless @source_path.exist?
         # try to read it now
         begin
           @line = 1
           @body = @source_path.read
         rescue
-          raise Massimo::InvalidResource
+          raise ::Massimo::InvalidResource
         end
       end
       

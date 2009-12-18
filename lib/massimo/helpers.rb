@@ -15,7 +15,7 @@ module Massimo
     
     # Gets the site instance
     def site
-      Massimo::Site()
+      ::Massimo::Site()
     end
     
     #

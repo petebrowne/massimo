@@ -28,7 +28,7 @@ module Massimo
     def process!
       path = self.output_path
       # Make the full path to the directory of the output file
-      FileUtils.mkdir_p(path.dirname)
+      ::FileUtils.mkdir_p(path.dirname)
       # write the filtered data to the output file
       path.open("w") do |file|
         file.write self.render(self.layout?)
@@ -68,7 +68,7 @@ module Massimo
         end
         
         # finally get the meta_data as a hash and set the body
-        meta_data = YAML.load(meta_data)
+        meta_data = ::YAML.load(meta_data)
         @meta_data.merge!(meta_data.symbolize_keys) if meta_data
         @body = body
       end
@@ -81,7 +81,7 @@ module Massimo
           else
             "/index.html" unless path.match(/\/index\.html$/)
           end
-        Pathname.new(path)
+        ::Pathname.new(path)
       end
       
       # Determines if this is an index page

@@ -9,17 +9,17 @@ module Massimo
         require "sass" unless defined? ::Sass
         options = self.site.options[:sass] || {}
         options.merge!(:css_filename => self.output_path)
-        Sass::Files.tree_for(@source_path, options).render
+        ::Sass::Files.tree_for(@source_path, options).render
       when :less
         require "less" unless defined? ::Less
-        Less.parse(@body)
+        ::Less.parse(@body)
       end
     end
     
     # Writes the rendered css to the output file.
     def process!
       # Make the full path to the directory of the output file
-      FileUtils.mkdir_p(self.output_path.dirname)
+      ::FileUtils.mkdir_p(self.output_path.dirname)
       # write the filtered data to the output file
       self.output_path.open("w") do |file|
         file.write self.render
@@ -30,7 +30,7 @@ module Massimo
       
       # Determine the output file path
       def output_path
-        @output_path ||= Pathname.new(@source_path.to_s.
+        @output_path ||= ::Pathname.new(@source_path.to_s.
           sub(self.site.source_dir, self.site.output_dir). # move to output dir
           sub(/#{@source_path.extname}$/, ".css")) # replace extension with .css
       end

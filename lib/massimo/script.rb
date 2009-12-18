@@ -1,6 +1,6 @@
 require "optparse"
 require "active_support"
-begin require "growl"; rescue LoadError; end
+begin require "growl"; rescue ::LoadError; end
 
 module Massimo
   class Script
@@ -15,16 +15,16 @@ module Massimo
       
       # The location of the config file. This is needed because the source
       # directory may change once the it is read.
-      @config_file = File.join(self.options[:source] || ".", "config.yml")
+      @config_file = ::File.join(self.options[:source] || ".", "config.yml")
       
       # Initialize the Site
-      self.site    = Massimo::Site(self.options)
+      self.site    = ::Massimo::Site(self.options)
       self.options = self.site.options
       self.source  = self.options[:source]
       self.output  = self.options[:output]
       
       # Setup Backtrace Cleaner
-      @cleaner = ActiveSupport::BacktraceCleaner.new
+      @cleaner = ::ActiveSupport::BacktraceCleaner.new
       @cleaner.add_silencer { |line| line =~ /^(\/|\\)/ } # Remove full File path traces
     end
     
@@ -39,10 +39,10 @@ module Massimo
       end
       run_server! if server?
       return 0
-    rescue Interrupt
+    rescue ::Interrupt
       message "Massimo is done watching you.", :newline => true
       return 0
-    rescue Exception => e
+    rescue ::Exception => e
       report_error(e)
       return 1
     end
@@ -54,11 +54,11 @@ module Massimo
         require "fileutils"
         message "Massimo is generating the default site layout"
         [ site.source_dir, site.all_source_dirs, site.output_dir ].flatten.each do |dir|
-          full_dir = File.expand_path(dir)
-          if File.exists?(full_dir)
+          full_dir = ::File.expand_path(dir)
+          if ::File.exists?(full_dir)
             puts indent_body("exists: #{full_dir}")
           else
-            FileUtils.mkdir_p(full_dir)
+            ::FileUtils.mkdir_p(full_dir)
             puts indent_body("created: #{full_dir}")
           end
         end
@@ -70,19 +70,19 @@ module Massimo
       
         message %{Massimo is watching "#{source}" for changes. Press Ctrl-C to Stop.}
       
-        watcher = DirectoryWatcher.new(
+        watcher = ::DirectoryWatcher.new(
           ".",
           :interval => 1,
-          :glob     => [ @config_file ] + site.all_source_dirs.collect { |dir| File.join(dir, *%w{** *}) }
+          :glob     => [ @config_file ] + site.all_source_dirs.collect { |dir| ::File.join(dir, *%w{** *}) }
         )
       
         watcher.add_observer do |*args|
           begin
             site.process!
-            time   = Time.now.strftime("%H:%M")
+            time   = ::Time.now.strftime("%H:%M")
             change = args.size == 1 ? "1 file" : "#{args.size} files"
             message "Massimo has rebuilt your site. #{change} changed. (#{time})"
-          rescue Exception => e
+          rescue ::Exception => e
             report_error(e)
           end
         end
@@ -105,9 +105,9 @@ module Massimo
         require "webrick"
         
         # Make sure the output dir exists
-        FileUtils.mkdir_p(output)
+        ::FileUtils.mkdir_p(output)
         
-        server = WEBrick::HTTPServer.new(
+        server = ::WEBrick::HTTPServer.new(
           :Port         => options[:server_port],
           :DocumentRoot => output
         )
@@ -142,7 +142,7 @@ module Massimo
         options.reverse_merge!(:growl => true)
         puts "\n" if options[:newline]
         puts "== #{string}"
-        Growl.notify(string, :title => "Massimo") if options[:growl] && defined?(::Growl)
+        ::Growl.notify(string, :title => "Massimo") if options[:growl] && defined?(::Growl)
       end
       
       # Report the given error. This could eventually log the backtrace.
@@ -163,7 +163,7 @@ module Massimo
         puts "\n"
         
         # Format the message differently for growl
-        Growl.notify(error.message, :title => "Massimo Error") if defined?(::Growl)
+        ::Growl.notify(error.message, :title => "Massimo Error") if defined?(::Growl)
       end
       
       # Returns the string with each line indented.
@@ -173,7 +173,7 @@ module Massimo
     
       # Parse the options
       def parse!
-        opts = OptionParser.new do |opts|
+        opts = ::OptionParser.new do |opts|
           opts.banner = <<HELP
 Massimo is a static website builder.
 
@@ -208,7 +208,7 @@ HELP
           end
         
           opts.on("--version", "-V", "Display current version") do
-            puts "Massimo " + Massimo::VERSION
+            puts "Massimo " + ::Massimo::VERSION
             exit 0
           end
         end

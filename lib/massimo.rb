@@ -1,4 +1,4 @@
-libdir = File.dirname(__FILE__)
+libdir = ::File.dirname(__FILE__)
 $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 
 # Rubygems
@@ -25,15 +25,15 @@ require "massimo/page"
 require "massimo/stylesheet"
 require "massimo/javascript"
 
-module Massimo # :nodoc:
-  VERSION = File.read(File.join(File.dirname(__FILE__), *%w{.. VERSION}))
+module Massimo
+  VERSION = ::File.read(::File.join(::File.dirname(__FILE__), *%w{.. VERSION})) # :nodoc:
   
-  MissingResource = Class.new(StandardError)
-  InvalidResource = Class.new(StandardError)
+  MissingResource = ::Class.new(StandardError) # :nodoc:
+  InvalidResource = ::Class.new(StandardError) # :nodoc:
   
   #
   def self.Site(options = {})
     return @site if defined?(@site) && options.empty?
-    @site = Massimo::Site.instance.setup(options)
+    @site = ::Massimo::Site.instance.setup(options)
   end
 end
