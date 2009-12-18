@@ -29,6 +29,15 @@ class TestSite < Test::Unit::TestCase
     assert_equal Massimo::Site::DEFAULT_OPTIONS[:source], @site.options[:source]
   end
   
+  should "have methods for determining the environment" do
+    @site = Massimo::Site()
+    assert @site.development?
+    @site = Massimo::Site(:environment => :development)
+    assert @site.development?
+    @site = Massimo::Site(:environment => :production)
+    assert @site.production?
+  end
+  
   context "A Normal Site" do
     setup { site() }
   

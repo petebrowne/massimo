@@ -1,2 +1,4 @@
 ---
-config: "working"
+:config: "working"
+:sass:
+  :cache: false

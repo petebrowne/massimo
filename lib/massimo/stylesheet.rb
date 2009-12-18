@@ -7,9 +7,7 @@ module Massimo
         @body.to_s
       when :sass
         require "sass" unless defined? ::Sass
-        options = self.site.options[:sass] || {}
-        options.merge!(:css_filename => self.output_path)
-        ::Sass::Files.tree_for(@source_path, options).render
+        ::Sass::Files.tree_for(@source_path, sass_options).render
       when :less
         require "less" unless defined? ::Less
         ::Less.parse(@body)
@@ -33,6 +31,14 @@ module Massimo
         @output_path ||= ::Pathname.new(@source_path.to_s.
           sub(self.site.source_dir, self.site.output_dir). # move to output dir
           sub(/#{@source_path.extname}$/, ".css")) # replace extension with .css
+      end
+      
+      # Gets the Sass options, with Site options merged in.
+      def sass_options
+        {
+          :style => site.production? ? :compressed : :nested
+        }.merge(self.site.options[:sass]).
+          merge(:css_filename => self.output_path)
       end
     
   end

@@ -28,4 +28,13 @@ class TestStylesheet < Test::Unit::TestCase
       teardown { clear_output }
     end
   end
+  
+  context "A Production Site" do
+    setup { site(:production => true)}
+    
+    should "should compress Sass stylesheets" do
+      stylesheet = Massimo::Stylesheet.new(source_dir("stylesheets", "application.sass"))
+      assert_equal "body{font-size:12px}#header{font-size:36px}\n", stylesheet.render
+    end
+  end
 end

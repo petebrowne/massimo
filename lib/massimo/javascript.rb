@@ -9,7 +9,7 @@ module Massimo
       # install assets if necessary
       secretary.install_assets
       
-      unless self.site.options[:development] or self.site.options[:minify] == false
+      if self.site.production? or self.site.options[:minify]
         # minify the concatenated javascript
         ::JSMin.minify(secretary.concatenation.to_s)
       else

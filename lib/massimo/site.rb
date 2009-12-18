@@ -9,6 +9,8 @@ module Massimo
       :server_port => "1984"
     }.freeze
     
+    SOURCE_DIRS = [ :pages, :views, :stylesheets, :javascripts, :helpers, :lib ].freeze # :nodoc:
+    
     attr_accessor :options, :helpers
     
     # 
@@ -71,6 +73,20 @@ module Massimo
       view && view.render(locals, &block)
     end
     
+    # Determines if the Site is in development mode.
+    def development?
+      @options[:environment].nil? || @options[:environment].to_sym == :development || @options[:development]
+    end
+    
+    # Determines if the Site is in production mode.
+    def production?
+      (@options[:environment] && @options[:environment].to_sym == :production) || @options[:production]
+    end
+    
+    #------------------------------------
+    #  Directory Path Methods
+    #------------------------------------
+    
     # The path to the source dir
     def source_dir(*path)
       ::File.join(@options[:source], *path)
@@ -78,37 +94,13 @@ module Massimo
     
     # Get all the source directories as an array.
     def all_source_dirs
-      [ :pages, :views, :stylesheets, :javascripts, :helpers, :lib ].collect { |p| dir_for(p) }
+      SOURCE_DIRS.collect { |d| dir_for(d) }
     end
     
-    # The path to the pages directory.
-    def pages_dir(*path)
-      dir_for(:pages, *path)
-    end
-    
-    # The path to the views directory.
-    def views_dir(*path)
-      dir_for(:views, *path)
-    end
-    
-    # The path to the stylesheets directory.
-    def stylesheets_dir(*path)
-      dir_for(:stylesheets, *path)
-    end
-    
-    # The path to the javascripts directory.
-    def javascripts_dir(*path)
-      dir_for(:javascripts, *path)
-    end
-    
-    # The path to the helpers directory.
-    def helpers_dir(*path)
-      dir_for(:helpers, *path)
-    end
-    
-    # The path to the lib directory.
-    def lib_dir(*path)
-      dir_for(:lib, *path)
+    SOURCE_DIRS.each do |d|
+      define_method("#{d}_dir") do |*path|
+        dir_for(d, *path)
+      end
     end
     
     # The path to the output dir
