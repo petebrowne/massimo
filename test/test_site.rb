@@ -41,10 +41,6 @@ class TestSite < Test::Unit::TestCase
   context "A Normal Site" do
     setup { site() }
   
-    should "use options set in the config.yml file" do
-      assert_equal "working", @site.options[:config]
-    end
-  
     should "have a source_dir method" do
       assert_equal source_dir("some", "path"), @site.source_dir("some", "path")
     end

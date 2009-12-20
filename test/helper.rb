@@ -35,7 +35,8 @@ class Test::Unit::TestCase
   def site(options = {})
     @site = Massimo::Site({
       :source => source_dir,
-      :output => output_dir
+      :output => output_dir,
+      :sass   => { :cache => false }
     }.merge(options))
   end
   

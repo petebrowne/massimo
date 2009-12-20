@@ -35,10 +35,11 @@ module Massimo
       
       # Gets the Sass options, with Site options merged in.
       def sass_options
-        {
+        options = {
           :style => site.production? ? :compressed : :nested
-        }.merge(self.site.options[:sass]).
-          merge(:css_filename => self.output_path)
+        }
+        options.merge!(self.site.options[:sass]) if self.site.options[:sass].is_a?(Hash)
+        options.merge(:css_filename => self.output_path)
       end
     
   end

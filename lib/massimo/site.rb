@@ -2,7 +2,7 @@ module Massimo
   class Site
     include Singleton
     
-    # Default options. Overriden by values in config.yml or command-line opts.
+    # Default options. Overriden by values given when creating a Site.
     DEFAULT_OPTIONS = {
       :source      => ".",
       :output      => ::File.join(".", "public"),
@@ -13,20 +13,9 @@ module Massimo
     
     attr_accessor :options, :helpers
     
-    # 
+    # Setup the Site with the given options. These options may be overridden by the config file.
     def setup(options = {})
-      options.symbolize_keys!
-      @options = DEFAULT_OPTIONS.dup
-      
-      # get source from options
-      @options[:source] = options[:source] if options[:source]
-      
-      # get options from config.yml file if it exists
-      config_path = self.source_dir("config.yml")
-      config = ::YAML.load_file(config_path) if ::File.exist?(config_path)
-      @options.merge!(config.symbolize_keys) if config.is_a?(::Hash)
-      
-      @options.merge!(options)
+      @options = DEFAULT_OPTIONS.dup.merge(options.symbolize_keys)
       self
     end
     
@@ -170,17 +159,18 @@ module Massimo
         @helpers = ::Massimo::Helpers.new(self.helper_modules.compact)
       end
       
-      # Find all the helper modules
-      def helper_modules
-        reload_files ::Dir.glob(helpers_dir("*.rb"))
-      end
-      
       # Reload all the files in the source lib dir.
       def reload_libs
         reload_files ::Dir.glob(lib_dir("**", "*.rb"))
       end
       
-      #
+      # Find all the helper modules
+      def helper_modules
+        reload_files ::Dir.glob(helpers_dir("*.rb"))
+      end
+      
+      # Relod the given file by removing their constants and loading the file again.
+      # Return an Array of the reloaded Constants.
       def reload_files(files)
         files.collect do |file|
           class_name = ::File.basename(file).gsub(::File.extname(file), "").classify

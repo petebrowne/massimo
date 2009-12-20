@@ -3,19 +3,24 @@ require "active_support"
 begin require "growl"; rescue ::LoadError; end
 
 module Massimo
-  class Script
+  class Command
     attr_accessor :args, :options, :site, :source, :output
+    
+    # Default options. Overriden by values in config.yml or command-line opts.
+    DEFAULT_OPTIONS = {
+      :config_path => ::File.join(".", "config.yml")
+    }.freeze
     
     #
     def initialize(args)
       # Parse the command line arguments
       self.args    = args
-      self.options = {}
+      self.options = DEFAULT_OPTIONS.dup
       self.parse!
       
-      # The location of the config file. This is needed because the source
-      # directory may change once the it is read.
-      @config_file = ::File.join(self.options[:source] || ".", "config.yml")
+      # Load the options from the config file
+      config = ::YAML.load_file(self.options[:config_path]) if ::File.exist?(self.options[:config_path])
+      self.options.merge!(config.symbolize_keys) if config.is_a?(::Hash)
       
       # Initialize the Site
       self.site    = ::Massimo::Site(self.options)
@@ -73,7 +78,7 @@ module Massimo
         watcher = ::DirectoryWatcher.new(
           ".",
           :interval => 1,
-          :glob     => [ @config_file ] + site.all_source_dirs.collect { |dir| ::File.join(dir, *%w{** *}) }
+          :glob     => site.all_source_dirs.collect { |dir| ::File.join(dir, *%w{** *}) }
         )
       
         watcher.add_observer do |*args|
@@ -174,7 +179,7 @@ module Massimo
       # Parse the options
       def parse!
         opts = ::OptionParser.new do |opts|
-          opts.banner = <<HELP
+          opts.banner = <<-HELP
 Massimo is a static website builder.
 
 Basic Command Line Usage:
@@ -186,6 +191,10 @@ Basic Command Line Usage:
   using the following options:
 
 HELP
+        
+          opts.on("--config [PATH]", "The path to the config file.") do |path|
+            options[:config_path] = path
+          end
         
           opts.on("--generate", "Generate the default layout of the site.") do
             options[:generate] = true
@@ -208,7 +217,7 @@ HELP
           end
         
           opts.on("--version", "-V", "Display current version") do
-            puts "Massimo " + ::Massimo::VERSION
+            puts "Massimo #{::Massimo::VERSION}"
             exit 0
           end
         end

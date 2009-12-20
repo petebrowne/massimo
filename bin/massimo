@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
 require File.expand_path(File.join(File.dirname(__FILE__), *%w{.. lib massimo}))
-require File.expand_path(File.join(File.dirname(__FILE__), *%w{.. lib massimo script}))
+require File.expand_path(File.join(File.dirname(__FILE__), *%w{.. lib massimo command}))
 
-exit Massimo::Script.new(ARGV).run!
+exit Massimo::Command.new(ARGV).run!
