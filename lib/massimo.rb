@@ -7,7 +7,6 @@ require "rubygems"
 # External
 require "pathname"
 require "fileutils"
-require "yaml"
 require "singleton"
 require "active_support"
 require "sinatra_more"

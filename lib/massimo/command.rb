@@ -1,5 +1,6 @@
 require "optparse"
 require "active_support"
+require "yaml"
 begin require "growl"; rescue ::LoadError; end
 
 module Massimo
