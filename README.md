@@ -52,7 +52,7 @@ A basic Massimo Site looks something like this, though each directory's path can
   
 #### config.yml
 
-This where you setup the options for the Site. It must be in the root of the source directory.
+This where you setup the options for the Site.
 
 #### helpers
 
