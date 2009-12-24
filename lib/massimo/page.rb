@@ -26,6 +26,7 @@ module Massimo
     
     # Writes the filtered data to the output file.
     def process!
+      refresh_layout
       path = self.output_path
       # Make the full path to the directory of the output file
       ::FileUtils.mkdir_p(path.dirname)
@@ -92,6 +93,11 @@ module Massimo
       # Determines if this an HTML page.
       def html?
         self.extension =~ /(html|php)$/
+      end
+      
+      # The next time `find_layout` is called, the layout will be reloaded.
+      def refresh_layout
+        @layout_view = nil
       end
       
       # Determines if there's a layout associated with this page.
