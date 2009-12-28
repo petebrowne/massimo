@@ -17,7 +17,8 @@ Massimo is a full static website generator. While making [Rails](http://rubyonra
 3. Run you Site locally to see how it looks
 4. Deploy your Site
 
-### Structure
+
+## Structure
 
 A basic Massimo Site looks something like this, though each directory's path can be customized:
 
@@ -78,13 +79,14 @@ This is where you put the working copies of your stylesheets. If they are Sass o
 
 This is where you put partials and layouts (like Rails). You can render partials from your pages by calling `render("partial_name")`.
 
-### Running Massimo
 
-#### Using the Command Line
+## Running Massimo
+
+### Using the Command Line
   
 Usually this is done through the massimo executable, which is installed with the gem. In order to get a server up and running with your Massimo site, run `massimo --server` and then browse to http://localhost:1984/. Or you could simply run `massimo --watch` to watch for changes and regenerate the site. For full command line options run `massimo --help`.
 
-#### Using the Ruby lib
+### Using the Ruby lib
 
 Massimo is designed to also work well with straight Ruby code. In order to create and process the Site you would do the following:
 
