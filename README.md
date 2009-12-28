@@ -8,6 +8,13 @@ Massimo is a full static website generator. While making [Rails](http://rubyonra
 * It concats javascripts using [Sprockets](http://getsprockets.org/)
   and then minifies them using [JSMin](http://github.com/rgrove/jsmin)
 * It renders stylesheets using either [Sass](http://sass-lang.com/) or [Less](http://lesscss.org/)
+
+
+## Installation
+
+Massimo is hosted on [Gemcutter](http://gemcutter.org/) at http://gemcutter.org/gems/massimo, so installation is simply:
+
+    sudo gem install massimo
  
  
 ## Basic Usage
@@ -149,6 +156,7 @@ The page object will also be available in your layout as `page`, and the same me
       </body>
     </html>
 
+
 ## Note on Patches/Pull Requests
  
 * Fork the project.
@@ -159,6 +167,7 @@ The page object will also be available in your layout as `page`, and the same me
   (if you want to have your own version, that is fine but
   bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
+
 
 ## Copyright
 
