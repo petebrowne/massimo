@@ -85,7 +85,7 @@ module Massimo
         watcher.add_observer do |*args|
           begin
             site.process!
-            time   = ::Time.now.strftime("%H:%M")
+            time   = ::Time.now.strftime("%l:%M:%S").strip
             change = args.size == 1 ? "1 file" : "#{args.size} files"
             message "Massimo has rebuilt your site. #{change} changed. (#{time})"
           rescue ::Exception => e
@@ -184,11 +184,11 @@ module Massimo
 Massimo is a static website builder.
 
 Basic Command Line Usage:
-  massimo                                                   # . -> ./public
-  massimo <path to write generated site>                    # . -> <path>
-  massimo <path to source> <path to write generated site>   # <path> -> <path>
+  massimo                                   # . -> ./public
+  massimo <path to output>                  # . -> <path>
+  massimo <path to source> <path to output> # <path> -> <path>
 
-  Configuration is read from "<source>/config.yml" but can be overriden
+  Configuration is read from "./config.yml" but can be overriden
   using the following options:
 
 HELP
@@ -197,7 +197,7 @@ HELP
             options[:config_path] = path
           end
         
-          opts.on("--generate", "Generate the default layout of the site.") do
+          opts.on("--generate", "Generate the default layout of the site. This will create all the necessary directories needed to generate websites using Massimo.") do
             options[:generate] = true
           end
         

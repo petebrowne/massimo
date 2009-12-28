@@ -79,8 +79,21 @@ This is where you put the working copies of your stylesheets. If they are Sass o
 This is where you put partials and layouts (like Rails). You can render partials from your pages by calling `render("partial_name")`.
 
 ### Running Massimo
+
+#### Using the Command Line
   
-Usually this is done through the massimo executable, which is installed with the gem. In order to get a server up and running with your Massimo site, run `massimo --server` and then browse to http://localhost:1984/. Or you could simply run `massimo --watch` to watch for changes and regenerate the site.
+Usually this is done through the massimo executable, which is installed with the gem. In order to get a server up and running with your Massimo site, run `massimo --server` and then browse to http://localhost:1984/. Or you could simply run `massimo --watch` to watch for changes and regenerate the site. For full command line options run `massimo --help`.
+
+#### Using the Ruby lib
+
+Massimo is designed to also work well with straight Ruby code. In order to create and process the Site you would do the following:
+
+    require "rubygems"
+    require "massimo"
+    
+    site = Massimo::Site(:source => "./source", :output => "./output") # Create a site with the given configuration options
+    site.pages # An array of all the pages found in the pages directory
+    site.process! # Processes all the source files and generates the output files.
 
 
 ## YAML Front Matter
@@ -91,6 +104,48 @@ Pages can contain YAML front matter blocks for either predefined configuration o
     title: Using YAML Front Matter
     layout: false
     ---
+
+### Options
+    
+The options available are:
+
+#### title
+
+This is the title of the Page. By default it will be generated from the basename of the Page file. For Example: `my-first-post.haml` would become `"My First Post"`.
+
+#### extension
+
+This would be the extension of the file generated from the Page file. This defaults to `".html"`.
+
+#### url
+
+This is the URL that will be used to determine the output file's location and name. This defaults to the same location (relative to the pages directory) of the Page and its filename without the extension (and dasherized). For Example: The Page: `posts/10_best_rubygems.haml` would default to the URL: `"posts/10-best-rubygems/"`.
+
+#### layout
+
+This is the name of the layout used for the Page. Settings this value to `false` will process the Page without a layout. This defaults to `"application"`.
+
+### Custom Variables
+    
+Any other variables will be available as methods in your pages. For instance:
+
+    ---
+    title: It's Christmas!
+    date: 2009-12-25
+    --
+    <h1><%= title %></h1>
+    <p><%= date.strftime("%m, %e, %Y") %></p>
+    
+The page object will also be available in your layout as `page`, and the same methods can be called on it:
+
+    <html>
+      <head>
+        <title><%= page.title %></title>
+      </head>
+      <body>
+        <%= yield %>
+      </body>
+    </html>
 
 ## Note on Patches/Pull Requests
  
@@ -105,4 +160,4 @@ Pages can contain YAML front matter blocks for either predefined configuration o
 
 ## Copyright
 
-Copyright (c) 2009 [Peter Browne](http://peterbrowne.net). See LICENSE for details.
+Copyright (c) 2009 [Peter Browne](http://petebrowne.com). See LICENSE for details.

@@ -7,13 +7,13 @@ begin
     gem.name        = "massimo"
     gem.summary     = %{Massimo is a static website builder.}
     gem.description = %{Massimo builds HTML, Javascript, and CSS Files from your source.}
-    gem.email       = "peter@peterbrowne.net"
+    gem.email       = "me@petebrowne.com"
     gem.homepage    = "http://github.com/peterbrowne/massimo"
     gem.authors     = [ "Peter Browne" ]
     gem.add_development_dependency "shoulda",           ">= 2.10.2"
     gem.add_development_dependency "yard",              ">= 0.5.2"
     gem.add_dependency             "activesupport",     ">= 2.3.5"
-    gem.add_dependency             "sinatra_more",      ">= 0.3.26"
+    gem.add_dependency             "sinatra_more",      ">= 0.3.29"
     gem.add_dependency             "directory_watcher", ">= 1.3.1"
     gem.add_dependency             "sprockets",         ">= 1.0.2"
     gem.add_dependency             "jsmin",             ">= 1.0.1"

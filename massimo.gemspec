@@ -9,10 +9,10 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Peter Browne"]
-  s.date = %q{2009-12-24}
+  s.date = %q{2009-12-28}
   s.default_executable = %q{massimo}
   s.description = %q{Massimo builds HTML, Javascript, and CSS Files from your source.}
-  s.email = %q{peter@peterbrowne.net}
+  s.email = %q{me@petebrowne.com}
   s.executables = ["massimo"]
   s.extra_rdoc_files = [
     "LICENSE",
@@ -104,7 +104,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<shoulda>, [">= 2.10.2"])
       s.add_development_dependency(%q<yard>, [">= 0.5.2"])
       s.add_runtime_dependency(%q<activesupport>, [">= 2.3.5"])
-      s.add_runtime_dependency(%q<sinatra_more>, [">= 0.3.26"])
+      s.add_runtime_dependency(%q<sinatra_more>, [">= 0.3.29"])
       s.add_runtime_dependency(%q<directory_watcher>, [">= 1.3.1"])
       s.add_runtime_dependency(%q<sprockets>, [">= 1.0.2"])
       s.add_runtime_dependency(%q<jsmin>, [">= 1.0.1"])
@@ -112,7 +112,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<shoulda>, [">= 2.10.2"])
       s.add_dependency(%q<yard>, [">= 0.5.2"])
       s.add_dependency(%q<activesupport>, [">= 2.3.5"])
-      s.add_dependency(%q<sinatra_more>, [">= 0.3.26"])
+      s.add_dependency(%q<sinatra_more>, [">= 0.3.29"])
       s.add_dependency(%q<directory_watcher>, [">= 1.3.1"])
       s.add_dependency(%q<sprockets>, [">= 1.0.2"])
       s.add_dependency(%q<jsmin>, [">= 1.0.1"])
@@ -121,7 +121,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<shoulda>, [">= 2.10.2"])
     s.add_dependency(%q<yard>, [">= 0.5.2"])
     s.add_dependency(%q<activesupport>, [">= 2.3.5"])
-    s.add_dependency(%q<sinatra_more>, [">= 0.3.26"])
+    s.add_dependency(%q<sinatra_more>, [">= 0.3.29"])
     s.add_dependency(%q<directory_watcher>, [">= 1.3.1"])
     s.add_dependency(%q<sprockets>, [">= 1.0.2"])
     s.add_dependency(%q<jsmin>, [">= 1.0.1"])
