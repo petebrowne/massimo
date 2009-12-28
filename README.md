@@ -141,7 +141,7 @@ Any other variables will be available as methods in your pages. For instance:
     ---
     title: It's Christmas!
     date: 2009-12-25
-    --
+    ---
     <h1><%= title %></h1>
     <p><%= date.strftime("%m, %e, %Y") %></p>
     
