@@ -25,7 +25,7 @@ require "massimo/stylesheet"
 require "massimo/javascript"
 
 module Massimo
-  VERSION = ::File.read(::File.join(::File.dirname(__FILE__), *%w{.. VERSION})) # :nodoc:
+  VERSION = ::File.read(::File.join(::File.dirname(__FILE__), "..", "VERSION")) # :nodoc:
   
   MissingResource = ::Class.new(StandardError) # :nodoc:
   InvalidResource = ::Class.new(StandardError) # :nodoc:

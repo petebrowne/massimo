@@ -32,33 +32,33 @@ module Massimo
     # Get all the Pages in the pages dir.
     def pages(reload = false)
       return @pages if defined?(@pages) && !reload
-      page_paths = self.find_files_in(:pages)
+      page_paths = find_files_in(:pages)
       @pages = page_paths.collect { |path| ::Massimo::Page.new(path) }
     end
     
     # Get all the Stylesheets in the stylesheets dir.
     def stylesheets(reload = false)
       return @stylesheets if defined?(@stylesheets) && !reload
-      stylesheet_paths = self.find_files_in(:stylesheets, [ :css, :sass, :less ])
+      stylesheet_paths = find_files_in(:stylesheets, [ :css, :sass, :less ])
       @stylesheets = stylesheet_paths.collect { |path| ::Massimo::Stylesheet.new(path) }
     end
     
     # Get all the Javascripts in the javascripts dir.
     def javascripts(reload = false)
       return @javascripts if defined?(@javascripts) && !reload
-      javascript_paths = self.find_files_in(:javascripts, [ :js ])
+      javascript_paths = find_files_in(:javascripts, [ :js ])
       @javascripts = javascript_paths.collect { |path| ::Massimo::Javascript.new(path) }
     end
     
     # Finds a view by the given name
     def find_view(name, meta_data = {})
-      view_path = Dir.glob(self.views_dir("#{name}.*")).first
+      view_path = Dir.glob(dir_for(:views, "#{name}.*")).first
       view_path && ::Massimo::View.new(view_path, meta_data)
     end
     
     # Finds a view then renders it with the given locals
     def render_view(name, locals = {}, &block)
-      view = self.find_view(name)
+      view = find_view(name)
       view && view.render(locals, &block)
     end
     
@@ -106,7 +106,7 @@ module Massimo
         if type_path = @options["#{type}_path".to_sym]
           ::File.join(type_path, *path)
         else
-          self.source_dir(type.to_s, *path)
+          source_dir(type.to_s, *path)
         end
       end
     
@@ -115,7 +115,7 @@ module Massimo
       # an array with the full path to the files.
       def find_files_in(type, extensions = nil)
         # the directory where these files will be found
-        type_dir = self.dir_for(type)
+        type_dir = dir_for(type)
         
         # By default get the file list from the options
         files = @options[type] && @options[type].dup
@@ -136,8 +136,10 @@ module Massimo
               case skip_files
               when ::Array
                 skip_files.include?(file)
-              else ::Proc
+              when ::Proc
                 skip_files.call(file)
+              else
+                false
               end
             end
           end
@@ -156,17 +158,17 @@ module Massimo
       
       # Reload the Helpers instance with the helper modules
       def reload_helpers
-        @helpers = ::Massimo::Helpers.new(self.helper_modules.compact)
+        @helpers = ::Massimo::Helpers.new(helper_modules.compact)
       end
       
       # Reload all the files in the source lib dir.
       def reload_libs
-        reload_files ::Dir.glob(lib_dir("**", "*.rb"))
+        reload_files ::Dir.glob(dir_for(:lib, "**", "*.rb"))
       end
       
       # Find all the helper modules
       def helper_modules
-        reload_files ::Dir.glob(helpers_dir("*.rb"))
+        reload_files ::Dir.glob(dir_for(:helpers, "*.rb"))
       end
       
       # Relod the given file by removing their constants and loading the file again.

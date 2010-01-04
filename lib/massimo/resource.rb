@@ -6,12 +6,22 @@ module Massimo
     def initialize(source_path)
       @source_path = ::Pathname.new(source_path)
       # read and parse the source file
-      self.read_source!
+      read_source!
     end
     
     # Renders the page using the registered filters.
     def render(locals = {})
       @body
+    end
+    
+    # Writes the rendered js to the output file.
+    def process!
+      # Make the full path to the directory of the output file
+      ::FileUtils.mkdir_p(output_path.dirname)
+      # write the filtered data to the output file
+      output_path.open("w") do |file|
+        file.write render
+      end
     end
     
     # Gets the resource's file name.
@@ -46,7 +56,13 @@ module Massimo
       
       # Get the options from the Site's config for the current resource type.
       def options_for_resource_type
-        self.site.options[self.resource_type.to_sym]
+        site.options[resource_type.to_sym]
+      end
+      
+      # Determine the output file path
+      def output_path
+        @output_path ||= ::Pathname.new(@source_path.to_s.
+          sub(site.source_dir, site.output_dir)) # move to output dir
       end
   end
 end

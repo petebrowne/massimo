@@ -10,7 +10,7 @@ module Massimo
     
     #
     def initialize(modules = nil)
-      self.extend(*modules) unless modules.nil? || modules.empty?
+      extend(*modules) unless modules.nil? || modules.empty?
     end
     
     # Gets the site instance
@@ -20,7 +20,7 @@ module Massimo
     
     #
     def render(name, locals = {}, &block)
-      self.site.render_view(name, locals, &block)
+      site.render_view(name, locals, &block)
     end
   end
 end
