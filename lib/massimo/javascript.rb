@@ -1,5 +1,7 @@
 module Massimo
-  class Javascript < Resource
+  class Javascript < Massimo::Resource::Base
+    processable!
+    
     # Concat the Javascript using Sprockets, then minify using JSmin
     def render
       secretary = ::Sprockets::Secretary.new(

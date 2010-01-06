@@ -1,5 +1,7 @@
 module Massimo
-  class Stylesheet < Resource
+  class Stylesheet < Massimo::Resource::Base
+    processable!
+    
     # Render the css based on the type of resource
     def render
       case resource_type.to_sym

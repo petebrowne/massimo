@@ -81,6 +81,17 @@ module Massimo
       ::File.join(@options[:source], *path)
     end
     
+    # Get the directory to the given resource type (pages, views, etc.).
+    # If the path has been manually set in the options, you will get that
+    # path. Otherwise you will get the path relative to the source directory.
+    def dir_for(type, *path)
+      if type_path = @options["#{type}_path".to_sym]
+        ::File.join(type_path, *path)
+      else
+        source_dir(type.to_s, *path)
+      end
+    end
+    
     # Get all the source directories as an array.
     def all_source_dirs
       SOURCE_DIRS.collect { |d| dir_for(d) }
@@ -98,17 +109,6 @@ module Massimo
     end
     
     protected
-    
-      # Get the directory to the given resource type (pages, views, etc.).
-      # If the path has been manually set in the options, you will get that
-      # path. Otherwise you will get the path relative to the source directory.
-      def dir_for(type, *path)
-        if type_path = @options["#{type}_path".to_sym]
-          ::File.join(type_path, *path)
-        else
-          source_dir(type.to_s, *path)
-        end
-      end
     
       # Find all the files in the given resouce type's directory, optionally
       # selecting only those with the given extensions. This will return
