@@ -45,12 +45,12 @@ class TestSite < Test::Unit::TestCase
       assert_equal source_dir("some", "path"), @site.source_dir("some", "path")
     end
   
-    should "have a directory shortcut methods" do
-      assert_equal source_dir("pages", "some", "file.txt"),       @site.pages_dir("some", "file.txt")
-      assert_equal source_dir("views", "some", "file.txt"),       @site.views_dir("some", "file.txt")
-      assert_equal source_dir("stylesheets", "some", "file.txt"), @site.stylesheets_dir("some", "file.txt")
-      assert_equal source_dir("javascripts", "some", "file.txt"), @site.javascripts_dir("some", "file.txt")
-    end
+    # should "have a directory shortcut methods" do
+    #   assert_equal source_dir("pages", "some", "file.txt"),       @site.pages_dir("some", "file.txt")
+    #   assert_equal source_dir("views", "some", "file.txt"),       @site.views_dir("some", "file.txt")
+    #   assert_equal source_dir("stylesheets", "some", "file.txt"), @site.stylesheets_dir("some", "file.txt")
+    #   assert_equal source_dir("javascripts", "some", "file.txt"), @site.javascripts_dir("some", "file.txt")
+    # end
   
     should "have a output_dir method" do
       assert_equal output_dir("some", "path"), @site.output_dir("some", "path")

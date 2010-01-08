@@ -1,5 +1,5 @@
 module Massimo
-  class View < Massimo::Resource::Base
+  class View < Resource::Base
     attr_reader :meta_data
     
     # Creates a new page associated with the given file path.
@@ -10,7 +10,7 @@ module Massimo
     
     # Renders the page using the appropriate Tilt Template
     def render(locals = {}, &block)
-      template = ::Tilt.new(file_name, @line || 1, options_for_resource_type) { @body }
+      template = Tilt.new(file_name, @line || 1, options_for_resource_type) { @body }
       template.render(site.helpers, @meta_data.merge(locals), &block)
     end
     

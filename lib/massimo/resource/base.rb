@@ -1,13 +1,11 @@
-require "massimo/resource/processing"
-require "massimo/resource/collection"
-require "massimo/resource/types"
+require File.join(File.dirname(__FILE__), "processing")
+require File.join(File.dirname(__FILE__), "collection")
 
 module Massimo
   module Resource
     class Base
-      include Massimo::Resource::Processing
-      extend  Massimo::Resource::Collection
-      extend  Massimo::Resource::Types
+      include ::Massimo::Resource::Processing
+      extend  ::Massimo::Resource::Collection
     
       attr_reader :source_path, :body
     
@@ -18,7 +16,7 @@ module Massimo
     
       # Gets the site instance
       def self.site
-        ::Massimo::Site()
+        Massimo::Site()
       end
     
       # Get the directory to this Resource type.
@@ -26,9 +24,14 @@ module Massimo
         site.dir_for(self.name.to_s.pluralize, *path)
       end
     
+      # Hook for adding Resource types.
+      def self.inherited(subclass)
+        Massimo.resources << subclass
+      end
+    
       # Creates a new page associated with the given file path.
       def initialize(source_path)
-        @source_path = ::Pathname.new(source_path)
+        @source_path = Pathname.new(source_path)
         read_source!
       end
     

@@ -9,8 +9,7 @@ require "assertions"
 require "rr"
 
 # Load Massimo
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
-require "massimo"
+require File.join(File.dirname(__FILE__), "..", "lib", "massimo")
 
 class Test::Unit::TestCase
   include Assertions
@@ -33,7 +32,7 @@ class Test::Unit::TestCase
   
   #
   def site(options = {})
-    @site = Massimo::Site({
+    @site = ::Massimo::Site({
       :source => source_dir,
       :output => output_dir,
       :sass   => { :cache => false }
@@ -42,13 +41,13 @@ class Test::Unit::TestCase
   
   #
   def page(*path)
-    @page ||= Massimo::Page.new(source_dir("pages", *path))
+    @page ||= ::Massimo::Page.new(source_dir("pages", *path))
   end
   
   #
   def view(*path)
     return @view if defined?(@view)
     meta_data = path.extract_options!
-    @view = Massimo::View.new(source_dir("views", *path), meta_data)
+    @view = ::Massimo::View.new(source_dir("views", *path), meta_data)
   end
 end

@@ -7,9 +7,9 @@ module Massimo
     # Creates a new page associated with the given file path.
     def initialize(source_path)
       super(source_path, {
-        :title     => ::File.basename(source_path).gsub(::File.extname(source_path), "").titleize, 
+        :title     => File.basename(source_path).gsub(File.extname(source_path), "").titleize, 
         :extension => ".html",
-        :url       => source_path.gsub(site.pages_dir, "").gsub(::File.extname(source_path), "").dasherize,
+        :url       => source_path.gsub(self.class.dir, "").gsub(File.extname(source_path), "").dasherize,
         :layout    => "application"
       })
     end
@@ -56,7 +56,7 @@ module Massimo
         end
         
         # finally get the meta_data as a hash and set the body
-        meta_data = ::YAML.load(meta_data)
+        meta_data = YAML.load(meta_data)
         @meta_data.merge!(meta_data.symbolize_keys) if meta_data
         @body = body
       end
@@ -70,7 +70,7 @@ module Massimo
             else
               "/index.html" unless path.match(/\/index\.html$/)
             end
-          ::Pathname.new(path)
+          Pathname.new(path)
         end
       end
       
