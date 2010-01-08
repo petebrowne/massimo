@@ -1,5 +1,5 @@
 module Massimo
-  class View < Resource::Base
+  class View < Massimo::Resource::Base
     attr_reader :meta_data
     
     # Creates a new page associated with the given file path.

@@ -1,5 +1,5 @@
 module Massimo
-  class Stylesheet < Resource::Base
+  class Stylesheet < Massimo::Resource::Base
     processable!
     
     # Render the css based on the type of resource

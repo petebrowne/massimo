@@ -1,5 +1,5 @@
 module Massimo
-  class Javascript < Resource::Base
+  class Javascript < Massimo::Resource::Base
     processable!
     
     # Concat the Javascript using Sprockets, then minify using JSmin

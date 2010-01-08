@@ -4,8 +4,8 @@ require File.join(File.dirname(__FILE__), "collection")
 module Massimo
   module Resource
     class Base
-      include ::Massimo::Resource::Processing
-      extend  ::Massimo::Resource::Collection
+      include Massimo::Resource::Processing
+      extend  Massimo::Resource::Collection
     
       attr_reader :source_path, :body
     
