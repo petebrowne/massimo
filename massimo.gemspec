@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{massimo}
-  s.version = "0.3.9"
+  s.version = "0.4.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Peter Browne"]
-  s.date = %q{2009-12-28}
+  s.date = %q{2010-01-09}
   s.default_executable = %q{massimo}
   s.description = %q{Massimo builds HTML, Javascript, and CSS Files from your source.}
   s.email = %q{me@petebrowne.com}
@@ -31,7 +31,6 @@ Gem::Specification.new do |s|
      "lib/massimo/helpers.rb",
      "lib/massimo/javascript.rb",
      "lib/massimo/page.rb",
-     "lib/massimo/resource.rb",
      "lib/massimo/site.rb",
      "lib/massimo/stylesheet.rb",
      "lib/massimo/templates.rb",
@@ -88,6 +87,7 @@ Gem::Specification.new do |s|
      "test/helper.rb",
      "test/source/helpers/test_helper.rb",
      "test/source/lib/site.rb",
+     "test/test_helpers.rb",
      "test/test_javascript.rb",
      "test/test_page.rb",
      "test/test_resource.rb",
