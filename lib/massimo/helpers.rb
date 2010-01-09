@@ -1,11 +1,11 @@
 module Massimo
   class Helpers
-    if defined? ::SinatraMore
-      include ::SinatraMore::OutputHelpers
-      include ::SinatraMore::TagHelpers
-      include ::SinatraMore::AssetTagHelpers
-      include ::SinatraMore::FormHelpers
-      include ::SinatraMore::FormatHelpers
+    if defined? SinatraMore
+      include SinatraMore::OutputHelpers
+      include SinatraMore::TagHelpers
+      include SinatraMore::AssetTagHelpers
+      include SinatraMore::FormHelpers
+      include SinatraMore::FormatHelpers
     end
     
     #
@@ -15,7 +15,7 @@ module Massimo
     
     # Gets the site instance
     def site
-      ::Massimo::Site()
+      Massimo::Site()
     end
     
     #

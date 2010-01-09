@@ -1,44 +1,37 @@
 module Massimo
-  class Page < View
+  class Page < Massimo::View
     META_SEP = %r/\A---\s*(?:\r\n|\n)?\z/ # :nodoc:
+    
+    processable!
     
     # Creates a new page associated with the given file path.
     def initialize(source_path)
       super(source_path, {
-        :title     => ::File.basename(source_path).gsub(::File.extname(source_path), "").titleize, 
+        :title     => File.basename(source_path).gsub(File.extname(source_path), "").titleize, 
         :extension => ".html",
-        :url       => source_path.gsub(site.pages_dir, "").gsub(::File.extname(source_path), "").dasherize,
+        :url       => source_path.gsub(self.class.dir, "").gsub(File.extname(source_path), "").dasherize,
         :layout    => "application"
       })
     end
     
     # Override render to wrap the result in the layout
-    def render(with_layout = true)
+    def render(use_layout = true)
       output = super()
-      output = find_layout.render(:page => self) { output } if with_layout && find_layout
+      if use_layout and found_layout = find_layout
+        output = found_layout.render(:page => self) { output }
+      end
       output
     end
     
-    # Writes the filtered data to the output file.
-    def process!
-      refresh_layout
-      # Make the full path to the directory of the output file
-      ::FileUtils.mkdir_p(output_path.dirname)
-      # write the filtered data to the output file
-      output_path.open("w") do |file|
-        file.write render(layout?)
-      end
-    end
-    
-    # Override to_s so that the layout can include the page with <%= page %>
+    # Override to_s so that the layout can include the page with `<%= page %>`
     def to_s
       render(false)
     end
     
     protected
     
-      # Reads the source page file, and populates the meta_data and
-      # body attributes.
+      # Reads the source page file, and populates the `@meta_data` and
+      # `@body` attributes.
       def read_source!
         # read the source file and setup some values for the loop
         source       = super()
@@ -63,7 +56,7 @@ module Massimo
         end
         
         # finally get the meta_data as a hash and set the body
-        meta_data = ::YAML.load(meta_data)
+        meta_data = YAML.load(meta_data)
         @meta_data.merge!(meta_data.symbolize_keys) if meta_data
         @body = body
       end
@@ -77,7 +70,7 @@ module Massimo
             else
               "/index.html" unless path.match(/\/index\.html$/)
             end
-          ::Pathname.new(path)
+          Pathname.new(path)
         end
       end
       
@@ -91,19 +84,9 @@ module Massimo
         extension =~ /(html|php)$/
       end
       
-      # The next time `find_layout` is called, the layout will be reloaded.
-      def refresh_layout
-        @layout_view = nil
-      end
-      
-      # Determines if there's a layout associated with this page.
-      def layout?
-        layout != false && !find_layout.nil?
-      end
-      
       # Finds the Layout View if it exists
       def find_layout
-        @layout_view ||= site.find_view("layouts/#{layout}") unless layout == false
+        site.find_view("layouts/#{layout}") unless layout == false
       end
   end
 end
