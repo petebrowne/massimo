@@ -50,4 +50,11 @@ class Test::Unit::TestCase
     meta_data = path.extract_options!
     @view = ::Massimo::View.new(source_dir("views", *path), meta_data)
   end
+  
+  #
+  def source_page_paths
+    @source_page_paths ||= Pathname.glob(source_dir("pages", "**", "*")).
+      reject  { |p| p.basename.to_s =~ /^_/ || File.directory?(p) }.
+      collect { |p| p.basename }
+  end
 end

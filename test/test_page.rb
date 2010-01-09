@@ -104,10 +104,16 @@ class TestPage < Test::Unit::TestCase
         end
       
       end
+      
       context "with layouts" do
       
         should "filter the content from the page file correctly" do
           assert_equal "<title>ERB With Layout</title>\n<body><h1>ERB With Layout</h1></body>\n", page("erb_with_layout.erb").render
+        end
+        
+        should "render the page without a layout when calling #to_s" do
+          page("erb_with_layout.erb")
+          assert_equal @page.render(false), @page.to_s
         end
       end
     end

@@ -12,9 +12,12 @@ module Massimo
         # Returns only the files listed in the options or all the files in this
         # Resource type's directory, with certain files filtered out.
         def find_resource_files
-          files = site.options[name] && site.options[name].dup
-          unless files and files.is_a?(Array)
-            files = Dir.glob(File.join(dir, "**", "*")) unless files && files.is_a?(Array)
+          files = site.options[collection_name.to_sym]
+          if files && files.is_a?(Array)
+            files = files.dup
+            add_full_path!(files)
+          else
+            files = Dir.glob(File.join(dir, "**", "*"))
             reject_partials_and_directories!(files)
             reject_skipped_files!(files)
           end
@@ -29,7 +32,7 @@ module Massimo
         # Reject the files in the skip_files option, which can either be an Array of files to skip
         # or a Proc that returns true if the file should be skipped.
         def reject_skipped_files!(files)
-          if skip_files = site.options["skip_#{name}".to_sym]
+          if skip_files = site.options["skip_#{collection_name}".to_sym]
             files.reject! do |file|
               test_file = file.sub("#{dir}/", "")
               case skip_files
@@ -42,6 +45,11 @@ module Massimo
               end
             end
           end
+        end
+        
+        # Add the full path to each file.
+        def add_full_path!(files)
+          files.collect! { |file| dir(file) }
         end
     end
   end

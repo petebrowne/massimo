@@ -9,9 +9,14 @@ module Massimo
     
       attr_reader :source_path, :body
     
-      # Get the name of this Resource type.
+      # The name of this Resource type.
       def self.name
         self.to_s.underscore.gsub(/.*\//, "")
+      end
+      
+      # The plural name of this Resource type.
+      def self.collection_name
+        name.pluralize
       end
     
       # Gets the site instance
@@ -21,7 +26,7 @@ module Massimo
     
       # Get the directory to this Resource type.
       def self.dir(*path)
-        site.dir_for(self.name.to_s.pluralize, *path)
+        site.dir_for(self.collection_name, *path)
       end
     
       # Hook for adding Resource types.

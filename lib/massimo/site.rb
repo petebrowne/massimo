@@ -117,12 +117,8 @@ module Massimo
       # Return an Array of the reloaded Constants.
       def reload_files(files)
         files.collect do |file|
-          class_name = File.basename(file).gsub(File.extname(file), "").classify
-          # Unload the constant if it already exists
-          Object.class_eval { remove_const(class_name) if const_defined?(class_name) }
-          # Load the constant
           load(file)
-          # return the constant
+          class_name = File.basename(file).gsub(File.extname(file), "").classify
           class_name.constantize rescue nil
         end
       end
