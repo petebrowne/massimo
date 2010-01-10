@@ -32,19 +32,51 @@ class TestSite < Test::Unit::TestCase
     assert @site.production?
   end
   
+  context "Site#dir_for" do
+    should "get the default path to directories" do
+      @site = Massimo::Site(:source => source_dir)
+      assert_equal source_dir("pages"), @site.dir_for(:pages)
+    end
+    
+    should "get the specified path to directories from the options" do
+      @site = Massimo::Site(:source => source_dir, :pages_path => source_dir("my_pages"))
+      assert_equal source_dir("my_pages"), @site.dir_for(:pages)
+    end
+    
+    should "get paths to files" do
+      @site = Massimo::Site(:source => source_dir)
+      assert_equal source_dir("random", "file.jpg"), @site.dir_for(:random, "file.jpg")
+    end
+  end
+  
+  context "Site#all_source_dirs" do
+    should "get the directories of all the resources, libs, and helpers" do
+      assert_equal [
+        "./test/source/views",
+        "./test/source/pages",
+        "./test/source/stylesheets",
+        "./test/source/javascripts",
+        "./test/source/helpers",
+        "./test/source/lib" ],
+        site.all_source_dirs
+    end
+    
+    should "include new resource directories" do
+      class Post < Massimo::Page; end
+      assert site.all_source_dirs.include?("./test/source/posts")
+    end
+    
+    teardown do
+      Massimo.resources.delete_if { |resource| resource.name == "post" }
+    end
+  end
+  
   context "A Normal Site" do
     setup { site() }
   
     should "have a source_dir method" do
       assert_equal source_dir("some", "path"), @site.source_dir("some", "path")
     end
-  
-    # should "have a directory shortcut methods" do
-    #   assert_equal source_dir("pages", "some", "file.txt"),       @site.pages_dir("some", "file.txt")
-    #   assert_equal source_dir("views", "some", "file.txt"),       @site.views_dir("some", "file.txt")
-    #   assert_equal source_dir("stylesheets", "some", "file.txt"), @site.stylesheets_dir("some", "file.txt")
-    #   assert_equal source_dir("javascripts", "some", "file.txt"), @site.javascripts_dir("some", "file.txt")
-    # end
   
     should "have a output_dir method" do
       assert_equal output_dir("some", "path"), @site.output_dir("some", "path")
