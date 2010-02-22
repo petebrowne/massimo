@@ -93,7 +93,7 @@ module Massimo
       
       # Reload all the files in the source lib dir.
       def reload_libs
-        reload_files Dir.glob(dir_for(:lib, "**", "*.rb"))
+        reload_files Dir.glob(dir_for(:lib, "**/*.rb"))
       end
     
       # Load methods for listing all available files for each Resource type.

@@ -5,20 +5,20 @@ require "rubygems"
 require "pathname"
 require "fileutils"
 require "singleton"
-require "active_support"
+require "active_support/inflector"
+require "active_support/core_ext/hash/keys"
 require "sinatra_more"
 require "sprockets"
 require "jsmin"
 require "tilt"
 
 # Internal
-lib_dir = File.dirname(__FILE__)
-require File.join(lib_dir, "massimo", "helpers")
-require File.join(lib_dir, "massimo", "templates")
-require File.join(lib_dir, "massimo", "site")
+require "massimo/helpers"
+require "massimo/templates"
+require "massimo/site"
 
 module Massimo
-  VERSION = File.read(File.join(File.dirname(__FILE__), "..", "VERSION")) # :nodoc:
+  VERSION = File.read(File.expand_path("../../VERSION", __FILE__)) # :nodoc:
   
   MissingResource = Class.new(StandardError) # :nodoc:
   InvalidResource = Class.new(StandardError) # :nodoc:
@@ -42,8 +42,8 @@ module Massimo
   end
 end
 
-require File.join(lib_dir, "massimo", "resource", "base")
-require File.join(lib_dir, "massimo", "view")
-require File.join(lib_dir, "massimo", "page")
-require File.join(lib_dir, "massimo", "stylesheet")
-require File.join(lib_dir, "massimo", "javascript")
+require "massimo/resource/base"
+require "massimo/view"
+require "massimo/page"
+require "massimo/stylesheet"
+require "massimo/javascript"

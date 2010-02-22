@@ -1,5 +1,5 @@
-require File.join(File.dirname(__FILE__), "processing")
-require File.join(File.dirname(__FILE__), "collection")
+require "massimo/resource/processing"
+require "massimo/resource/collection"
 
 module Massimo
   module Resource

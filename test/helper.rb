@@ -9,7 +9,7 @@ require "assertions"
 require "rr"
 
 # Load Massimo
-require File.join(File.dirname(__FILE__), "..", "lib", "massimo")
+require File.expand_path("../../lib/massimo", __FILE__)
 
 class Test::Unit::TestCase
   include Assertions
@@ -17,12 +17,12 @@ class Test::Unit::TestCase
 
   #
   def source_dir(*subdirs)
-    File.join(File.dirname(__FILE__), "source", *subdirs)
+    File.join("./test/source", *subdirs)
   end
 
   #
   def output_dir(*subdirs)
-    File.join(File.dirname(__FILE__), "output", *subdirs)
+    File.join("./test/output", *subdirs)
   end
 
   #
@@ -53,7 +53,7 @@ class Test::Unit::TestCase
   
   #
   def source_page_paths
-    @source_page_paths ||= Pathname.glob(source_dir("pages", "**", "*")).
+    @source_page_paths ||= Pathname.glob(source_dir("pages/**/*")).
       reject  { |p| p.basename.to_s =~ /^_/ || File.directory?(p) }.
       collect { |p| p.basename }
   end

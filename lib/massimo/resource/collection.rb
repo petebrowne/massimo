@@ -17,7 +17,7 @@ module Massimo
             files = files.dup
             add_full_path!(files)
           else
-            files = Dir.glob(File.join(dir, "**", "*"))
+            files = Dir.glob(File.join(dir, "**/*"))
             reject_partials_and_directories!(files)
             reject_skipped_files!(files)
           end
