@@ -4,7 +4,7 @@ module Tilt
   
   # My Markdown implementation.
   class MarkdownTemplate < Template
-    def compile!
+    def prepare
       @erb_engine = Tilt::ERBTemplate.new { data }
     end
 

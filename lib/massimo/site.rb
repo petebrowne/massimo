@@ -113,14 +113,11 @@ module Massimo
         reload_files Dir.glob(dir_for(:helpers, "*.rb"))
       end
       
-      # Relod the given file by removing their constants and loading the file again.
-      # Return an Array of the reloaded Constants.
+      # Reload the given files and an Array of the reloaded Constants.
       def reload_files(files)
         files.collect do |file|
-          class_name = File.basename(file).gsub(File.extname(file), "").classify
-          Object.class_eval { remove_const(class_name) if const_defined?(class_name) }
           load(file)
-          class_name.constantize rescue nil
+          File.basename(file).gsub(File.extname(file), "").classify.constantize rescue nil
         end
       end
   end
