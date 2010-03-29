@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{massimo}
-  s.version = "0.4.2"
+  s.version = "0.4.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Peter Browne"]
-  s.date = %q{2010-02-22}
+  s.date = %q{2010-03-29}
   s.default_executable = %q{massimo}
   s.description = %q{Massimo builds HTML, Javascript, and CSS Files from your source.}
   s.email = %q{me@petebrowne.com}
@@ -85,20 +85,20 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/peterbrowne/massimo}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.5}
+  s.rubygems_version = %q{1.3.6}
   s.summary = %q{Massimo is a static website builder.}
   s.test_files = [
-    "test/assertions.rb",
-     "test/helper.rb",
-     "test/source/helpers/test_helper.rb",
-     "test/source/lib/site.rb",
-     "test/test_helpers.rb",
-     "test/test_javascript.rb",
-     "test/test_page.rb",
-     "test/test_resource.rb",
-     "test/test_site.rb",
+    "test/test_helpers.rb",
+     "test/assertions.rb",
      "test/test_stylesheet.rb",
-     "test/test_view.rb"
+     "test/test_site.rb",
+     "test/helper.rb",
+     "test/test_resource.rb",
+     "test/test_page.rb",
+     "test/test_view.rb",
+     "test/test_javascript.rb",
+     "test/source/lib/site.rb",
+     "test/source/helpers/test_helper.rb"
   ]
 
   if s.respond_to? :specification_version then
