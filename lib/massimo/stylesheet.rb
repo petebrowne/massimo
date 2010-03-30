@@ -1,3 +1,6 @@
+require "pathname"
+require "massimo/resource/base"
+
 module Massimo
   class Stylesheet < Massimo::Resource::Base
     processable!

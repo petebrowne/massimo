@@ -1,3 +1,5 @@
+require "tilt"
+
 module Tilt
   register :html, Tilt::ERBTemplate
   register :php,  Tilt::ERBTemplate

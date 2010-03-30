@@ -1,18 +1,6 @@
-# Rubygems
-require "rubygems"
+libdir = File.dirname(__FILE__)
+$LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 
-# External
-require "pathname"
-require "fileutils"
-require "singleton"
-require "active_support/inflector"
-require "active_support/core_ext/hash/keys"
-require "sinatra_more"
-require "sprockets"
-require "jsmin"
-require "tilt"
-
-# Internal
 require "massimo/helpers"
 require "massimo/templates"
 require "massimo/site"
@@ -28,7 +16,7 @@ module Massimo
   # instance.
   def self.Site(options = {})
     return @site if defined?(@site) && options.empty?
-    @site = Massimo::Site.instance.setup(options)
+    @site = Site.instance.setup(options)
   end
   
   # All the avaiable Resource types

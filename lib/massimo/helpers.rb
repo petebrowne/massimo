@@ -1,3 +1,5 @@
+begin require "sinatra_more"; rescue LoadError; end
+
 module Massimo
   class Helpers
     if defined? SinatraMore

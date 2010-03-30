@@ -1,8 +1,8 @@
-require "optparse"
-require "yaml"
 require "active_support/backtrace_cleaner"
 require "active_support/core_ext/hash/keys"
 begin require "growl"; rescue LoadError; end
+require "optparse"
+require "yaml"
 
 module Massimo
   class Command

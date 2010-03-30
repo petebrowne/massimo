@@ -1,3 +1,6 @@
+require "fileutils"
+require "pathname"
+
 module Massimo
   module Resource
     module Processing

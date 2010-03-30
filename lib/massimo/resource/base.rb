@@ -1,11 +1,13 @@
+require "active_support/inflector"
+require "pathname"
 require "massimo/resource/processing"
 require "massimo/resource/collection"
 
 module Massimo
   module Resource
     class Base
-      include Massimo::Resource::Processing
-      extend  Massimo::Resource::Collection
+      include Processing
+      extend  Collection
     
       attr_reader :source_path, :body
     

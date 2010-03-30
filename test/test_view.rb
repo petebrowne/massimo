@@ -43,8 +43,8 @@ class TestView < Test::Unit::TestCase
       assert_equal "test", @view.new_data
     end
     
-    should "still raise NoMethodError when accessing non-existent meta_data properties" do
-      assert_raise(::NoMethodError) { @view.non_existent_prop }
+    should "still return nil when accessing non-existent meta_data properties" do
+      assert_nil @view.non_existent_prop
     end
   end
 end

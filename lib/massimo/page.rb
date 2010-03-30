@@ -1,3 +1,8 @@
+require "active_support/inflector"
+require "pathname"
+require "yaml"
+require "massimo/view"
+
 module Massimo
   class Page < Massimo::View
     META_SEP = %r/\A---\s*(?:\r\n|\n)?\z/ # :nodoc:

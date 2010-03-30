@@ -1,3 +1,6 @@
+require "tilt"
+require "massimo/resource/base"
+
 module Massimo
   class View < Massimo::Resource::Base
     attr_reader :meta_data
@@ -18,9 +21,15 @@ module Massimo
       
       # All undefined methods are sent to the `@meta_data` hash.
       def method_missing(method, *args, &block)
-        if method.to_s.match(/(.*)\=$/) && args.length == 1
-          @meta_data[$1.to_sym] = args.first
-        elsif args.empty? && @meta_data.key?(method)
+        case args.length
+        when 1
+          method_name = method.to_s
+          if method_name.chomp!('=')
+            @meta_data[method_name.to_sym] = args.first
+          else
+            super
+          end
+        when 0
           @meta_data[method]
         else
           super

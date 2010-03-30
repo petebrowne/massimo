@@ -1,3 +1,9 @@
+require "active_support/inflector"
+require "active_support/core_ext/hash/keys"
+require "singleton"
+# require "massimo/helpers"
+# require "massimo/view"
+
 module Massimo
   class Site
     include Singleton
@@ -116,8 +122,10 @@ module Massimo
       # Reload the given files and an Array of the reloaded Constants.
       def reload_files(files)
         files.collect do |file|
+          class_name = File.basename(file).gsub(File.extname(file), "").classify
+          Object.class_eval { remove_const(class_name) if const_defined?(class_name) }
           load(file)
-          File.basename(file).gsub(File.extname(file), "").classify.constantize rescue nil
+          class_name.constantize rescue nil
         end
       end
   end

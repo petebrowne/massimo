@@ -1,3 +1,7 @@
+require "jsmin"
+require "sprockets"
+require "massimo/resource/base"
+
 module Massimo
   class Javascript < Massimo::Resource::Base
     processable!
