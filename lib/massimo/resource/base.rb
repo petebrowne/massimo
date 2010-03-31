@@ -34,6 +34,7 @@ module Massimo
       # Hook for adding Resource types.
       def self.inherited(subclass)
         Massimo.resources << subclass
+        Massimo.resources.uniq!
       end
     
       # Creates a new page associated with the given file path.
