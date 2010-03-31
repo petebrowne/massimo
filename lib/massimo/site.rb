@@ -125,7 +125,9 @@ module Massimo
           class_name = File.basename(file).gsub(File.extname(file), "").classify
           Object.class_eval { remove_const(class_name) if const_defined?(class_name) }
           load(file)
-          class_name.constantize rescue nil
+          class_constant = class_name.constantize rescue nil
+          Massimo.resources.delete(class_constant)
+          class_constant
         end
       end
   end
