@@ -214,11 +214,11 @@ HELP
             options[:server_port] = port
           end
         
-          opts.on("--verbose", "-v", "Show full backtrace on errors. Defaults to false.") do
+          opts.on("--verbose", "-V", "Show full backtrace on errors. Defaults to false.") do
             options[:verbose] = true
           end
         
-          opts.on("--version", "-V", "Display current version") do
+          opts.on("--version", "-v", "Display current version") do
             puts "Massimo #{Massimo::VERSION}"
             exit 0
           end
