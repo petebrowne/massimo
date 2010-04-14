@@ -31,6 +31,11 @@ module Massimo
       @meta_data['url']
     end
     
+    def layout
+      read_source
+      @meta_data['layout'] ||= 'application'
+    end
+    
     protected
     
       def read_source

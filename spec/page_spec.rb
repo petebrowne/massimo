@@ -49,32 +49,49 @@ describe Massimo::Page do
   context 'without meta data' do
     let(:page) { Massimo::Page.new 'without_meta_data.erb' }
     
-    it 'should create the title from the filename' do
+    it 'should create the #title from the filename' do
       within_construct do |c|
         c.file 'without_meta_data.erb'
         page.title.should == 'Without Meta Data'
       end
     end
     
-    it 'should default the extension to .html' do
+    it "should default the #extension to '.html'" do
       within_construct do |c|
         c.file 'without_meta_data.erb'
         page.extension.should == '.html'
       end
-      
     end
-    it 'should create the url from the filename' do
+    
+    it "should default the #layout to 'application'" do
+      within_construct do |c|
+        c.file 'without_meta_data.erb'
+        page.layout.should == 'application'
+      end
+    end
+    
+    it 'should create the #url from the filename' do
       within_construct do |c|
         c.file 'without_meta_data.erb'
         page.url.should == '/without-meta-data'
       end
     end
     
-    it "should prepend the Resource's url to the url" do
+    it "should prepend the Resource's url to the #url" do
       Massimo.config.pages_url = '/pages'
       within_construct do |c|
         c.file 'without_meta_data.erb'
         page.url.should == '/pages/without-meta-data'
+      end
+    end
+  end
+  
+  describe '#output_path' do
+    it 'should add the #extension from the meta_data' do
+      within_construct do |c|
+        c.file 'feed.erb', "---\nextension: .rss\n---"
+        page = Massimo::Page.new('feed.erb')
+        page.output_path.to_s.should == '/feed.rss'
       end
     end
   end

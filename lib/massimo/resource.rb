@@ -26,7 +26,7 @@ module Massimo
     
     # The path to the output file.
     def output_path
-      @output_path ||= Pathname.new source_path.to_s.sub(Massimo.config.source_path, Massimo.config.output_path)
+      @output_path ||= Pathname.new source_path.to_s.sub(/^#{Massimo.config.source_path}/, Massimo.config.output_path)
     end
     
     # Reads the associated file's content.

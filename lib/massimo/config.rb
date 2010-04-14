@@ -17,7 +17,8 @@ module Massimo
     end
     
     def path_for(resource_name)
-      if resource_path = instance_variable_get("@#{resource_name}_path")
+      path_method = "#{resource_name}_path"
+      if resource_path = (respond_to?(path_method) and send(path_method))
         resource_path
       else
         File.join(source_path, resource_name)
@@ -25,7 +26,8 @@ module Massimo
     end
     
     def url_for(resource_name)
-      if resource_url = instance_variable_get("@#{resource_name}_url")
+      url_method = "#{resource_name}_url"
+      if resource_url = (respond_to?(url_method) and send(url_method))
         resource_url
       else
         '/'
