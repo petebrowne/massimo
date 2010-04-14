@@ -7,19 +7,41 @@ describe Massimo::Config do
   describe '#initialize' do
     context 'with an options hash' do
       it 'should set the given attributes' do
-        configuration = Massimo::Config.new :source_path => 'source/dir'
-        configuration.source_path.should == 'source/dir'
+        config = Massimo::Config.new :source_path => 'source/path'
+        config.source_path.should == 'source/path'
       end
     end
     
     context 'with a string' do
       it 'should read a YAML file for configuration' do
         within_construct do |c|
-          c.file 'config.yml', "source_path: source/dir\n"
-          configuration = Massimo::Config.new 'config.yml'
-          configuration.source_path.should == 'source/dir'
+          c.file 'config.yml', "source_path: source/path\n"
+          config = Massimo::Config.new 'config.yml'
+          config.source_path.should == 'source/path'
         end
       end
+    end
+  end
+  
+  describe '#path_for' do
+    it 'should read the configured option' do
+      config = Massimo::Config.new :pages_path => 'pages/path'
+      config.path_for('pages').should == 'pages/path'
+    end
+    
+    it 'should default to a path in the #source_path' do
+      Massimo::Config.new.path_for('pages').should == './pages'
+    end
+  end
+  
+  describe '#url_for' do
+    it 'should read the configured option' do
+      config = Massimo::Config.new :pages_url => '/pages'
+      config.url_for('pages').should == '/pages'
+    end
+    
+    it "should default to '/'" do
+      Massimo::Config.new.url_for('users').should == '/'
     end
   end
 end

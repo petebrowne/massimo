@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
-gem 'tilt', '~> 0.8.0'
+gem 'activesupport', '>= 3.0.0.beta'
+gem 'tilt',          '~> 0.8.0'
 
 group :development do
   gem 'version', '~> 0.9.0'

@@ -1,8 +1,23 @@
+require 'active_support/inflector'
 require 'fileutils'
 require 'pathname'
 
 module Massimo
   class Resource
+    class << self
+      def resource_name
+        self.name.underscore.sub(/.*\//, '').pluralize
+      end
+      
+      def path
+        Massimo.config.path_for resource_name
+      end
+      
+      def url
+        Massimo.config.url_for resource_name
+      end
+    end
+    
     attr_reader :source_path
     
     def initialize(source)

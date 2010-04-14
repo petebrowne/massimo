@@ -54,4 +54,39 @@ describe Massimo::Resource do
       end
     end
   end
+  
+  describe '.resource_name' do
+    context 'for Resource' do
+      it "should be 'resource'" do
+        Massimo::Resource.resource_name.should == 'resources'
+      end
+    end
+    
+    context 'for Page' do
+      it "should be 'page'" do
+        Massimo::Page.resource_name.should == 'pages'
+      end
+    end
+    
+    context 'for a custom Resource' do
+      it 'should be determined based on the class name' do
+        class NewResource < Massimo::Resource; end
+        NewResource.resource_name.should == 'new_resources'
+      end
+    end
+  end
+  
+  describe '.path' do
+    it 'should get the path from the configuration' do
+      Massimo::Site.new :pages_path => 'some/path'
+      Massimo::Page.path.should == 'some/path'
+    end
+  end
+  
+  describe '.url' do
+    it 'should get the url from the configuration' do
+      Massimo::Site.new :pages_url => '/pages'
+      Massimo::Page.url.should == '/pages'
+    end
+  end
 end
