@@ -8,7 +8,6 @@ describe Massimo::Page do
         ---
         title: A Page
         created_at: 2010-04-01
-        url: a/messy/url
         ---
         <%= title %>
         <%= created_at.strftime('%m-%Y') %>
@@ -33,15 +32,8 @@ describe Massimo::Page do
       within_construct do |c|
         c.file 'page.erb', page_content
         stub(template = Object.new).render
-        mock(Tilt).new('page.erb', 6) { template }
+        mock(Tilt).new('page.erb', 5) { template }
         page.render
-      end
-    end
-    
-    it "should ensure urls start with a '/'" do
-      within_construct do |c|
-        c.file 'page.erb', page_content
-        page.url.should =~ /^\//
       end
     end
   end
@@ -67,31 +59,6 @@ describe Massimo::Page do
       within_construct do |c|
         c.file 'without_meta_data.erb'
         page.layout.should == 'application'
-      end
-    end
-    
-    it 'should create the #url from the filename' do
-      within_construct do |c|
-        c.file 'without_meta_data.erb'
-        page.url.should == '/without-meta-data'
-      end
-    end
-    
-    it "should prepend the Resource's url to the #url" do
-      Massimo.config.pages_url = '/pages'
-      within_construct do |c|
-        c.file 'without_meta_data.erb'
-        page.url.should == '/pages/without-meta-data'
-      end
-    end
-  end
-  
-  describe '#output_path' do
-    it 'should add the #extension from the meta_data' do
-      within_construct do |c|
-        c.file 'feed.erb', "---\nextension: .rss\n---"
-        page = Massimo::Page.new('feed.erb')
-        page.output_path.to_s.should == '/feed.rss'
       end
     end
   end

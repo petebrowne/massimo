@@ -5,7 +5,7 @@ describe Massimo::Site do
     context 'with an options hash' do
       it 'configures the site' do
         site = Massimo::Site.new :source_path => 'source/dir'
-        site.config.source_path.should == 'source/dir'
+        site.config.source_path.should == File.expand_path('source/dir')
       end
     end
     context 'with a string' do
@@ -13,7 +13,7 @@ describe Massimo::Site do
         within_construct do |c|
           c.file 'config.yml', "source_path: source/dir\n"
           site = Massimo::Site.new 'config.yml'
-          site.config.source_path.should == 'source/dir'
+          site.config.source_path.should == File.expand_path('source/dir')
         end
       end
     end
@@ -23,7 +23,7 @@ describe Massimo::Site do
         site = Massimo::Site.new do |config|
           config.source_path = 'source/dir'
         end
-        site.config.source_path.should == 'source/dir'
+        site.config.source_path.should == File.expand_path('source/dir')
       end
     end
   end

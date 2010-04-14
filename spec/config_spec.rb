@@ -1,14 +1,16 @@
 require File.expand_path('../spec_helper', __FILE__)
 
 describe Massimo::Config do
-  its(:source_path) { should == '.' }
-  its(:output_path) { should == './public' }
+  its(:source_path)     { should == File.expand_path('.') }
+  its(:output_path)     { should == File.expand_path('public') }
+  its(:resources_url)   { should == '/' }
+  its(:directory_index) { should == 'index.html' }
   
   describe '#initialize' do
     context 'with an options hash' do
       it 'should set the given attributes' do
         config = Massimo::Config.new :source_path => 'source/path'
-        config.source_path.should == 'source/path'
+        config.source_path.should == File.expand_path('source/path')
       end
     end
     
@@ -17,7 +19,7 @@ describe Massimo::Config do
         within_construct do |c|
           c.file 'config.yml', "source_path: source/path\n"
           config = Massimo::Config.new 'config.yml'
-          config.source_path.should == 'source/path'
+          config.source_path.should == File.expand_path('source/path')
         end
       end
     end
@@ -26,11 +28,11 @@ describe Massimo::Config do
   describe '#path_for' do
     it 'should read the configured option' do
       config = Massimo::Config.new :pages_path => 'pages/path'
-      config.path_for('pages').should == 'pages/path'
+      config.path_for('pages').should == File.expand_path('pages/path')
     end
     
     it 'should default to a path in the #source_path' do
-      Massimo::Config.new.path_for('pages').should == './pages'
+      Massimo::Config.new.path_for('pages').should == File.expand_path('pages')
     end
   end
   

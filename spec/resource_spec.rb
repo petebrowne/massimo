@@ -1,7 +1,8 @@
 require File.expand_path('../spec_helper', __FILE__)
 
 describe Massimo::Resource do
-  let(:resource) { Massimo::Resource.new './file.txt' }
+  
+  let(:resource) { Massimo::Resource.new 'file.txt' }
   
   describe '#initialize' do
     it 'should require the #source_path to the file' do
@@ -14,6 +15,35 @@ describe Massimo::Resource do
       it 'should be a Pathname object' do
         resource.source_path.should be_an_instance_of(Pathname)
       end
+    end
+  end
+  
+  describe '#url' do
+    it 'should be created from the filename' do
+      Massimo::Resource.new('a_resource_url.erb').url.should == '/a-resource-url.erb'
+    end
+    
+    it "should prepend the Resource's url" do
+      Massimo.config.resources_url = '/resources'
+      Massimo::Resource.new('url.erb').url.should == '/resources/url.erb'
+    end
+    
+    it 'should replace custom extensions' do
+      within_construct do |c|
+        c.file 'feed.erb', "---\nextension: .rss\n---"
+        page = Massimo::Page.new('feed.erb')
+        page.url.to_s.should == '/feed.rss'
+      end
+    end
+    
+    it 'should drop directory index file names' do
+      Massimo::Resource.new('some/url/index.html').url.should == '/some/url/'
+    end
+  end
+  
+  describe '#extension' do
+    it 'should be the extension of the file' do
+      Massimo::Resource.new('url.erb').extension.should == '.erb'
     end
   end
   
@@ -79,7 +109,7 @@ describe Massimo::Resource do
   describe '.path' do
     it 'should get the path from the configuration' do
       Massimo::Site.new :pages_path => 'some/path'
-      Massimo::Page.path.should == 'some/path'
+      Massimo::Page.path.should == File.expand_path('some/path')
     end
   end
   

@@ -21,14 +21,7 @@ module Massimo
     
     def url
       read_source
-      @meta_data['url'] ||= begin
-        url = source_path.to_s.sub(self.class.path, '')
-        url = url.chomp(source_path.extname.to_s).dasherize
-        url = File.join(self.class.url, url) unless url[self.class.url]
-        url
-      end
-      @meta_data['url'] = '/' + @meta_data['url'] unless @meta_data['url'][/^\//]
-      @meta_data['url']
+      @meta_data['url'] ||= super
     end
     
     def layout

@@ -17,7 +17,7 @@ describe Massimo do
   describe '.config' do
     it 'should return the configuration to the current Site' do
       Massimo::Site.new :source_path => 'source/dir'
-      Massimo.config.source_path.should == 'source/dir'
+      Massimo.config.source_path.should == File.expand_path('source/dir')
     end
   end
 end
