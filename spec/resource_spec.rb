@@ -109,7 +109,7 @@ describe Massimo::Resource do
     
     context 'for a custom Resource' do
       it 'should be determined based on the class name' do
-        class NewResource < Massimo::Resource; end
+        NewResource = Class.new(Massimo::Resource)
         NewResource.resource_name.should == 'new_resources'
       end
     end
