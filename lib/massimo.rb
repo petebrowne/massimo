@@ -9,11 +9,11 @@ module Massimo
   
   class << self
     def site
-      @@site ||= Site.new
+      @site ||= Site.new
     end
   
     def site=(site)
-      @@site = site
+      @site = site
     end
     
     def config

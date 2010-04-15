@@ -29,11 +29,9 @@ describe Massimo::Resource do
     end
     
     it 'should replace custom extensions' do
-      within_construct do |c|
-        c.file 'feed.erb', "---\nextension: .rss\n---"
-        page = Massimo::Page.new('feed.erb')
-        page.url.to_s.should == '/feed.rss'
-      end
+      resource = Massimo::Resource.new('url.erb')
+      mock(resource).extension { '.rss' }
+      resource.url.should == '/url.rss'
     end
     
     it 'should drop directory index file names' do
@@ -53,7 +51,7 @@ describe Massimo::Resource do
     end
     
     it 'should move the #source_path to the sites output dir' do
-      resource.output_path.to_s.should == './public/file.txt'
+      resource.output_path.to_s.should == File.expand_path('public/file.txt')
     end
   end
   

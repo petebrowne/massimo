@@ -12,7 +12,7 @@ Spec::Runner.configure do |config|
   config.include Construct::Helpers
   config.mock_with :rr
   
-  config.after do
+  config.after :each do
     Massimo.site = nil
   end
 end

@@ -3,6 +3,7 @@ require File.expand_path('../spec_helper', __FILE__)
 describe Massimo::Config do
   its(:source_path)     { should == File.expand_path('.') }
   its(:output_path)     { should == File.expand_path('public') }
+  its(:resources_path)  { should == '.' }
   its(:resources_url)   { should == '/' }
   its(:directory_index) { should == 'index.html' }
   

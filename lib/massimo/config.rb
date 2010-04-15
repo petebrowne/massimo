@@ -7,6 +7,7 @@ module Massimo
     DEFAULT_OPTIONS = {
       :source_path     => '.',
       :output_path     => 'public',
+      :resources_path  => '.',
       :resources_url   => '/',
       :directory_index => 'index.html'
     }.freeze

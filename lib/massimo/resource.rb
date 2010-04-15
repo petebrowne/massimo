@@ -21,11 +21,13 @@ module Massimo
     attr_reader :source_path
     
     def initialize(source)
-      @source_path = source.is_a?(Pathname) ? source : Pathname.new(source)
+      @source_path = source.is_a?(Pathname) ? source.expand_path : Pathname.new(source).expand_path
     end
     
     def url
       @url ||= begin
+        puts self.class.path.inspect
+        puts source_path.to_s.inspect
         url = source_path.to_s.sub(/^#{Regexp.escape(self.class.path)}/, '')
         if directory_index?
           url.chomp! File.basename(url)
