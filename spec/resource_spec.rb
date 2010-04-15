@@ -45,6 +45,12 @@ describe Massimo::Resource do
     end
   end
   
+  describe '#filename' do
+    it 'should be the filename of the file' do
+      Massimo::Resource.new('url.erb').filename.should == 'url.erb'
+    end
+  end
+  
   describe '#output_path' do
     it 'should be a Pathname object' do
       resource.output_path.should be_an_instance_of(Pathname)
@@ -52,6 +58,11 @@ describe Massimo::Resource do
     
     it 'should move the #source_path to the sites output dir' do
       resource.output_path.to_s.should == File.expand_path('public/file.txt')
+    end
+    
+    it 'should re-add directory index file names' do
+      resource = Massimo::Resource.new('some/url/index.html')
+      resource.output_path.to_s.should == File.expand_path('public/some/url/index.html')
     end
   end
   

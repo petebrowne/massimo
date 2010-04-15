@@ -58,18 +58,14 @@ module Massimo
       end
       
       def method_missing(method, *args, &block)
-        method_name = method.to_s
-        case args.length
-        when 1
-          if method_name.chomp! '='
-            read_source
-            @meta_data[method_name] = args.first
-          else
-            super
-          end
-        when 0
+        if args.length == 0
           read_source
-          @meta_data[method_name]
+          method_name = method.to_s
+          if method_name.chomp! '?'
+            !!@meta_data[method_name]
+          else
+            @meta_data[method_name]
+          end
         else
           super
         end

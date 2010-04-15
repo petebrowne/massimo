@@ -24,29 +24,35 @@ module Massimo
       @source_path = source.is_a?(Pathname) ? source.expand_path : Pathname.new(source).expand_path
     end
     
+    def filename
+      @filename ||= source_path.basename.to_s
+    end
+    
+    def extension
+      @extension ||= source_path.extname
+    end
+    
     def url
       @url ||= begin
-        puts self.class.path.inspect
-        puts source_path.to_s.inspect
         url = source_path.to_s.sub(/^#{Regexp.escape(self.class.path)}/, '')
         if directory_index?
-          url.chomp! File.basename(url)
+          url.chomp! filename
         else
           url.sub! /\.[^\.]+$/, extension
         end
         url = url.dasherize
-        url = File.join(self.class.url, url) unless url[self.class.url]
+        url = File.join(self.class.url, url) unless url.include? self.class.url
         url
       end
     end
     
-    def extension
-      source_path.extname
-    end
-    
     # The path to the output file.
     def output_path
-      @output_path ||= Pathname.new File.join(Massimo.config.output_path, url)
+      @output_path ||= begin
+        path = Pathname.new File.join(Massimo.config.output_path, url)
+        path = path.join(filename) if directory_index?
+        path
+      end
     end
     
     # Reads the associated file's content.
@@ -76,7 +82,7 @@ module Massimo
       end
       
       def directory_index?
-        Massimo.config.directory_index.include? source_path.basename.to_s
+        Massimo.config.directory_index.include? filename
       end
   end
 end

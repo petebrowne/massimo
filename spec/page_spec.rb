@@ -28,6 +28,13 @@ describe Massimo::Page do
       end
     end
     
+    it 'should report the #created_at attribute has been set' do
+      within_construct do |c|
+        c.file 'page.erb', page_content
+        page.created_at?.should === true
+      end
+    end
+    
     it 'should report the correct line number to Tilt' do
       within_construct do |c|
         c.file 'page.erb', page_content
@@ -59,6 +66,13 @@ describe Massimo::Page do
       within_construct do |c|
         c.file 'without_meta_data.erb'
         page.layout.should == 'application'
+      end
+    end
+    
+    it 'should report the #created_at attribute has not been set' do
+      within_construct do |c|
+        c.file 'without_meta_data.erb'
+        page.created_at?.should === false
       end
     end
   end
