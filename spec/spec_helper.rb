@@ -1,11 +1,8 @@
-$:.unshift File.dirname(__FILE__)
 $:.unshift File.expand_path('../../lib', __FILE__)
 
 require 'rubygems'
-require 'spec'
-require 'rr'
-require 'construct'
-require 'unindent'
+require 'bundler'
+Bundler.require(:default, :test)
 require 'massimo'
 
 Spec::Runner.configure do |config|

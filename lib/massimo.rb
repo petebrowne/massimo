@@ -1,9 +1,10 @@
 module Massimo
-  autoload :Config,   'massimo/config'
-  autoload :Page,     'massimo/page'
-  autoload :Resource, 'massimo/resource'
-  autoload :Site,     'massimo/site'
-  autoload :View,     'massimo/view'
+  autoload :Config,     'massimo/config'
+  autoload :Page,       'massimo/page'
+  autoload :Resource,   'massimo/resource'
+  autoload :Site,       'massimo/site'
+  autoload :Stylesheet, 'massimo/stylesheet'
+  autoload :View,       'massimo/view'
   
   VERSION = File.read File.expand_path('../../VERSION', __FILE__)
   

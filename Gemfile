@@ -10,6 +10,8 @@ end
 group :test do
   gem 'rspec',          '~> 1.3.0'
   gem 'rr',             '~> 0.10.0'
-  gem 'test-construct', '~> 1.2.0'
+  gem 'test-construct', '~> 1.2.0', :require => 'construct'
+  gem 'haml',           '~> 2.2.0', :require => 'sass'
+  gem 'less',           '~> 1.2.0'
   gem 'unindent',       '~> 0.9.0'
 end

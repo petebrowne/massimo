@@ -188,24 +188,12 @@ describe Massimo::Resource do
       
       it 'should skip files with prefixed underscores' do
         within_construct do |c|
-          c.file 'pages/index.haml'
-          c.file 'pages/_skip.haml'
-          c.file 'pages/_skip_this.erb'
-          Massimo::Page.all.map(&:filename).should =~ %w( index.haml )
+          c.file 'stylesheets/main.sass'
+          c.file 'stylesheets/_base.sass'
+          c.file 'stylesheets/_mixins.sass'
+          Massimo::Stylesheet.all.map(&:filename).should =~ %w( main.sass )
         end
       end
     end
-    
-    # context 'with specific files set' do
-    #   it 'should return only those files' do
-    #     Massimo.config.pages = %w( index.html about.haml )
-    #     within_construct do |c|
-    #       c.file 'pages/index.haml'
-    #       c.file 'pages/about.haml'
-    #       c.file 'pages/contact.haml'
-    #       Massimo::Page.all.map(&:filename) == Massimo.config.pages
-    #     end
-    #   end
-    # end
   end
 end
