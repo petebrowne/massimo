@@ -16,12 +16,18 @@ module Massimo
       def url
         Massimo.config.url_for resource_name
       end
+      
+      def find(name)
+        resource_path = Dir.glob(File.join(path, "#{name}.*")).first
+        resource_path && self.new(resource_path)
+      end
     end
     
-    attr_reader :source_path
+    attr_reader :source_path, :content
     
     def initialize(source)
       @source_path = source.is_a?(Pathname) ? source.expand_path : Pathname.new(source).expand_path
+      read_source
     end
     
     def filename
@@ -55,12 +61,6 @@ module Massimo
       end
     end
     
-    # Reads the associated file's content.
-    def content
-      read_source
-      @content
-    end
-    
     # Runs the content through any necessary filters, templates, etc.
     def render
       content
@@ -77,7 +77,6 @@ module Massimo
     protected
     
       def read_source
-        return if defined? @content
         @content = source_path.read
       end
       

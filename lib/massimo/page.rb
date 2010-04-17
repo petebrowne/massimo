@@ -1,39 +1,38 @@
+require 'active_support/core_ext/hash/keys'
 require 'active_support/inflector'
 require 'yaml'
 
 module Massimo
   class Page < Resource
     def render
-      read_source
       template = Tilt.new(source_path.basename.to_s, @line || 1) { content }
-      template.render
+      output   = template.render(nil, @meta_data)
+      if found_layout = Massimo::View.find("layouts/#{layout}")
+        output = found_layout.render(:page => self) { output }
+      end
+      output
     end
     
     def title
-      read_source
-      @meta_data['title'] ||= source_path.basename.to_s.chomp(source_path.extname.to_s).titleize
+      @meta_data[:title] ||= source_path.basename.to_s.chomp(source_path.extname.to_s).titleize
     end
     
     def extension
-      read_source
-      @meta_data['extension'] ||= '.html'
+      @meta_data[:extension] ||= '.html'
     end
     
     def url
-      read_source
-      @meta_data['url'] ||= super
+      @meta_data[:url] ||= super
     end
     
     def layout
-      read_source
-      @meta_data['layout'] ||= 'application'
+      @meta_data[:layout] = 'application' if @meta_data[:layout].nil?
+      @meta_data[:layout]
     end
     
     protected
     
       def read_source
-        return if defined? @content
-        
         @line        = nil
         @content     = ''
         front_matter = false
@@ -54,7 +53,7 @@ module Massimo
           end
         end
         
-        @meta_data = YAML.load(meta_data) || {}
+        @meta_data = (YAML.load(meta_data) || {}).symbolize_keys
       end
       
       def method_missing(method, *args, &block)
@@ -62,9 +61,9 @@ module Massimo
           read_source
           method_name = method.to_s
           if method_name.chomp! '?'
-            !!@meta_data[method_name]
+            !!@meta_data[method_name.to_sym]
           else
-            @meta_data[method_name]
+            @meta_data[method_name.to_sym]
           end
         else
           super

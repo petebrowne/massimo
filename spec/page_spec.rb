@@ -43,6 +43,13 @@ describe Massimo::Page do
         page.render
       end
     end
+    
+    it 'should include the meta_data as locals when rendering' do
+      within_construct do |c|
+        c.file 'page.erb', page_content
+        page.render.should include('A Page')
+      end
+    end
   end
   
   context 'without meta data' do
@@ -73,6 +80,45 @@ describe Massimo::Page do
       within_construct do |c|
         c.file 'without_meta_data.erb'
         page.created_at?.should === false
+      end
+    end
+  end
+  
+  describe '#render' do
+    let(:page) { Massimo::Page.new 'page.erb' }
+    
+    context 'with layouts' do
+      it 'should wrap the content in a layout' do
+        within_construct do |c|
+          c.file 'page.erb'
+          c.file 'views/layouts/application.erb', 'Layout'
+          page.render.should == 'Layout'
+        end
+      end
+      
+      it 'should include the content with #yield' do
+        within_construct do |c|
+          c.file 'page.erb', 'Content'
+          c.file 'views/layouts/application.erb', '<%= yield %>'
+          page.render.should == 'Content'
+        end
+      end
+      
+      it 'should include the page as a local' do
+        within_construct do |c|
+          c.file 'page.erb', "---\ntitle: A Page\n---"
+          c.file 'views/layouts/application.erb', "<%= page.title %>"
+          page.render.should == 'A Page'
+        end
+      end
+      
+      it 'should not render the layout if #layout is false' do
+        within_construct do |c|
+          c.file 'page.erb', "---\nlayout: false\n---\nContent"
+          c.file 'views/layouts/application.erb', 'Layout'
+          puts page.layout
+          page.render.should_not include('Layout')
+        end
       end
     end
   end
