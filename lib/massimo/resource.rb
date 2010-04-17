@@ -21,6 +21,12 @@ module Massimo
         resource_path = Dir.glob(File.join(path, "#{name}.*")).first
         resource_path && self.new(resource_path)
       end
+      
+      def all
+        files = Dir.glob File.join(path, "**/*.*")
+        files.reject! { |file| File.basename(file) =~ /^_/ }
+        files.map { |file| self.new(file) }
+      end
     end
     
     attr_reader :source_path, :content

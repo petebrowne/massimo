@@ -166,4 +166,46 @@ describe Massimo::Resource do
       end
     end
   end
+  
+  describe '.all' do
+    context 'with no options' do
+      it 'should return an array of the resource type' do
+        within_construct do |c|
+          c.file 'file.txt'
+          c.file 'file-2.txt'
+          Massimo::Resource.all.map(&:class).should == [ Massimo::Resource, Massimo::Resource ]
+        end
+      end
+      
+      it 'should find all the files in the resource path' do
+        within_construct do |c|
+          c.file 'pages/index.haml'
+          c.file 'pages/about/us.haml'
+          c.file 'pages/contact/us.erb'
+          Massimo::Page.all.map(&:filename).should =~ %w( index.haml us.haml us.erb)
+        end
+      end
+      
+      it 'should skip files with prefixed underscores' do
+        within_construct do |c|
+          c.file 'pages/index.haml'
+          c.file 'pages/_skip.haml'
+          c.file 'pages/_skip_this.erb'
+          Massimo::Page.all.map(&:filename).should =~ %w( index.haml )
+        end
+      end
+    end
+    
+    # context 'with specific files set' do
+    #   it 'should return only those files' do
+    #     Massimo.config.pages = %w( index.html about.haml )
+    #     within_construct do |c|
+    #       c.file 'pages/index.haml'
+    #       c.file 'pages/about.haml'
+    #       c.file 'pages/contact.haml'
+    #       Massimo::Page.all.map(&:filename) == Massimo.config.pages
+    #     end
+    #   end
+    # end
+  end
 end
