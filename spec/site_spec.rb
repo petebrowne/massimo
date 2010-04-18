@@ -58,6 +58,12 @@ describe Massimo::Site do
         end
       end
       
+      after do
+        Object.class_eval do
+          remove_const :Comment
+        end
+      end
+      
       it 'should create a class that inherits from Page' do
         Comment.superclass.should == Massimo::Page
       end

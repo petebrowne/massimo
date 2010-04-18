@@ -1,5 +1,6 @@
 module Massimo
   autoload :Config,     'massimo/config'
+  autoload :Javascript, 'massimo/javascript'
   autoload :Page,       'massimo/page'
   autoload :Resource,   'massimo/resource'
   autoload :Site,       'massimo/site'

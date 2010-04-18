@@ -48,9 +48,9 @@ module Massimo
       @url ||= begin
         url = source_path.to_s.sub(/^#{Regexp.escape(self.class.path)}/, '')
         if directory_index?
-          url.chomp! filename
+          url.chomp!(filename)
         else
-          url.sub! /\.[^\.]+$/, extension
+          url.sub!(/\.[^\.]+$/, extension)
         end
         url = url.dasherize
         url = File.join(self.class.url, url) unless url.include? self.class.url

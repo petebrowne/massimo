@@ -1,6 +1,17 @@
 require File.expand_path('../spec_helper', __FILE__)
 
 describe Massimo::Stylesheet do
+  context 'with normal .css files' do
+    let(:stylesheet) { Massimo::Stylesheet.new('stylesheets/main.css') }
+    
+    it 'should render using Sass' do
+      within_construct do |c|
+        c.file 'stylesheets/main.css', '#header { font-size: 36px }'
+        stylesheet.render.should == '#header { font-size: 36px }'
+      end
+    end
+  end
+  
   context 'with .sass styleheets' do
     let(:stylesheet) { Massimo::Stylesheet.new('stylesheets/main.sass') }
     

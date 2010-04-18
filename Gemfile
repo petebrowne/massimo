@@ -13,5 +13,6 @@ group :test do
   gem 'test-construct', '~> 1.2.0', :require => 'construct'
   gem 'haml',           '~> 2.2.0', :require => 'sass'
   gem 'less',           '~> 1.2.0'
+  gem 'coffee-script',  '~> 0.3.0'
   gem 'unindent',       '~> 0.9.0'
 end
