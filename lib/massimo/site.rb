@@ -2,8 +2,6 @@ module Massimo
   class Site
     attr_accessor :config
     
-    DEFAULT_RESOURCES = [ Massimo::Page, Massimo::Javascript, Massimo::Stylesheet ].freeze
-    
     def initialize(options = nil)
       @config = Config.new(options)
       yield @config if block_given?
@@ -11,7 +9,7 @@ module Massimo
     end
     
     def resources
-      @resources ||= DEFAULT_RESOURCES.dup
+      @resources ||= [ Massimo::Page, Massimo::Javascript, Massimo::Stylesheet ]
     end
     
     def resource(name_or_class, &block)
