@@ -1,6 +1,9 @@
 require 'active_support/core_ext/hash/keys'
 require 'active_support/inflector'
+require 'tilt'
 require 'yaml'
+
+Tilt.register 'html', Tilt::StringTemplate
 
 module Massimo
   class Page < Resource
@@ -22,7 +25,11 @@ module Massimo
     end
     
     def url
-      @meta_data[:url] ||= super
+      @meta_data[:url] ||= begin
+        url = super
+        url.sub!(File.extname(url), '/') if extension == '.html'
+        url
+      end
     end
     
     def layout

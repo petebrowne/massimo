@@ -3,6 +3,7 @@ require File.expand_path('../spec_helper', __FILE__)
 describe Massimo::Page do
   context 'with meta data' do
     let(:page) { Massimo::Page.new 'page.erb' }
+    
     let(:page_content) do
       <<-STR.unindent
         ---
@@ -127,6 +128,24 @@ describe Massimo::Page do
         c.file 'index.erb', "<%= render 'partial' %>"
         c.file 'views/partial.erb', 'Partial'
         Massimo::Page.new('index.erb').render.should == 'Partial'
+      end
+    end
+  end
+  
+  describe '#url' do
+    it 'should be a pretty url based on the filename' do
+      within_construct do |c|
+        c.file 'pages/about-us.erb'
+        Massimo::Page.new('pages/about-us.erb').url.should == '/about-us/'
+      end
+    end
+    
+    context "when the extension is not '.html'" do
+      it 'should not create a pretty url' do
+        within_construct do |c|
+          c.file 'pages/about-us.rss', "---\nextension: .rss\n---"
+          Massimo::Page.new('pages/about-us.rss').url.should == '/about-us.rss'
+        end
       end
     end
   end
