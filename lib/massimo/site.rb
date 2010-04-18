@@ -23,5 +23,14 @@ module Massimo
         end
       resources << resource
     end
+    
+    def template_scope
+      @template_scope ||= Object.new.extend(Massimo::Helpers)
+    end
+    
+    def helpers(*extensions, &block)
+      template_scope.instance_eval &block if block_given?
+      template_scope.extend(*extensions) if extensions.any?
+    end
   end
 end

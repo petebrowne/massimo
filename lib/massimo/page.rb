@@ -6,7 +6,7 @@ module Massimo
   class Page < Resource
     def render
       template = Tilt.new(source_path.basename.to_s, @line || 1) { content }
-      output   = template.render(nil, @meta_data)
+      output   = template.render(Massimo.site.template_scope, @meta_data)
       if found_layout = Massimo::View.find("layouts/#{layout}")
         output = found_layout.render(:page => self) { output }
       end

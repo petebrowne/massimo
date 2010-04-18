@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'activesupport', '>= 3.0.0.beta'
+gem 'sinatra_more',  '~> 0.3.0'
 gem 'sprockets',     '~> 1.0.0'
 gem 'tilt',          '~> 0.8.0'
 

@@ -80,4 +80,35 @@ describe Massimo::Site do
       end
     end
   end
+  
+  describe '#template_scope' do
+    it 'should return an object with the Helpers methods included' do
+      Massimo.site.template_scope.methods.should include('render')
+    end
+  end
+  
+  describe '#helpers' do
+    context 'with a block' do
+      it 'should add the defined methods to the template scope' do
+        Massimo.site.helpers do
+          def hello
+            'world'
+          end
+        end
+        Massimo.site.template_scope.hello.should == 'world'
+      end
+    end
+    
+    context 'with a Module' do
+      it 'should extend the template_scope with the given Module' do
+        module CycleHelper
+          def cycle
+            'even'
+          end
+        end
+        Massimo.site.helpers CycleHelper
+        Massimo.site.template_scope.cycle.should == 'even'
+      end
+    end
+  end
 end

@@ -121,5 +121,13 @@ describe Massimo::Page do
         end
       end
     end
+    
+    it 'should use Site#template_scope as the scope' do
+      within_construct do |c|
+        c.file 'index.erb', "<%= render 'partial' %>"
+        c.file 'views/partial.erb', 'Partial'
+        Massimo::Page.new('index.erb').render.should == 'Partial'
+      end
+    end
   end
 end
