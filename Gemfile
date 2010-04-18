@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'activesupport', '>= 3.0.0.beta'
+gem 'sprockets',     '~> 1.0.0'
 gem 'tilt',          '~> 0.8.0'
 
 group :development do

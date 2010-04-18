@@ -7,7 +7,15 @@ describe Massimo::Javascript do
     it 'should copy content' do
       within_construct do |c|
         c.file 'javascripts/main.js', 'var number = 42;'
-        javascript.render.should == 'var number = 42;'
+        javascript.render.should == "var number = 42;\n"
+      end
+    end
+    
+    it 'should concat using Sprockets' do
+      within_construct do |c|
+        c.file 'javascripts/main.js', '//= require "_plugin.js"'
+        c.file 'javascripts/_plugin.js', 'var number = 42;'
+        javascript.render.should == "var number = 42;\n"
       end
     end
   end
