@@ -2,7 +2,7 @@ module Massimo
   class Site
     attr_accessor :config
     
-    DEFAULT_RESOURCES = [ Massimo::Page ].freeze
+    DEFAULT_RESOURCES = [ Massimo::Page, Massimo::Javascript, Massimo::Stylesheet ].freeze
     
     def initialize(options = nil)
       @config = Config.new(options)

@@ -36,6 +36,14 @@ describe Massimo::Site do
     it 'should include Massimo::Page by default' do
       Massimo::Site.new.resources.should include(Massimo::Page)
     end
+    
+    it 'should include Massimo::Javascript by default' do
+      Massimo::Site.new.resources.should include(Massimo::Javascript)
+    end
+    
+    it 'should include Massimo::Stylesheet by default' do
+      Massimo::Site.new.resources.should include(Massimo::Stylesheet)
+    end
   end
   
   describe '#resource' do
