@@ -119,4 +119,35 @@ describe Massimo::Site do
       end
     end
   end
+  
+  describe '#process' do
+    let(:processed_files) { Dir.glob('public/**/*.*') }
+    
+    it 'should process each resource' do
+      within_construct do |c|
+        c.file 'pages/index.html'
+        c.file 'pages/about-us.html'
+        c.file 'javascripts/main.js'
+        c.file 'stylesheets/main.css'
+        Massimo.site.process
+        processed_files.should =~ [
+          'public/index.html',
+          'public/about-us/index.html',
+          'public/javascripts/main.js',
+          'public/stylesheets/main.css'
+        ]
+      end
+    end
+    
+    context 'with a custom resource' do
+      it 'should process the resource' do
+        within_construct do |c|
+          c.file 'videos/keyboard-cat.html'
+          Massimo.site.resource :video
+          Massimo.site.process
+          processed_files.should =~ %w( public/keyboard-cat/index.html )
+        end
+      end
+    end
+  end
 end

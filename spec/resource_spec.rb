@@ -40,15 +40,8 @@ describe Massimo::Resource do
       within_construct do |c|
         c.file 'url.erb'
         resource = Massimo::Resource.new('url.erb')
-        mock(resource).extension { '.rss' }
+        stub(resource).extension { '.rss' }
         resource.url.should == '/url.rss'
-      end
-    end
-    
-    it 'should drop directory index file names' do
-      within_construct do |c|
-        c.file 'some/url/index.html'
-        Massimo::Resource.new('some/url/index.html').url.should == '/some/url/'
       end
     end
   end
@@ -83,14 +76,6 @@ describe Massimo::Resource do
       within_construct do |c|
         c.file 'file.txt'
         resource.output_path.to_s.should == File.expand_path('public/file.txt')
-      end
-    end
-    
-    it 'should re-add directory index file names' do
-      within_construct do |c|
-        c.file 'some/url/index.html'
-        resource = Massimo::Resource.new('some/url/index.html')
-        resource.output_path.to_s.should == File.expand_path('public/some/url/index.html')
       end
     end
   end

@@ -140,11 +140,57 @@ describe Massimo::Page do
       end
     end
     
+    context 'with a root directory index' do
+      it "should be '/'" do
+        within_construct do |c|
+          c.file 'pages/index.erb'
+          Massimo::Page.new('pages/index.erb').url.should == '/'
+        end
+      end
+    end
+    
+    context 'with a nested directory index' do
+      it 'should drop the filename' do
+        within_construct do |c|
+          c.file 'pages/some/url/index.haml'
+          Massimo::Page.new('pages/some/url/index.haml').url.should == '/some/url/'
+        end
+      end
+    end
+    
     context "when the extension is not '.html'" do
       it 'should not create a pretty url' do
         within_construct do |c|
           c.file 'pages/about-us.rss', "---\nextension: .rss\n---"
           Massimo::Page.new('pages/about-us.rss').url.should == '/about-us.rss'
+        end
+      end
+    end
+  end
+  
+  describe '#output_path' do
+    it 'should re-add directory index file names' do
+      within_construct do |c|
+        c.file 'pages/some/url/index.html'
+        resource = Massimo::Page.new('pages/some/url/index.html')
+        resource.output_path.to_s.should == File.expand_path('public/some/url/index.html')
+      end
+    end
+    
+    context 'with a root url' do
+      it 'should add the directory index' do
+        within_construct do |c|
+          c.file 'pages/index.erb'
+          Massimo::Page.new('pages/index.erb').output_path.to_s.should == File.expand_path('public/index.html')
+        end
+      end
+    end
+    
+    context 'with a pretty url' do
+      it 'should create a directory index file' do
+        within_construct do |c|
+          c.file 'pages/about-us.erb'
+          Massimo::Page.new('pages/about-us.erb').output_path.to_s.should == File.expand_path('public/about-us/index.html')
         end
       end
     end

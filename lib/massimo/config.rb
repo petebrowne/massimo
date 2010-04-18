@@ -9,7 +9,9 @@ module Massimo
       :output_path     => 'public',
       :resources_path  => '.',
       :resources_url   => '/',
-      :directory_index => 'index.html'
+      :javascripts_url => '/javascripts',
+      :stylesheets_url => '/stylesheets',
+      :resources_url   => '/'
     }.freeze
     
     def initialize(options = nil)

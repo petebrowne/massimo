@@ -27,7 +27,8 @@ module Massimo
     def url
       @meta_data[:url] ||= begin
         url = super
-        url.sub!(File.extname(url), '/') if extension == '.html'
+        url.chomp!('index.html')
+        url.sub!(/\.html$/, '/')
         url
       end
     end
@@ -35,6 +36,14 @@ module Massimo
     def layout
       @meta_data[:layout] = 'application' if @meta_data[:layout].nil?
       @meta_data[:layout]
+    end
+    
+    def output_path
+      @output_path ||= begin
+        output_path = super.to_s
+        output_path << "index.html" if output_path =~ /\/$/
+        Pathname.new output_path
+      end
     end
     
     protected

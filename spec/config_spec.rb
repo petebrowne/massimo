@@ -5,7 +5,8 @@ describe Massimo::Config do
   its(:output_path)     { should == File.expand_path('public') }
   its(:resources_path)  { should == '.' }
   its(:resources_url)   { should == '/' }
-  its(:directory_index) { should == 'index.html' }
+  its(:javascripts_url) { should == '/javascripts' }
+  its(:stylesheets_url) { should == '/stylesheets' }
   
   describe '#initialize' do
     context 'with an options hash' do

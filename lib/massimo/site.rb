@@ -30,5 +30,11 @@ module Massimo
       template_scope.instance_eval &block if block_given?
       template_scope.extend(*extensions) if extensions.any?
     end
+    
+    def process
+      resources.each do |resource|
+        resource.all.each(&:process)
+      end
+    end
   end
 end
