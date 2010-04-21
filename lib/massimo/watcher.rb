@@ -36,8 +36,10 @@ module Massimo
       @files != files
     end
     
-    def files
-      @files = Dir[*@glob].map { |file| File.mtime(file) }
-    end
+    protected
+    
+      def files
+        @files = Dir[*@glob].map { |file| File.mtime(file) }
+      end
   end
 end
