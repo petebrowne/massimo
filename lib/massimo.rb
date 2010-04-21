@@ -4,9 +4,11 @@ module Massimo
   autoload :Javascript, 'massimo/javascript'
   autoload :Page,       'massimo/page'
   autoload :Resource,   'massimo/resource'
+  autoload :Server,     'massimo/server'
   autoload :Site,       'massimo/site'
   autoload :Stylesheet, 'massimo/stylesheet'
   autoload :View,       'massimo/view'
+  autoload :Watcher,    'massimo/watcher'
   
   VERSION = File.read File.expand_path('../../VERSION', __FILE__)
   

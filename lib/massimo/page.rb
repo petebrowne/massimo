@@ -34,7 +34,7 @@ module Massimo
     end
     
     def layout
-      @meta_data[:layout] = 'application' if @meta_data[:layout].nil?
+      @meta_data[:layout] = 'main' if @meta_data[:layout].nil?
       @meta_data[:layout]
     end
     

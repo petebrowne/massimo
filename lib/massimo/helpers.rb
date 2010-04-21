@@ -1,3 +1,5 @@
+require 'sinatra_more/markup_plugin'
+
 module Massimo
   module Helpers
     include SinatraMore::OutputHelpers

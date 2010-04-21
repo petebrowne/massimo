@@ -15,8 +15,7 @@ Gem::Specification.new do |s|
   
   s.add_dependency 'activesupport', '>= 3.0.0.beta'
   s.add_dependency 'sinatra_more',  '~> 0.3.0'
-  s.add_dependency 'sprockets',     '~> 1.0.0'
-  s.add_dependency 'tilt',          '~> 0.8.0'
+  s.add_dependency 'tilt',          '~> 0.9.0'
   
   s.add_development_dependency 'version',        '~> 0.9.0'
   s.add_development_dependency 'rspec',          '~> 1.3.0'
@@ -25,5 +24,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'haml',           '~> 2.2.0'
   s.add_development_dependency 'less',           '~> 1.2.0'
   s.add_development_dependency 'coffee-script',  '~> 0.3.0'
+  s.add_development_dependency 'sprockets',      '~> 1.0.0'
   s.add_development_dependency 'unindent',       '~> 0.9.0'
 end

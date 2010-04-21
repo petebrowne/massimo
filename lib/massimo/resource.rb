@@ -27,6 +27,17 @@ module Massimo
         files.reject! { |file| File.basename(file) =~ /^_/ }
         files.map { |file| self.new(file) }
       end
+      
+      def processable?
+        true
+      end
+      
+      protected
+        
+        def unprocessable
+          def self.processable?; false; end
+          define_method(:process) { false }
+        end
     end
     
     attr_reader :source_path, :content

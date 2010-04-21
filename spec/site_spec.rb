@@ -44,6 +44,10 @@ describe Massimo::Site do
     it 'should include Massimo::Stylesheet by default' do
       Massimo::Site.new.resources.should include(Massimo::Stylesheet)
     end
+    
+    it 'should include Massimo::View by default' do
+      Massimo::Site.new.resources.should include(Massimo::View)
+    end
   end
   
   describe '#resource' do
@@ -136,6 +140,14 @@ describe Massimo::Site do
           'public/javascripts/main.js',
           'public/stylesheets/main.css'
         ]
+      end
+    end
+    
+    it 'should not process views' do
+      within_construct do |c|
+        c.file 'views/partial.haml'
+        Massimo.site.process
+        processed_files.should be_empty
       end
     end
     

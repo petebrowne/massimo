@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
-require File.expand_path('../../lib/massimo', __FILE__)
-require File.expand_path('../../lib/massimo/command', __FILE__)
+$:.unshift File.expand_path('../../lib', __FILE__)
 
-exit Massimo::Command.new(ARGV).run
+require 'massimo'
+require 'massimo/cli'
+
+Massimo::CLI.start

@@ -1,3 +1,6 @@
+require 'active_support/inflector'
+require 'tilt'
+
 module Massimo
   class Site
     attr_accessor :config
@@ -9,7 +12,7 @@ module Massimo
     end
     
     def resources
-      @resources ||= [ Massimo::Page, Massimo::Javascript, Massimo::Stylesheet ]
+      @resources ||= [ Massimo::Page, Massimo::Javascript, Massimo::Stylesheet, Massimo::View ]
     end
     
     def resource(name_or_class, &block)
@@ -23,7 +26,7 @@ module Massimo
     end
     
     def template_scope
-      @template_scope ||= Object.new.extend(Massimo::Helpers)
+      @template_scope ||= Object.new.extend(Massimo::Helpers, Tilt::CompileSite)
     end
     
     def helpers(*extensions, &block)
@@ -32,7 +35,7 @@ module Massimo
     end
     
     def process
-      resources.each do |resource|
+      resources.select(&:processable?).each do |resource|
         resource.all.each(&:process)
       end
     end

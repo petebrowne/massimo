@@ -181,4 +181,32 @@ describe Massimo::Resource do
       end
     end
   end
+  
+  describe '.processable?' do
+    it 'should be true be default' do
+      Massimo::Resource.should be_processable
+    end
+    
+    context 'when a process in unprocessable' do
+      it 'should be false' do
+        class Unprocessable < Massimo::Resource
+          unprocessable
+        end
+        Unprocessable.should_not be_processable
+      end
+    end
+  end
+  
+  describe '.unprocessable' do
+    it 'should overwrite #process to do nothing' do
+      class NewResource < Massimo::Resource
+        unprocessable
+      end
+      within_construct do |c|
+        c.file 'resource.txt'
+        dont_allow(File).open
+        NewResource.new('resource.txt').process
+      end
+    end
+  end
 end

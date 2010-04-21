@@ -73,7 +73,7 @@ describe Massimo::Page do
     it "should default the #layout to 'application'" do
       within_construct do |c|
         c.file 'without_meta_data.erb'
-        page.layout.should == 'application'
+        page.layout.should == 'main'
       end
     end
     
@@ -92,7 +92,7 @@ describe Massimo::Page do
       it 'should wrap the content in a layout' do
         within_construct do |c|
           c.file 'page.erb'
-          c.file 'views/layouts/application.erb', 'Layout'
+          c.file 'views/layouts/main.erb', 'Layout'
           page.render.should == 'Layout'
         end
       end
@@ -100,7 +100,7 @@ describe Massimo::Page do
       it 'should include the content with #yield' do
         within_construct do |c|
           c.file 'page.erb', 'Content'
-          c.file 'views/layouts/application.erb', '<%= yield %>'
+          c.file 'views/layouts/main.erb', '<%= yield %>'
           page.render.should == 'Content'
         end
       end
@@ -108,7 +108,7 @@ describe Massimo::Page do
       it 'should include the page as a local' do
         within_construct do |c|
           c.file 'page.erb', "---\ntitle: A Page\n---"
-          c.file 'views/layouts/application.erb', "<%= page.title %>"
+          c.file 'views/layouts/main.erb', "<%= page.title %>"
           page.render.should == 'A Page'
         end
       end
@@ -116,7 +116,7 @@ describe Massimo::Page do
       it 'should not render the layout if #layout is false' do
         within_construct do |c|
           c.file 'page.erb', "---\nlayout: false\n---\nContent"
-          c.file 'views/layouts/application.erb', 'Layout'
+          c.file 'views/layouts/main.erb', 'Layout'
           puts page.layout
           page.render.should_not include('Layout')
         end
