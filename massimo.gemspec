@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'version',        '~> 0.9.0'
   s.add_development_dependency 'rspec',          '~> 1.3.0'
   s.add_development_dependency 'test-construct', '~> 1.2.0'
+  s.add_development_dependency 'rack-test',      '~> 0.5.0'
   s.add_development_dependency 'rr',             '~> 0.10.0'
   s.add_development_dependency 'haml',           '~> 2.2.0'
   s.add_development_dependency 'less',           '~> 1.2.0'

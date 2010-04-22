@@ -7,6 +7,7 @@ require 'massimo'
 
 Spec::Runner.configure do |config|
   config.include Construct::Helpers
+  config.include Rack::Test::Methods
   config.mock_with :rr
   
   config.after :each do
