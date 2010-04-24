@@ -5,13 +5,13 @@ module Massimo
   class Site
     attr_accessor :config
     
-    def initialize(options = nil)
-      @config = Config.new(options)
-      yield @config if block_given?
-      Massimo.site = self
-      
+    def initialize(options = nil, &block)
+      @config                    = Config.new(options)
       @template_scope_blocks     = []
       @template_scope_extensions = []
+      Massimo.site               = self
+      
+      instance_eval(&block) if block_given?
     end
     
     def resources

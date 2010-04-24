@@ -18,9 +18,9 @@ describe Massimo::Site do
       end
     end
     
-    context 'with a configuration block' do
+    context 'with a block' do
       it 'configures the site' do
-        site = Massimo::Site.new do |config|
+        site = Massimo::Site.new do
           config.source_path = 'source/dir'
         end
         site.config.source_path.should == File.expand_path('source/dir')
