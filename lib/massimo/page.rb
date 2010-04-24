@@ -8,8 +8,9 @@ Tilt.register 'html', Tilt::StringTemplate
 module Massimo
   class Page < Resource
     def render
-      template = Tilt.new(source_path.basename.to_s, @line || 1) { content }
-      output   = template.render(Massimo.site.template_scope, @meta_data)
+      template  = Tilt.new(source_path.basename.to_s, @line || 1) { content }
+      meta_data = @meta_data.merge(self.class.resource_name.singularize.to_sym => self)
+      output    = template.render(Massimo.site.template_scope, meta_data)
       if found_layout = Massimo::View.find("layouts/#{layout}")
         output = found_layout.render(:page => self) { output }
       end

@@ -130,6 +130,14 @@ describe Massimo::Page do
         Massimo::Page.new('index.erb').render.should == 'Partial'
       end
     end
+    
+    it 'should include a local that references itself' do
+      NewPage = Class.new(Massimo::Page)
+      within_construct do |c|
+        c.file 'new_page.erb', '<%= new_page.title %>'
+        NewPage.new('new_page.erb').render.should == 'New Page'
+      end
+    end
   end
   
   describe '#url' do
