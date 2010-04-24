@@ -8,7 +8,6 @@ module Massimo
     
     def initialize(site)
       @site  = site
-      @glob  = site.resources.map(&:path).map { |p| File.join(p, '**/*.*') }
       @files = []
     end
     
@@ -39,7 +38,15 @@ module Massimo
     protected
     
       def files
-        @files = Dir[*@glob].map { |file| File.mtime(file) }
+        @files = Dir[*glob].map { |file| File.mtime(file) }
+      end
+      
+      def glob
+        glob  = @site.resources.map(&:path)
+        glob << @site.config.path_for(:lib)
+        glob << @site.config.path_for(:helpers)
+        glob.map! { |path| File.join(path, '**/*.*') }
+        glob
       end
   end
 end

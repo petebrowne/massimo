@@ -1,7 +1,8 @@
 require File.expand_path('../spec_helper', __FILE__)
 
 describe Massimo::Watcher do
-  let(:watcher) { Massimo::Watcher.new(Massimo.site) }
+  let(:site)    { Massimo::Site.new(:lib_path => 'libs') }
+  let(:watcher) { Massimo::Watcher.new(site) }
   
   it 'should not have changed' do
     watcher.should_not be_changed
@@ -44,7 +45,7 @@ describe Massimo::Watcher do
     it 'should have changed' do
       with_files do |c|
         sleep 1
-        File.open('pages/index.haml', 'w+')  { |f| f.write('change') }
+        File.open('pages/index.haml', 'w+') { |file| file.write('change') }
         watcher.should be_changed
       end
     end
@@ -54,6 +55,7 @@ describe Massimo::Watcher do
     context 'with changes' do
       it 'should call site#process' do
         mock(Massimo::Site.new).process
+        watcher = Massimo::Watcher.new(Massimo.site)
         mock(watcher).changed? { true }
         watcher.process
       end
@@ -62,6 +64,7 @@ describe Massimo::Watcher do
     context 'without changes' do
       it 'should not call site#process' do
         dont_allow(Massimo::Site.new).process
+        watcher = Massimo::Watcher.new(Massimo.site)
         mock(watcher).changed? { false }
         watcher.process
       end
