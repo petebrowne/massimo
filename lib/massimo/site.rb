@@ -30,14 +30,10 @@ module Massimo
     
     def template_scope
       @template_scope ||= begin
-        scope = Object.new
-        scope.extend(Massimo::Helpers, Tilt::CompileSite)
-        @template_scope_blocks.each do |block|
-          scope.instance_eval(&block)
-        end
-        @template_scope_extensions.each do |extension|
-          scope.extend(extension)
-        end
+        scope = Object.new.extend(Massimo::Helpers, Tilt::CompileSite)
+        add_template_scope_blocks(scope)
+        add_template_scope_extensions(scope)
+        add_template_scope_helpers(scope)
         scope
       end
     end
@@ -48,14 +44,35 @@ module Massimo
     end
     
     def process
+      @template_scope = nil
       reload_libs
-      reload_helpers
       resources.select(&:processable?).each do |resource|
         resource.all.each(&:process)
       end
     end
     
     protected
+    
+      def add_template_scope_blocks(scope)
+        @template_scope_blocks.each do |block|
+          scope.instance_eval(&block)
+        end
+      end
+      
+      def add_template_scope_extensions(scope)
+        @template_scope_extensions.each do |extension|
+          scope.extend(extension)
+        end
+      end
+      
+      def add_template_scope_helpers(scope)
+        config.files_in(:helpers, :rb).each do |file|
+          load(file)
+          if helper = (class_name_of_file(file).constantize rescue nil)
+            scope.extend(helper)
+          end
+        end
+      end
     
       def reload_libs
         if defined? @previous_libs
@@ -66,24 +83,8 @@ module Massimo
             end
           end
         end
-        @previous_libs = each_file_in(:lib) do |file|
+        @previous_libs = config.files_in(:lib, :rb).each do |file|
           load(file)
-        end
-      end
-      
-      def reload_helpers
-        @template_scope = nil
-        each_file_in(:helpers) do |file|
-          load(file)
-          if helper = (class_name_of_file(file).constantize rescue nil)
-            template_scope.extend(helper)
-          end
-        end
-      end
-      
-      def each_file_in(dir, &block)
-        Dir.glob(File.join(config.path_for(dir), '**/*.rb')).each do |file|
-          yield file
         end
       end
       

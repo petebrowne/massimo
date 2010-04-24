@@ -48,4 +48,32 @@ describe Massimo::Config do
       Massimo::Config.new.url_for('users').should == '/'
     end
   end
+  
+  describe '#files_in' do
+    it 'should find each file in the given resource dir' do
+      within_construct do |c|
+        c.file 'lib/some_file.rb'
+        c.file 'lib/another_file.txt'
+        files = Massimo::Config.new.files_in(:lib).map { |file| File.basename(file) }
+        files.should =~ %w( some_file.rb another_file.txt )
+      end
+    end
+    
+    it 'should not find directories' do
+      within_construct do |c|
+        c.directory 'pages/some_dir'
+        files = Massimo::Config.new.files_in(:pages)
+        files.should_not include(File.expand_path('pages/some_dir'))
+      end
+    end
+    
+    it 'should find files with the given extension' do
+      within_construct do |c|
+        c.file 'lib/some_file.rb'
+        c.file 'lib/another_file.txt'
+        files = Massimo::Config.new.files_in(:lib, 'rb')
+        files.should_not include(File.expand_path('lib/another_file.txt'))
+      end
+    end
+  end
 end

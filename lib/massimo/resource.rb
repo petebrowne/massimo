@@ -23,7 +23,7 @@ module Massimo
       end
       
       def all
-        files = Dir.glob File.join(path, "**/*.*")
+        files = Massimo.config.files_in resource_name
         files.reject! { |file| File.basename(file) =~ /^_/ }
         files.map { |file| self.new(file) }
       end

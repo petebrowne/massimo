@@ -48,5 +48,9 @@ module Massimo
         resources_url
       end
     end
+    
+    def files_in(resource_name, extension = '*')
+      Dir.glob(File.join(path_for(resource_name), "**/*.#{extension}"))
+    end
   end
 end
