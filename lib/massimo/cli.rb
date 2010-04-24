@@ -1,5 +1,3 @@
-$:.unshift File.expand_path('../vendor', __FILE__)
-
 require 'optparse'
 require 'ostruct'
 require 'thor'
