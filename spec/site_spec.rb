@@ -161,5 +161,82 @@ describe Massimo::Site do
         end
       end
     end
+    
+    context 'with lib files' do
+      it 'should load them' do
+        within_construct do |c|
+          c.file 'lib/site.rb', <<-CLASS.unindent
+            class Massimo::Site
+              def test
+                true
+              end
+            end
+          CLASS
+          Massimo.site.process
+          Massimo.site.test.should === true
+        end
+      end
+      
+      it 'should reload them' do
+        within_construct do |c|
+          c.file 'lib/site.rb', <<-CLASS.unindent
+            class Massimo::Site
+              def test
+                false
+              end
+            end
+          CLASS
+          expect {
+            Massimo.site.process
+          }.to change(Massimo.site, :test).to(false)
+        end
+      end
+      
+      it 'should remove previously loaded libs' do
+        within_construct do |c|
+          c.file 'lib/some_constant.rb', 'module SomeConstant; end'
+          Massimo.site.process
+          File.delete 'lib/some_constant.rb'
+          Massimo.site.process
+          expect {
+            SomeConstant
+          }.to raise_error
+        end
+      end
+    end
+    
+    context 'with helper files' do
+      it 'should extend the template scope' do
+        within_construct do |c|
+          c.file 'helpers/some_helper.rb', <<-HELPER.unindent
+            module SomeHelper
+              def test
+                'working'
+              end
+            end
+          HELPER
+          Massimo.site.process
+          Massimo.site.template_scope.test.should == 'working'
+        end
+      end
+      
+      it 'should reload the methods in the template scope' do
+        within_construct do |c|
+          c.file 'helpers/helper.rb', <<-HELPER.unindent
+            module Helper
+              def testing
+                'working'
+              end
+            end
+          HELPER
+          Massimo.site.process
+          File.delete 'helpers/helper.rb'
+          Massimo.site.process
+          expect {
+            Massimo.site.template_scope.testing
+          }.to raise_error
+        end
+      end
+    end
   end
 end

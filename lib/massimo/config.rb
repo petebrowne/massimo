@@ -36,7 +36,7 @@ module Massimo
       if resource_path = (respond_to?(path_method) and send(path_method))
         File.expand_path(resource_path)
       else
-        File.join(source_path, resource_name)
+        File.join(source_path, resource_name.to_s)
       end
     end
     

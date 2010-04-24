@@ -30,11 +30,11 @@ describe Massimo::Config do
   describe '#path_for' do
     it 'should read the configured option' do
       config = Massimo::Config.new :pages_path => 'pages/path'
-      config.path_for('pages').should == File.expand_path('pages/path')
+      config.path_for(:pages).should == File.expand_path('pages/path')
     end
     
     it 'should default to a path in the #source_path' do
-      Massimo::Config.new.path_for('pages').should == File.expand_path('pages')
+      Massimo::Config.new.path_for(:pages).should == File.expand_path('pages')
     end
   end
   
