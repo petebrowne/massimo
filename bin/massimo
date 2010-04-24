@@ -1,8 +1,5 @@
 #!/usr/bin/env ruby
 
-$:.unshift File.expand_path('../../lib', __FILE__)
-
 require 'massimo'
-require 'massimo/cli'
 
 Massimo::CLI.start

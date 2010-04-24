@@ -53,7 +53,7 @@ module Massimo
       require 'active_support/inflector'
       
       if file
-        create_file File.join(site.config.path_for(resource.pluralize), file)
+        create_file File.join(site.config.path_for(site_or_resource.pluralize), file)
       else
         empty_directory site_or_resource
         inside site_or_resource do

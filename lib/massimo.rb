@@ -1,4 +1,5 @@
 module Massimo
+  autoload :CLI,        'massimo/cli'
   autoload :Config,     'massimo/config'
   autoload :Helpers,    'massimo/helpers'
   autoload :Javascript, 'massimo/javascript'
