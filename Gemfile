@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'activesupport', '>= 3.0.0.beta'
+gem 'rack',          '~> 1.1.0'
 gem 'sinatra_more',  '~> 0.3.0'
 gem 'tilt',          '~> 0.9.0'
 

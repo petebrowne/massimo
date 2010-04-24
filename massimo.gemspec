@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
   s.executables << 'massimo'
   
   s.add_dependency 'activesupport', '>= 3.0.0.beta'
+  s.add_dependency 'rack',          '~> 1.1.0'
   s.add_dependency 'sinatra_more',  '~> 0.3.0'
   s.add_dependency 'tilt',          '~> 0.9.0'
   

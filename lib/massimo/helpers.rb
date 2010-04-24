@@ -1,3 +1,4 @@
+require 'rack/utils' # needed for sinatra_more...
 require 'sinatra_more/markup_plugin'
 
 module Massimo
