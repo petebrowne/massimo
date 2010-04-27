@@ -38,6 +38,17 @@ describe Massimo::Stylesheet do
     end
   end
   
+  context 'with .scss styleheets' do
+    let(:stylesheet) { Massimo::Stylesheet.new('stylesheets/main.scss') }
+    
+    it 'should render using Sass' do
+      within_construct do |c|
+        c.file 'stylesheets/main.scss', "$size: 36px;\n#header { font-size: $size; }\n"
+        stylesheet.render.should == "#header {\n  font-size: 36px; }\n"
+      end
+    end
+  end
+  
   context 'with .less stylesheets' do
     let(:stylesheet) { Massimo::Stylesheet.new('stylesheets/main.less') }
     

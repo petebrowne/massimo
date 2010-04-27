@@ -13,9 +13,9 @@ end
 group :test do
   gem 'rspec',          '~> 1.3.0'
   gem 'rr',             '~> 0.10.0'
-  gem 'test-construct', '~> 1.2.0', :require => 'construct'
-  gem 'rack-test',      '~> 0.5.0', :require => 'rack/test'
-  gem 'haml',           '~> 2.2.0', :require => 'sass'
+  gem 'test-construct', '~> 1.2.0',      :require => 'construct'
+  gem 'rack-test',      '~> 0.5.0',      :require => 'rack/test'
+  gem 'haml',           '>= 3.0.0.beta', :require => 'sass'
   gem 'less',           '~> 1.2.0'
   gem 'coffee-script',  '~> 0.3.0'
   gem 'sprockets',      '~> 1.0.0'
