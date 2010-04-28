@@ -5,14 +5,14 @@ describe Massimo::Page do
     let(:page) { Massimo::Page.new 'page.erb' }
     
     let(:page_content) do
-      <<-STR.unindent
+      <<-CONTENT.unindent
         ---
         title: A Page
         created_at: 2010-04-01
         ---
         <%= title %>
         <%= created_at.strftime('%m-%Y') %>
-      STR
+      CONTENT
     end
     
     it 'should read the meta data into a #meta_data hash' do
@@ -38,10 +38,17 @@ describe Massimo::Page do
     
     it 'should report the correct line number to Tilt' do
       within_construct do |c|
-        c.file 'page.erb', page_content
-        stub(template = Object.new).render
-        mock(Tilt).new('page.erb', 5) { template }
-        page.render
+        c.file 'page.erb', <<-CONTENT.unindent
+          ---
+          title: A Page
+          ---
+          <%= raise 'Error' %>
+        CONTENT
+        begin
+          page.render
+        rescue Exception => error
+          error.backtrace.first.should =~ /:4:/
+        end
       end
     end
     

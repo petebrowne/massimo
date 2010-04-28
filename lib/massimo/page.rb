@@ -1,19 +1,24 @@
 require 'active_support/core_ext/hash/keys'
+require 'active_support/core_ext/string/starts_ends_with'
 require 'active_support/inflector'
 require 'tilt'
 require 'yaml'
 
-Tilt.register 'html', Tilt::StringTemplate
-
 module Massimo
   class Page < Resource
     def render
-      template  = Tilt.new(source_path.basename.to_s, @line || 1) { content }
-      meta_data = @meta_data.merge(self.class.resource_name.singularize.to_sym => self)
-      output    = template.render(Massimo.site.template_scope, meta_data)
+      output = content
+      
+      if template_type = Tilt[source_path.basename.to_s]
+        template  = template_type.new(nil, @line || 1) { output }
+        meta_data = @meta_data.merge(self.class.resource_name.singularize.to_sym => self)
+        output    = template.render(Massimo.site.template_scope, meta_data)
+      end
+        
       if found_layout = Massimo::View.find("layouts/#{layout}")
         output = found_layout.render(:page => self) { output }
       end
+      
       output
     end
     
@@ -42,7 +47,7 @@ module Massimo
     def output_path
       @output_path ||= begin
         output_path = super.to_s
-        output_path << "index.html" if output_path =~ /\/$/
+        output_path << "index.html" if output_path.ends_with? '/'
         Pathname.new output_path
       end
     end
