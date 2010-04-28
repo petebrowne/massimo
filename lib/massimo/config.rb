@@ -11,8 +11,7 @@ module Massimo
       :base_url        => '/',
       :resources_url   => '/',
       :javascripts_url => '/javascripts',
-      :stylesheets_url => '/stylesheets',
-      :resources_url   => '/'
+      :stylesheets_url => '/stylesheets'
     }.freeze
     
     def initialize(options = nil)
