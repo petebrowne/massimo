@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   
   s.authors  = 'Pete Browne'
   s.email    = 'me@petebrowne.com'
-  s.homepage = 'http://github.com/petebrowne/massimo'
+  s.homepage = 'http://petebrowne.github.com/massimo/'
   
   s.files       = Dir['{bin,lib}/**/*'] + %w(LICENSE README.md VERSION)
   s.executables << 'massimo'
