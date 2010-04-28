@@ -19,11 +19,12 @@ a
   text-decoration: none
   font-weight: bold
   color: $faint-color
-  border-bottom: 1px solid
+  border-bottom: 1px solid darken($faint-color, 20%)
   
   &:hover
     background: $main-color
     color: $bg-color
+    border-color: $bg-color
     
 a img
   border: none
@@ -35,14 +36,14 @@ h2
   margin: 40px 0 15px 0
   padding-top: 20px
   border: 0
-  border-top: 1px solid #393A3B
+  border-top: 1px solid darken($faint-color, 20%)
   font-size: 25px
   font-family: Helvetica, Arial, sans-serif
 
 code
   font-family: "Bitstream Vera Sans Mono", monospace
   white-space: pre
-  color: #828589
+  color: lighten($faint-color, 20%)
 
 pre
   +border_radius(3px)
@@ -122,7 +123,7 @@ table
 #content
   clear: both
   padding: 30px 0
-  border-top: 1px solid #393A3B
+  border-top: 1px solid darken($faint-color, 20%)
   
   img
     border: 1px solid $faint-color
@@ -131,7 +132,7 @@ table
 
 #footer
   padding-top: 30px
-  border-top: 1px solid #393A3B
+  border-top: 1px solid darken($faint-color, 20%)
   text-align: center
   font-style: italic
 
