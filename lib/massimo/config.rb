@@ -14,6 +14,8 @@ module Massimo
       :stylesheets_url => '/stylesheets'
     }.freeze
     
+    # Creates a new configuration. Takes either a hash of options
+    # or a file path to a .yaml file.
     def initialize(options = nil)
       hash = DEFAULT_OPTIONS.dup
       
@@ -23,14 +25,18 @@ module Massimo
       super hash
     end
     
+    # The full, expanded path to the source path.
     def source_path
       File.expand_path(super)
     end
     
+    # The full, expanded path to the output path.
     def output_path
       File.expand_path(super)
     end
     
+    # Get a full, expanded path for the given resource name. This is either set
+    # in the configuration or determined dynamically based on the name.
     def path_for(resource_name)
       path_method = "#{resource_name}_path"
       if resource_path = (respond_to?(path_method) and send(path_method))
@@ -40,6 +46,7 @@ module Massimo
       end
     end
     
+    # Get the configured URL for th given resource name.
     def url_for(resource_name)
       url_method   = "#{resource_name}_url"
       resource_url = respond_to?(url_method) && send(url_method)
@@ -47,6 +54,8 @@ module Massimo
       File.join(base_url, resource_url)
     end
     
+    # Get an array of all the file paths found in the given resource name's path,
+    # restricted to the given extension.
     def files_in(resource_name, extension = '*')
       Dir.glob(File.join(path_for(resource_name), "**/*.#{extension}"))
     end

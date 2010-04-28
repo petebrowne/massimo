@@ -9,10 +9,12 @@ module Massimo
     include SinatraMore::FormHelpers
     include SinatraMore::FormatHelpers
     
+    # Returns an instance of the Site
     def site
       Massimo.site
     end
     
+    # Renders a view with the given locals. Kind of like `render :partial` in Rails
     def render(view_name, locals = {})
       view = Massimo::View.find(view_name)
       view && view.render(locals)
