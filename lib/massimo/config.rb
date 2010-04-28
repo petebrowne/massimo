@@ -8,6 +8,7 @@ module Massimo
       :source_path     => '.',
       :output_path     => 'public',
       :resources_path  => '.',
+      :base_url        => '/',
       :resources_url   => '/',
       :javascripts_url => '/javascripts',
       :stylesheets_url => '/stylesheets',
@@ -41,12 +42,10 @@ module Massimo
     end
     
     def url_for(resource_name)
-      url_method = "#{resource_name}_url"
-      if resource_url = (respond_to?(url_method) and send(url_method))
-        resource_url
-      else
-        resources_url
-      end
+      url_method   = "#{resource_name}_url"
+      resource_url = respond_to?(url_method) && send(url_method)
+      resource_url = resources_url unless resource_url
+      File.join(base_url, resource_url)
     end
     
     def files_in(resource_name, extension = '*')

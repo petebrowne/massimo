@@ -4,6 +4,7 @@ describe Massimo::Config do
   its(:source_path)     { should == File.expand_path('.') }
   its(:output_path)     { should == File.expand_path('public') }
   its(:resources_path)  { should == '.' }
+  its(:base_url)        { should == '/' }
   its(:resources_url)   { should == '/' }
   its(:javascripts_url) { should == '/javascripts' }
   its(:stylesheets_url) { should == '/stylesheets' }
@@ -41,11 +42,18 @@ describe Massimo::Config do
   describe '#url_for' do
     it 'should read the configured option' do
       config = Massimo::Config.new :pages_url => '/pages'
-      config.url_for('pages').should == '/pages'
+      config.url_for(:pages).should == '/pages'
     end
     
     it "should default to '/'" do
-      Massimo::Config.new.url_for('users').should == '/'
+      Massimo::Config.new.url_for(:users).should == '/'
+    end
+    
+    context 'with a custom #base_url' do
+      it 'should prepend the #base_url' do
+        config = Massimo::Config.new :base_url => '/blog'
+        config.url_for(:stylesheets).should == '/blog/stylesheets'
+      end
     end
   end
   
