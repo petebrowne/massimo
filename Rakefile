@@ -67,6 +67,11 @@ task :install => :package do
   sh %{gem install pkg/massimo-#{spec.version}}
 end
 
+desc 'Release the gem'
+task :release => :package do
+  sh %{gem push pkg/massimo-#{spec.version}.gem}
+end
+
 desc 'Validate the gemspec'
 task :gemspec do
   spec.validate
