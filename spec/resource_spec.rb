@@ -78,6 +78,16 @@ describe Massimo::Resource do
         resource.output_path.to_s.should == File.expand_path('public/file.txt')
       end
     end
+    
+    context 'with a custom #base_url' do
+      it 'should not include the #base_url' do
+        within_construct do |c|
+          Massimo.config.base_url = '/blog'
+          c.file 'file.txt'
+          resource.output_path.to_s.should == File.expand_path('public/file.txt')
+        end
+      end
+    end
   end
   
   describe '#content' do

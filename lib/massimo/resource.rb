@@ -67,7 +67,7 @@ module Massimo
     
     # The path to the output file.
     def output_path
-      @output_path ||= Pathname.new File.join(Massimo.config.output_path, url)
+      @output_path ||= Pathname.new File.join(Massimo.config.output_path, url.sub(/^#{Regexp.escape(Massimo.config.base_url)}/, ''))
     end
     
     # Runs the content through any necessary filters, templates, etc.
