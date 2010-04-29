@@ -1,5 +1,3 @@
-require 'optparse'
-require 'ostruct'
 require 'thor'
 
 module Massimo

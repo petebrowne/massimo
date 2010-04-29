@@ -11,7 +11,7 @@ module Massimo
       @files = []
     end
     
-    # Runs a loop, processing the whenever files have changed.
+    # Runs a loop, processing the Site whenever files have changed.
     def run
       loop do
         process
