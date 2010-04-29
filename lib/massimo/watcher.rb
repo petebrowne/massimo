@@ -13,22 +13,23 @@ module Massimo
     
     # Runs a loop, processing the Site whenever files have changed.
     def run
-      loop do
-        process
-        sleep 0.5
+      begin
+        loop do
+          process
+          sleep 0.5
+        end
+      rescue Interrupt
+        exit
       end
     end
     
     # Processes the Site if any of the files have changed.
     def process
       if changed?
-        begin
-          puts 'massimo has noticed a change'
+        Massimo::UI.report_errors do
+          Massimo::UI.massimo 'has noticed a change'
           @site.process
-          puts 'massimo has built your site'
-        rescue Exception => e
-          puts e.message
-          puts e.backtrace
+          Massimo::UI.massimo 'has built your site'
         end
       end
     end
