@@ -5,7 +5,8 @@ module Massimo
     unprocessable
     
     def render(locals = {}, &block)
-      template = Tilt.new(source_path.basename.to_s) { content }
+      file_path = source_path.to_s.sub(/^#{Regexp.escape(Massimo.config.source_path)}/, '')
+      template  = Tilt.new(file_path) { content }
       template.render(Massimo.site.template_scope, locals, &block)
     end
   end

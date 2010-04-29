@@ -9,8 +9,9 @@ module Massimo
     def render
       output = content
       
-      if template_type = Tilt[source_path.basename.to_s]
-        template  = template_type.new(nil, @line || 1) { output }
+      if template_type = Tilt[filename]
+        file_path = source_path.to_s.sub(/^#{Regexp.escape(Massimo.config.source_path)}/, '')
+        template  = template_type.new(file_path, @line || 1) { output }
         meta_data = @meta_data.merge(self.class.resource_name.singularize.to_sym => self)
         output    = template.render(Massimo.site.template_scope, meta_data)
       end
@@ -23,7 +24,7 @@ module Massimo
     end
     
     def title
-      @meta_data[:title] ||= source_path.basename.to_s.chomp(source_path.extname.to_s).titleize
+      @meta_data[:title] ||= filename.chomp(source_path.extname.to_s).titleize
     end
     
     def extension
@@ -31,12 +32,7 @@ module Massimo
     end
     
     def url
-      @meta_data[:url] ||= begin
-        url = super
-        url.chomp!('index.html')
-        url.sub!(/\.html$/, '/')
-        url
-      end
+      @meta_data[:url] ||= super.chomp('index.html').sub(/\.html$/, '/')
     end
     
     def layout
