@@ -7,10 +7,29 @@ describe Massimo::UI do
       Massimo::UI.say 'message'
     end
     
+    it 'should not send a Growl notification' do
+      dont_allow(Growl).notify
+      Massimo::UI.say 'message'
+    end
+    
     context 'with a color' do
       it 'should print out the message with the correct color code' do
         mock($stdout).puts "\e[31mmessage\e[0m"
         Massimo::UI.say 'message', :red
+      end
+    end
+    
+    context 'with :growl => true' do
+      it 'should send a Growl Notification' do
+        mock(Growl).notify('message', anything)
+        Massimo::UI.say 'message', :growl => true
+      end
+      
+      context 'and a color' do
+        it 'should send an uncolored Growl Notification' do
+          mock(Growl).notify('message', anything)
+          Massimo::UI.say 'message', :red, :growl => true
+        end
       end
     end
   end

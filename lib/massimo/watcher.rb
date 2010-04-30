@@ -2,6 +2,7 @@ module Massimo
   class Watcher
     class << self
       def start(site)
+        Massimo::UI.say 'massimo is watching your files for changes', :growl => true
         self.new(site).run
       end
     end
@@ -29,7 +30,7 @@ module Massimo
         Massimo::UI.report_errors do
           Massimo::UI.say 'massimo has noticed a change'
           @site.process
-          Massimo::UI.say 'massimo has built your site'
+          Massimo::UI.say 'massimo has built your site', :growl => true
         end
       end
     end

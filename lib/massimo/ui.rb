@@ -1,3 +1,5 @@
+require 'active_support/core_ext/array/extract_options'
+
 module Massimo
   module UI
     extend self
@@ -13,7 +15,11 @@ module Massimo
     }.freeze
     
     # Say (print) something to the user.
-    def say(message, color = nil)
+    def say(message, *args)
+      options = args.extract_options!
+      color   = args.first
+      
+      growl(message) if options[:growl]
       message = (' ' * padding) + message.to_s
       message = self.color(message, color) if color
 
@@ -35,6 +41,7 @@ module Massimo
           say error.message, :magenta
           say error.backtrace.first, :magenta
         end
+        growl "#{error.message}\n#{error.backtrace.first}", 'massimo problem'
       end
     end
     
@@ -46,6 +53,10 @@ module Massimo
     end
     
     protected
+    
+      def growl(message, title = 'massimo')
+        Growl.notify(message, :title => title) if defined?(Growl)
+      end
     
       def padding
         @padding ||= 0

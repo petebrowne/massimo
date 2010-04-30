@@ -4,6 +4,7 @@ module Massimo
   class Server
     class << self
       def start(site, port = 3000)
+        Massimo::UI.say "massimo is serving your site at http://localhost:#{port}", :growl => true
         app = Rack::Builder.new do
           use Rack::ShowExceptions
           run Massimo::Server.new(site)
