@@ -10,8 +10,7 @@ module Massimo
       output = content
       
       if template_type = Tilt[filename]
-        file_path = source_path.to_s.sub(/^#{Regexp.escape(Massimo.config.source_path)}/, '')
-        template  = template_type.new(file_path, @line || 1) { output }
+        template  = template_type.new(source_path.to_s, @line || 1) { output }
         meta_data = @meta_data.merge(self.class.resource_name.singularize.to_sym => self)
         output    = template.render(Massimo.site.template_scope, meta_data)
       end

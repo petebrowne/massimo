@@ -27,9 +27,9 @@ module Massimo
     def process
       if changed?
         Massimo::UI.report_errors do
-          Massimo::UI.massimo 'has noticed a change'
+          Massimo::UI.say 'massimo has noticed a change'
           @site.process
-          Massimo::UI.massimo 'has built your site'
+          Massimo::UI.say 'massimo has built your site'
         end
       end
     end

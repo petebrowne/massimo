@@ -13,21 +13,21 @@ module Massimo
     def build
       Massimo::UI.report_errors do
         site.process
-        Massimo::UI.massimo 'has built your site'
+        Massimo::UI.say 'massimo has built your site'
       end
     end
     map 'b' => :build
     
     desc 'watch', 'Watches your files for changes and rebuilds'
     def watch
-      Massimo::UI.massimo 'is watching your files for changes'
+      Massimo::UI.say 'massimo is watching your files for changes'
       Massimo::Watcher.start(site)
     end
     map 'w' => :watch
     
     desc 'server [PORT]', 'Runs a local web server and processes the site on save'
     def server(port = 3000)
-      Massimo::UI.massimo "is serving your site at http://localhost:#{port}"
+      Massimo::UI.say "massimo is serving your site at http://localhost:#{port}"
       Massimo::Server.start(site, port.to_i)
     end
     map 's' => :server

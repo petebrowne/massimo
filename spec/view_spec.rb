@@ -6,7 +6,7 @@ describe Massimo::View do
       within_construct do |c|
         c.file 'index.erb'
         stub(template = Object.new).render
-        mock(Tilt).new('index.erb') { template }
+        mock(Tilt).new(File.expand_path('index.erb')) { template }
         Massimo::View.new('index.erb').render
       end
     end

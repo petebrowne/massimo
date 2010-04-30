@@ -20,19 +20,9 @@ module Massimo
       $stdout.puts(message)
     end
     
-    #
-    def massimo(message, color = nil)
-      say bold('massimo ') + message, color
-    end
-    
-    # Bolden the given message
-    def bold(message)
-      ansify(message, 1, 22)
-    end
-    
     # Color the given message with the given color
     def color(message, color)
-      ansify(message, COLOR_CODES[color.to_sym])
+      "\e[#{COLOR_CODES[color.to_sym]}m#{message}\e[0m"
     end
     
     # Run the given block and cleanly report any errors
@@ -40,11 +30,10 @@ module Massimo
       begin
         yield
       rescue Exception => error
-        massimo 'had a problem', :red
+        say 'massimo had a problem', :red
         indent do
           say error.message, :magenta
-          error.backtrace.each { |line| say line }
-          say ''
+          say error.backtrace.first, :magenta
         end
       end
     end
@@ -58,12 +47,8 @@ module Massimo
     
     protected
     
-      def ansify(message, open, close = 0)
-        "\e[#{open}m#{message}\e[#{close}m"
-      end
-    
       def padding
-        @padding ||= 2
+        @padding ||= 0
       end
       
       def padding=(value)
