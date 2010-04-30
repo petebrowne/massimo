@@ -1,6 +1,20 @@
 require File.expand_path('../spec_helper', __FILE__)
 
 describe Massimo::UI do
+  describe '.say' do
+    it 'should print out the given message to stdout' do
+      mock($stdout).puts 'message'
+      Massimo::UI.say 'message'
+    end
+    
+    context 'with a color' do
+      it 'should print out the message with the correct color code' do
+        mock($stdout).puts "\e[31mmessage\e[0m"
+        Massimo::UI.say 'message', :red
+      end
+    end
+  end
+  
   describe '.color' do
     it 'should wrap the given message with the correct color code' do
       Massimo::UI.color('message', :red).should == "\e[31mmessage\e[0m"
