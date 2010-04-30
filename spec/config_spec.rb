@@ -95,4 +95,14 @@ describe Massimo::Config do
       Massimo::Config.new.options_for(:sass).should == {}
     end
   end
+  
+  describe '#production?' do
+    it 'should be false by default' do
+      Massimo::Config.new.production?.should === false
+    end
+    
+    it 'should be true if production is set' do
+      Massimo::Config.new(:production => true).production?.should === true
+    end
+  end
 end

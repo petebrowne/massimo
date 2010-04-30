@@ -61,5 +61,11 @@ module Massimo
     def options_for(lib_name)
       send(lib_name) || {}
     end
+    
+    # Wether or not the Site's environment is in production mode. Usually you would
+    # want to set this to compress and concat assets.
+    def production?
+      !!self.production
+    end
   end
 end

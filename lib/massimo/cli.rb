@@ -5,9 +5,10 @@ module Massimo
     include Thor::Actions
     
     default_task :build
-    class_option 'config',      :desc => 'Path to the config file', :aliases => '-c'
-    class_option 'source_path', :desc => 'Path to the source dir',  :aliases => '-s'
-    class_option 'output_path', :desc => 'Path to the output dir',  :aliases => '-o'
+    class_option 'config',      :desc => 'Path to the config file',   :aliases => '-c'
+    class_option 'source_path', :desc => 'Path to the source dir',    :aliases => '-s'
+    class_option 'output_path', :desc => 'Path to the output dir',    :aliases => '-o'
+    class_option 'production',  :desc => 'Sets the Site environment', :aliases => '-p', :type => :boolean
     
     desc 'build', 'Builds the site'
     def build
@@ -75,11 +76,12 @@ module Massimo
       def site
         @site ||= begin
           site = Massimo::Site.new config_file(:yml)
+          site.config.production  = options[:production]
+          site.config.source_path = options[:source_path] if options[:source_path]
+          site.config.output_path = options[:output_path] if options[:output_path]
           if config_rb = config_file(:rb)
             site.instance_eval File.read(config_rb)
           end
-          site.config.source_path = options[:source_path] if options[:source_path]
-          site.config.output_path = options[:output_path] if options[:output_path]
           site
         end
       end
