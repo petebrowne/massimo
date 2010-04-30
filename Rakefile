@@ -29,18 +29,6 @@ else
 end
 
 #------------------------------------
-#  Versioning
-#------------------------------------
-
-begin
-  require 'rake/version_task'
-rescue LoadError
-  raise 'Run `gem install version` to run version tasks'
-else
-  Rake::VersionTask.new
-end
-
-#------------------------------------
 #  Console
 #------------------------------------
 

@@ -6,10 +6,6 @@ gem 'sinatra_more',  '~> 0.3.0'
 gem 'thor',          '~> 0.13.0'
 gem 'tilt',          '~> 0.9.0'
 
-group :development do
-  gem 'version', '~> 0.9.0'
-end
-
 group :test do
   gem 'rspec',          '~> 1.3.0'
   gem 'rr',             '~> 0.10.0'
@@ -20,4 +16,5 @@ group :test do
   gem 'coffee-script',  '~> 0.3.0'
   gem 'sprockets',      '~> 1.0.0'
   gem 'unindent',       '~> 0.9.0'
+  gem 'growl',          '~> 1.0.0'
 end

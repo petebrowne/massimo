@@ -12,7 +12,7 @@ module Massimo
   autoload :View,       'massimo/view'
   autoload :Watcher,    'massimo/watcher'
   
-  VERSION = File.read File.expand_path('../../VERSION', __FILE__)
+  VERSION = '0.6.1'
   
   class << self
     def site
