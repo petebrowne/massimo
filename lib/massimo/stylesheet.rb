@@ -4,10 +4,11 @@ module Massimo
       case source_path.extname.to_s
       when '.sass', '.scss'
         require 'sass' unless defined?(Sass)
-        Sass::Files.tree_for(source_path.to_s, :css_filename => output_path).render
+        options = Massimo.config.options_for(:sass).merge(:css_filename => output_path)
+        Sass::Files.tree_for(source_path.to_s, options).render
       when '.less'
         require 'less' unless defined?(Less)
-        Less::Engine.new(content).to_css
+        Less::Engine.new(content, Massimo.config.options_for(:less)).to_css
       else
         super
       end

@@ -36,6 +36,14 @@ describe Massimo::Stylesheet do
         stylesheet.output_path.extname.should == '.css'
       end
     end
+    
+    it 'should use Sass options from config' do
+      Massimo.config.sass = { :style => :compressed }
+      within_construct do |c|
+        c.file 'stylesheets/main.sass', "#header\n font-size: 36px"
+        stylesheet.render.should == "#header{font-size:36px}\n"
+      end
+    end
   end
   
   context 'with .scss styleheets' do

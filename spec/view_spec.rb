@@ -6,7 +6,7 @@ describe Massimo::View do
       within_construct do |c|
         c.file 'index.erb'
         stub(template = Object.new).render
-        mock(Tilt).new(File.expand_path('index.erb')) { template }
+        mock(Tilt).new(anything, anything, anything) { template }
         Massimo::View.new('index.erb').render
       end
     end
@@ -36,6 +36,14 @@ describe Massimo::View do
         c.file 'index.erb', "<%= render 'partial' %>"
         c.file 'views/partial.erb', 'Partial'
         Massimo::View.new('index.erb').render.should == 'Partial'
+      end
+    end
+    
+    it 'should pass config options for the template' do
+      Massimo.config.haml = { :attr_wrapper => %(") }
+      within_construct do |c|
+        c.file 'view.haml', '#header Title'
+        Massimo::View.new('view.haml').render.should == %(<div id="header">Title</div>\n)
       end
     end
   end

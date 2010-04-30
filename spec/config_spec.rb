@@ -84,4 +84,15 @@ describe Massimo::Config do
       end
     end
   end
+  
+  describe '#options_for' do
+    it 'should return the options set for the given name' do
+      config = Massimo::Config.new(:sass => { :style => :compressed })
+      config.options_for(:sass).should == { :style => :compressed }
+    end
+    
+    it 'should return an empty hash if the options have not been set' do
+      Massimo::Config.new.options_for(:sass).should == {}
+    end
+  end
 end

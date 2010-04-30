@@ -10,9 +10,10 @@ module Massimo
       output = content
       
       if template_type = Tilt[filename]
-        template  = template_type.new(source_path.to_s, @line || 1) { output }
-        meta_data = @meta_data.merge(self.class.resource_name.singularize.to_sym => self)
-        output    = template.render(Massimo.site.template_scope, meta_data)
+        options   = Massimo.config.options_for(source_path.extname[1..-1])
+        template  = template_type.new(source_path.to_s, @line, options) { output }
+        meta_data = @meta_data.merge self.class.resource_name.singularize.to_sym => self
+        output    = template.render Massimo.site.template_scope, meta_data
       end
         
       if found_layout = Massimo::View.find("layouts/#{layout}")
@@ -23,7 +24,7 @@ module Massimo
     end
     
     def title
-      @meta_data[:title] ||= filename.chomp(source_path.extname.to_s).titleize
+      @meta_data[:title] ||= filename.chomp(source_path.extname).titleize
     end
     
     def extension
@@ -75,7 +76,6 @@ module Massimo
       
       def method_missing(method, *args, &block)
         if args.length == 0
-          read_source
           method_name = method.to_s
           if method_name.chomp! '?'
             !!@meta_data[method_name.to_sym]

@@ -145,6 +145,14 @@ describe Massimo::Page do
         NewPage.new('new_page.erb').render.should == 'New Page'
       end
     end
+    
+    it 'should pass config options for the template' do
+      Massimo.config.haml = { :attr_wrapper => %(") }
+      within_construct do |c|
+        c.file 'new_page.haml', '#header Title'
+        Massimo::Page.new('new_page.haml').render.should == %(<div id="header">Title</div>\n)
+      end
+    end
   end
   
   describe '#url' do

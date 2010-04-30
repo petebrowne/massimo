@@ -19,45 +19,47 @@ module Massimo
     def initialize(options = nil)
       hash = DEFAULT_OPTIONS.dup
       
-      options = YAML.load_file(options) if options.is_a?(String)
-      hash.merge!(options.symbolize_keys) if options.is_a?(Hash)
+      options = YAML.load_file(options) if options.is_a? String
+      hash.merge!(options.symbolize_keys) if options.is_a? Hash
       
       super hash
     end
     
     # The full, expanded path to the source path.
     def source_path
-      File.expand_path(super)
+      File.expand_path super
     end
     
     # The full, expanded path to the output path.
     def output_path
-      File.expand_path(super)
+      File.expand_path super
     end
     
     # Get a full, expanded path for the given resource name. This is either set
     # in the configuration or determined dynamically based on the name.
     def path_for(resource_name)
-      path_method = "#{resource_name}_path"
-      if resource_path = (respond_to?(path_method) and send(path_method))
-        File.expand_path(resource_path)
+      if resource_path = send("#{resource_name}_path")
+        File.expand_path resource_path
       else
-        File.join(source_path, resource_name.to_s)
+        File.join source_path, resource_name.to_s
       end
     end
     
     # Get the configured URL for th given resource name.
     def url_for(resource_name)
-      url_method   = "#{resource_name}_url"
-      resource_url = respond_to?(url_method) && send(url_method)
-      resource_url = resources_url unless resource_url
-      File.join(base_url, resource_url)
+      File.join base_url, send("#{resource_name}_url") || resources_url
     end
     
     # Get an array of all the file paths found in the given resource name's path,
     # restricted to the given extension.
     def files_in(resource_name, extension = '*')
-      Dir.glob(File.join(path_for(resource_name), "**/*.#{extension}"))
+      Dir.glob File.join(path_for(resource_name), "**/*.#{extension}")
+    end
+    
+    # Convience method for getting options for a given library name. For instance,
+    # this is how we get the options set for Haml or Sass during processing.
+    def options_for(lib_name)
+      send(lib_name) || {}
     end
   end
 end
