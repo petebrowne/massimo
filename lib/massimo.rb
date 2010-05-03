@@ -12,7 +12,7 @@ module Massimo
   autoload :View,       'massimo/view'
   autoload :Watcher,    'massimo/watcher'
   
-  VERSION = '0.6.2'
+  VERSION = '0.6.3'
   
   class << self
     def site
