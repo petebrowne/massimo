@@ -10,6 +10,11 @@ The prefered way is to use a `config.rb` file. In that file, you have access to 
     config.stylesheets_url = '/css'
     config.output_path     = '_site'
     
+    if config.production?
+      config.javascripts_compressor = :pack
+      config.sass = { :style => :compressed }
+    end
+    
     resource :user do
       unprocessable
     end
@@ -24,8 +29,11 @@ This config file does a few things:
 
 * It changes the URLs for the javascripts and stylesheets.
 * It changes the output path to `'_site'`
+* Uses Packr for javascripts compression and compresses the stylesheets during production mode
 * It creates a custom [resource](/massimo/resources/).
 * It creates a custom helper method to access the custom resources.
+
+*Note the `if config.production?` block. This changes the configuration based on the environment setup in the command line.*
 
 
 config.yml
@@ -44,11 +52,15 @@ Options
   <tbody>
     <tr>
       <th>source_path</th>
-      <td>The path to the source files of the project. Defaults to <code>'.'</code>.</td>
+      <td>The path to the source files of the project. This can be changed on the command line using the <code>--source-path=PATH</code> option. Defaults to <code>'.'</code>.</td>
     </tr>
     <tr>
       <th>output_path</th>
-      <td>The path to output the site to. Defaults to <code>'public'</code>.</td>
+      <td>The path to output the site to. This can be changed on the command line using the <code>--output-path=PATH</code> option. Defaults to <code>'public'</code>.</td>
+    </tr>
+    <tr>
+      <th>production</th>
+      <td>A boolean representing the Site's environment. This can be changed on the command line using the <code>--production</code> flag. Defaults to <code>false</code>.</td>
     </tr>
     <tr>
       <th>base_url</th>
@@ -61,6 +73,10 @@ Options
     <tr>
       <th>[resource]_url</th>
       <td>The base url for the given resources. Defaults to <code>'/javascripts'</code> for javascripts and <code>'/stylesheets'</code> for stylesheets. Defaults to <code>'/'</code> for everything else.</td>
+    </tr>
+    <tr>
+      <th>javascripts_compressor</th>
+      <td>Which javasript compressor to use.  Available options are <code>:min</code> (which uses <a href='http://github.com/rgrove/jsmin/'>JSMin</a>) and <code>:pack</code> (which uses <a href='http://github.com/jcoglan/packr'>Packr</a>). By default there is no compression.</td>
     </tr>
   </tbody>
 </table>
