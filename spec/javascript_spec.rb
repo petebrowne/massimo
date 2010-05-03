@@ -37,4 +37,37 @@ describe Massimo::Javascript do
       end
     end
   end
+  
+  context 'with compression' do
+    let(:javascript) { Massimo::Javascript.new 'javascripts/main.js' }
+    
+    context 'using :min' do
+      it 'should compress using JSMin' do
+        Massimo.config.javascripts_compressor = :min
+        within_construct do |c|
+          c.file 'javascripts/main.js', 'function(number) { return number + 2; }'
+          javascript.render.should == 'function(number){return number+2;}'
+        end
+      end
+    end
+    
+    context 'using :pack' do
+      it 'should compress using Packr' do
+        Massimo.config.javascripts_compressor = :pack
+        within_construct do |c|
+          c.file 'javascripts/main.js', 'function(number) { return number + 2; }'
+          javascript.render.should == 'function(a){return a+2}'
+        end
+      end
+      
+      it 'should be configurable' do
+        Massimo.config.javascripts_compressor = :pack
+        Massimo.config.packr = { :shrink_vars => false }
+        within_construct do |c|
+          c.file 'javascripts/main.js', 'function(number) { return number + 2; }'
+          javascript.render.should == 'function(number){return number+2}'
+        end
+      end
+    end
+  end
 end
