@@ -1,7 +1,7 @@
 module Massimo
   class Stylesheet < Massimo::Resource
     def render
-      case source_path.extname.to_s
+      case source_path.extname
       when '.sass', '.scss'
         require 'sass' unless defined?(Sass)
         options = Massimo.config.options_for(:sass).merge(:css_filename => output_path)

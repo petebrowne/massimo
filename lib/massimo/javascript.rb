@@ -11,7 +11,7 @@ module Massimo
     protected
     
       def compile
-        case source_path.extname.to_s
+        case source_path.extname
         when '.coffee'
           require 'coffee-script' unless defined?(CoffeeScript)
           CoffeeScript.compile(content, Massimo.config.options_for(:coffee_script))
