@@ -51,27 +51,33 @@ module Massimo
     protected
     
       def read_source
-        @line        = nil
-        @content     = ''
-        front_matter = false
-        meta_data    = ''
-        
-        source_path.open do |file|
-          file.each do |line|
-            if line =~ /\A---\s*\Z/
-              front_matter = !front_matter
-            else
-              if front_matter
-                meta_data << line
+        case source_path.extname
+        when '.yml', '.yaml'
+          @meta_data = (YAML.load(source_path.read) || {}).symbolize_keys
+          @content   = @meta_data[:content] || ''
+        else
+          @line        = nil
+          @content     = ''
+          front_matter = false
+          meta_data    = ''
+          
+          source_path.open do |file|
+            file.each do |line|
+              if line =~ /\A---\s*\Z/
+                front_matter = !front_matter
               else
-                @line ||= file.lineno
-                @content << line
+                if front_matter
+                  meta_data << line
+                else
+                  @line ||= file.lineno
+                  @content << line
+                end
               end
             end
           end
+          
+          @meta_data = (YAML.load(meta_data) || {}).symbolize_keys
         end
-        
-        @meta_data = (YAML.load(meta_data) || {}).symbolize_keys
       end
       
       def method_missing(method, *args, &block)

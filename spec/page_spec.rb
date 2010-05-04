@@ -201,4 +201,24 @@ describe Massimo::Page do
       end
     end
   end
+  
+  context 'as a .yml file' do
+    it 'should treat the whole file as front matter' do
+      with_file 'pages/data.yml', 'name: Joe' do
+        Massimo::Page.new('pages/data.yml').name.should == 'Joe'
+      end
+    end
+    
+    it 'should default content to an empty string' do
+      with_file 'pages/data.yml', 'name: Joe' do
+        Massimo::Page.new('pages/data.yml').content.should == ''
+      end
+    end
+    
+    it 'should set the content with a content attribute' do
+      with_file 'pages/data.yml', 'content: Some Content' do
+        Massimo::Page.new('pages/data.yml').content.should == 'Some Content'
+      end
+    end
+  end
 end
