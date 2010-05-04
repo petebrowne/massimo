@@ -3,6 +3,7 @@ require File.expand_path('../spec_helper', __FILE__)
 describe Massimo::Config do
   its(:source_path)     { should == File.expand_path('.') }
   its(:output_path)     { should == File.expand_path('public') }
+  its(:environment)     { should == 'development' }
   its(:resources_path)  { should == '.' }
   its(:base_url)        { should == '/' }
   its(:resources_url)   { should == '/' }
@@ -96,13 +97,10 @@ describe Massimo::Config do
     end
   end
   
-  describe '#production?' do
-    it 'should be false by default' do
-      Massimo::Config.new.production?.should === false
-    end
-    
-    it 'should be true if production is set' do
-      Massimo::Config.new(:production => true).production?.should === true
+  describe '#environment' do
+    it 'should be a StringInquirer' do
+      config = Massimo::Config.new :environment => 'production'
+      config.environment.should be_an_instance_of(ActiveSupport::StringInquirer)
     end
   end
 end

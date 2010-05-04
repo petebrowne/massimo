@@ -1,4 +1,5 @@
 require 'active_support/core_ext/hash/keys'
+require 'active_support/string_inquirer'
 require 'ostruct'
 require 'yaml'
 
@@ -7,6 +8,7 @@ module Massimo
     DEFAULT_OPTIONS = {
       :source_path     => '.',
       :output_path     => 'public',
+      :environment     => 'development',
       :resources_path  => '.',
       :base_url        => '/',
       :resources_url   => '/',
@@ -35,6 +37,12 @@ module Massimo
       File.expand_path super
     end
     
+    # Return the enviornment option wrapped by a StringInquirer, so you can
+    # query the environment like this: `config.environment.production?`
+    def environment
+      ActiveSupport::StringInquirer.new(super)
+    end
+    
     # Get a full, expanded path for the given resource name. This is either set
     # in the configuration or determined dynamically based on the name.
     def path_for(resource_name)
@@ -60,12 +68,6 @@ module Massimo
     # this is how we get the options set for Haml or Sass during processing.
     def options_for(lib_name)
       send(lib_name) || {}
-    end
-    
-    # Wether or not the Site's environment is in production mode. Usually you would
-    # want to set this to compress and concat assets.
-    def production?
-      !!self.production
     end
   end
 end
