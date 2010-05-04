@@ -12,8 +12,7 @@ describe Massimo::Resource do
   describe '#source_path' do
     context 'when set with a string' do
       it 'should be a Pathname object' do
-        within_construct do |c|
-          c.file 'file.txt'
+        with_file 'file.txt' do
           resource.source_path.should be_an_instance_of(Pathname)
         end
       end
@@ -22,23 +21,20 @@ describe Massimo::Resource do
   
   describe '#url' do
     it 'should be created from the filename' do
-      within_construct do |c|
-        c.file 'a_resource_url.erb'
+      with_file 'a_resource_url.erb' do
         Massimo::Resource.new('a_resource_url.erb').url.should == '/a-resource-url.erb'
       end
     end
     
     it "should prepend the Resource's url" do
-      within_construct do |c|
-        c.file 'url.erb'
+      with_file 'url.erb' do
         Massimo.config.resources_url = '/resources'
         Massimo::Resource.new('url.erb').url.should == '/resources/url.erb'
       end
     end
     
     it 'should replace custom extensions' do
-      within_construct do |c|
-        c.file 'url.erb'
+      with_file 'url.erb' do
         resource = Massimo::Resource.new('url.erb')
         stub(resource).extension { '.rss' }
         resource.url.should == '/url.rss'
@@ -48,8 +44,7 @@ describe Massimo::Resource do
   
   describe '#extension' do
     it 'should be the extension of the file' do
-      within_construct do |c|
-        c.file 'url.erb'
+      with_file 'url.erb' do
         Massimo::Resource.new('url.erb').extension.should == '.erb'
       end
     end
@@ -57,8 +52,7 @@ describe Massimo::Resource do
   
   describe '#filename' do
     it 'should be the filename of the file' do
-      within_construct do |c|
-        c.file 'url.erb'
+      with_file 'url.erb' do
         Massimo::Resource.new('url.erb').filename.should == 'url.erb'
       end
     end
@@ -66,24 +60,21 @@ describe Massimo::Resource do
   
   describe '#output_path' do
     it 'should be a Pathname object' do
-      within_construct do |c|
-        c.file 'file.txt'
+      with_file 'file.txt' do
         resource.output_path.should be_an_instance_of(Pathname)
       end
     end
     
     it 'should move the #source_path to the sites output dir' do
-      within_construct do |c|
-        c.file 'file.txt'
+      with_file 'file.txt' do
         resource.output_path.to_s.should == File.expand_path('public/file.txt')
       end
     end
     
     context 'with a custom #base_url' do
       it 'should not include the #base_url' do
-        within_construct do |c|
-          Massimo.config.base_url = '/blog'
-          c.file 'file.txt'
+        Massimo.config.base_url = '/blog'
+        with_file 'file.txt' do
           resource.output_path.to_s.should == File.expand_path('public/file.txt')
         end
       end
@@ -92,8 +83,7 @@ describe Massimo::Resource do
   
   describe '#content' do
     it "should read the associated file's content" do
-      within_construct do |c|
-        c.file('file.txt', 'content')
+      with_file 'file.txt', 'content' do
         resource.content.should == 'content'
       end
     end
@@ -101,8 +91,7 @@ describe Massimo::Resource do
   
   describe '#render' do
     it "should return the file's content" do
-      within_construct do |c|
-        c.file('file.txt', 'content')
+      with_file 'file.txt', 'content' do
         resource.render.should == 'content'
       end
     end
@@ -110,10 +99,9 @@ describe Massimo::Resource do
   
   describe '#process' do
     it 'should create a file with the rendered content' do
-      within_construct do |c|
-        c.file('file.txt', 'content')
+      with_file 'file.txt', 'content' do
         resource.process
-        File.read('./public/file.txt').should == 'content'
+        File.read('public/file.txt').should == 'content'
       end
     end
   end
@@ -155,8 +143,7 @@ describe Massimo::Resource do
   
   describe '.find' do
     it 'should find resources by their file name' do
-      within_construct do |c|
-        c.file 'views/partials/post.haml', '%h1 Post'
+      with_file 'views/partials/post.haml', '%h1 Post' do
         Massimo::View.find('partials/post').content.should == '%h1 Post'
       end
     end
@@ -212,8 +199,7 @@ describe Massimo::Resource do
       class NewResource < Massimo::Resource
         unprocessable
       end
-      within_construct do |c|
-        c.file 'resource.txt'
+      with_file 'resource.txt' do
         dont_allow(File).open
         NewResource.new('resource.txt').process
       end

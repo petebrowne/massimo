@@ -19,4 +19,11 @@ Spec::Runner.configure do |config|
   config.after :each do
     Massimo.site = nil
   end
+  
+  def with_file(filename, content = nil)
+    within_construct do |construct|
+      construct.file filename, content
+      yield
+    end
+  end
 end

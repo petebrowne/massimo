@@ -10,8 +10,7 @@ describe Massimo::Site do
     end
     context 'with a string' do
       it 'should read a YAML file for configuration' do
-        within_construct do |c|
-          c.file 'config.yml', "source_path: source/dir\n"
+        with_file 'config.yml', "source_path: source/dir\n" do
           site = Massimo::Site.new 'config.yml'
           site.config.source_path.should == File.expand_path('source/dir')
         end
@@ -85,8 +84,7 @@ describe Massimo::Site do
       end
       
       it 'should add the methods in the class body' do
-        within_construct do |c|
-          c.file 'comment.txt'
+        with_file 'comment.txt' do
           Comment.new('comment.txt').should be_spam
         end
       end
@@ -144,8 +142,7 @@ describe Massimo::Site do
     end
     
     it 'should not process views' do
-      within_construct do |c|
-        c.file 'views/partial.haml'
+      with_file 'views/partial.haml' do
         Massimo.site.process
         processed_files.should be_empty
       end
@@ -153,8 +150,7 @@ describe Massimo::Site do
     
     context 'with a custom resource' do
       it 'should process the resource' do
-        within_construct do |c|
-          c.file 'videos/keyboard-cat.html'
+        with_file 'videos/keyboard-cat.html' do
           Massimo.site.resource :video
           Massimo.site.process
           processed_files.should =~ %w( public/keyboard-cat/index.html )
@@ -164,28 +160,28 @@ describe Massimo::Site do
     
     context 'with lib files' do
       it 'should load them' do
-        within_construct do |c|
-          c.file 'lib/site.rb', <<-CLASS.unindent
-            class Massimo::Site
-              def test
-                true
-              end
+        content = <<-CONTENT.unindent
+          class Massimo::Site
+            def test
+              true
             end
-          CLASS
+          end
+        CONTENT
+        with_file 'lib/site.rb', content do
           Massimo.site.process
           Massimo.site.test.should === true
         end
       end
       
       it 'should reload them' do
-        within_construct do |c|
-          c.file 'lib/site.rb', <<-CLASS.unindent
-            class Massimo::Site
-              def test
-                false
-              end
+        content = <<-CONTENT.unindent
+          class Massimo::Site
+            def test
+              false
             end
-          CLASS
+          end
+        CONTENT
+        with_file 'lib/site.rb', content do
           expect {
             Massimo.site.process
           }.to change(Massimo.site, :test).to(false)
@@ -193,8 +189,7 @@ describe Massimo::Site do
       end
       
       it 'should remove previously loaded libs' do
-        within_construct do |c|
-          c.file 'lib/some_constant.rb', 'module SomeConstant; end'
+        with_file 'lib/some_constant.rb', 'module SomeConstant; end' do
           Massimo.site.process
           File.delete 'lib/some_constant.rb'
           Massimo.site.process
@@ -207,28 +202,28 @@ describe Massimo::Site do
     
     context 'with helper files' do
       it 'should extend the template scope' do
-        within_construct do |c|
-          c.file 'helpers/some_helper.rb', <<-HELPER.unindent
-            module SomeHelper
-              def test
-                'working'
-              end
+        content = <<-CONTENT.unindent
+          module SomeHelper
+            def test
+              'working'
             end
-          HELPER
+          end
+        CONTENT
+        with_file 'helpers/some_helper.rb', content do
           Massimo.site.process
           Massimo.site.template_scope.test.should == 'working'
         end
       end
       
       it 'should reload the methods in the template scope' do
-        within_construct do |c|
-          c.file 'helpers/helper.rb', <<-HELPER.unindent
-            module Helper
-              def testing
-                'working'
-              end
+        content = <<-CONTENT.unindent
+          module Helper
+            def testing
+              'working'
             end
-          HELPER
+          end
+        CONTENT
+        with_file 'helpers/helper.rb', content do
           Massimo.site.process
           File.delete 'helpers/helper.rb'
           Massimo.site.process

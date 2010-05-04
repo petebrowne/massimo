@@ -11,8 +11,7 @@ describe Massimo::Helpers do
   
   describe '#render' do
     it 'should render a view with the given locals' do
-      within_construct do |c|
-        c.file 'views/partial.haml', '= local'
+      with_file 'views/partial.haml', '= local' do
         helpers.render('partial', :local => 'Local').should == "Local\n"
       end
     end
