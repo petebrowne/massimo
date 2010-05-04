@@ -10,7 +10,7 @@ The prefered way is to use a `config.rb` file. In that file, you have access to 
     config.stylesheets_url = '/css'
     config.output_path     = '_site'
     
-    if config.production?
+    if config.environment.production?
       config.javascripts_compressor = :pack
       config.sass = { :style => :compressed }
     end
@@ -33,7 +33,7 @@ This config file does a few things:
 * It creates a custom [resource](/massimo/resources/).
 * It creates a custom helper method to access the custom resources.
 
-*Note the `if config.production?` block. This changes the configuration based on the environment setup in the command line.*
+*Note the `if config.environment.production?` block. This changes the configuration based on the environment setup in the command line.*
 
 
 config.yml
@@ -59,8 +59,8 @@ Options
       <td>The path to output the site to. This can be changed on the command line using the <code>--output-path=PATH</code> option. Defaults to <code>'public'</code>.</td>
     </tr>
     <tr>
-      <th>production</th>
-      <td>A boolean representing the Site's environment. This can be changed on the command line using the <code>--production</code> flag. Defaults to <code>false</code>.</td>
+      <th>environment</th>
+      <td>A string representing the Site's environment. This can be changed on the command line using the <code>--environment</code> option or the <code>--production</code> flag. Defaults to <code>'development'</code>.</td>
     </tr>
     <tr>
       <th>base_url</th>
