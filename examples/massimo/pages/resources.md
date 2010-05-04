@@ -62,15 +62,16 @@ You can use Resources in a very similar way to how you would use a model in Rail
 
 The `unprocessable` macro tells **massimo** to not process the user resources. Now you can have a bunch of user files:
 
-    # users/bob.txt
-    ---
+    # users/bob.yml
     name: Bob
-    ---
     
-    # users/sue.txt
-    ---
+    # users/sue.yml
     name: Sue
-    ---
+    
+    # users/jack.yml
+    name: Jack
+    
+*Note: If a resource is a YAML file, the entire file's content will be treated as YAML. The front matter black is not necessary.*
     
 And on the page you need to list the Users, you could get an array of the resources by calling `User.all`:
 
