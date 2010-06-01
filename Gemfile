@@ -12,7 +12,7 @@ group :test do
   gem 'test-construct', '~> 1.2.0',      :require => 'construct'
   gem 'rack-test',      '~> 0.5.0',      :require => 'rack/test'
   gem 'unindent',       '~> 0.9.0'
-  gem 'haml',           '>= 3.0.0.beta', :require => 'sass'
+  gem 'haml',           '~> 3.0.0', :require => 'sass'
   gem 'less',           '~> 1.2.0'
   gem 'coffee-script',  '~> 0.3.0'
   gem 'sprockets',      '~> 1.0.0'
