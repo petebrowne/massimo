@@ -6,7 +6,7 @@ gem 'sinatra_more',  '~> 0.3.0'
 gem 'thor',          '~> 0.13.0'
 gem 'tilt',          '~> 0.10.0'
 
-group :test do
+group :development do
   gem 'rspec',          '~> 1.3.0'
   gem 'rr',             '~> 0.10.0'
   gem 'test-construct', '~> 1.2.0', :require => 'construct'
