@@ -3,7 +3,7 @@ $:.unshift(lib) unless $:.include?(lib)
 
 require 'rubygems'
 require 'bundler'
-Bundler.require(:default, :test)
+Bundler.require(:default, :development)
 require 'massimo'
 
 Spec::Runner.configure do |config|
