@@ -204,14 +204,14 @@ describe Massimo::Site do
       it 'should extend the template scope' do
         content = <<-CONTENT.unindent
           module SomeHelper
-            def test
+            def helper_method
               'working'
             end
           end
         CONTENT
         with_file 'helpers/some_helper.rb', content do
           Massimo.site.process
-          Massimo.site.template_scope.test.should == 'working'
+          Massimo.site.template_scope.helper_method.should == 'working'
         end
       end
       
