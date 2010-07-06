@@ -1,5 +1,4 @@
 module Massimo
-  autoload :CLI,        'massimo/cli'
   autoload :Config,     'massimo/config'
   autoload :Helpers,    'massimo/helpers'
   autoload :Javascript, 'massimo/javascript'
@@ -12,7 +11,17 @@ module Massimo
   autoload :View,       'massimo/view'
   autoload :Watcher,    'massimo/watcher'
   
-  VERSION = '0.6.8'
+  module Commands
+    autoload :Base,     'massimo/commands/base'
+    autoload :Build,    'massimo/commands/build'
+    autoload :Generate, 'massimo/commands/generate'
+    autoload :Help,     'massimo/commands/help'
+    autoload :Server,   'massimo/commands/server'
+    autoload :Version,  'massimo/commands/version'
+    autoload :Watch,    'massimo/commands/watch'
+  end
+  
+  VERSION = '0.7.0'
   
   class << self
     def site
