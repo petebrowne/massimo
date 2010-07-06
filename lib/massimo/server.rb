@@ -6,6 +6,11 @@ module Massimo
     class << self
       def start(site, port = 3000)
         Massimo::UI.say "massimo is serving your site at http://localhost:#{port}", :growl => true
+        trap('INT') do
+          Massimo::UI.say 'massimo is shutting down your server', :growl => true
+          Rack::Handler::WEBrick.shutdown
+        end
+        
         app = Rack::Builder.new do
           use Rack::ShowExceptions
           run Massimo::Server.new(site)
