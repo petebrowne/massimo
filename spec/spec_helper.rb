@@ -12,7 +12,7 @@ Spec::Runner.configure do |config|
   config.mock_with :rr
   
   config.before :each do
-    stub($stdout)
+    stub($stdout).puts
     stub(Growl).notify
   end
   
