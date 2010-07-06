@@ -1,3 +1,4 @@
+require 'active_support/core_ext/string/starts_ends_with'
 require 'rack'
 
 module Massimo
@@ -21,7 +22,7 @@ module Massimo
     
     def call(env)
       @watcher.process
-      env['PATH_INFO'] << 'index.html' if env['PATH_INFO'] =~ /\/$/
+      env['PATH_INFO'] << 'index.html' if env['PATH_INFO'].ends_with? '/'
       @file_server.call(env)
     end
   end
