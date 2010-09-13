@@ -1,11 +1,10 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    activesupport (3.0.0.beta4)
-    bundler (1.0.0.beta.1)
+    activesupport (3.0.0)
     coffee-script (0.3.2)
     growl (1.0.3)
-    haml (3.0.13)
+    haml (3.0.18)
     jsmin (1.0.1)
     less (1.2.21)
       mutter (>= 0.4.2)
@@ -30,11 +29,11 @@ GEM
       tilt (>= 0.2)
     sprockets (1.0.2)
     test-construct (1.2.0)
-    thor (0.13.7)
+    thor (0.13.8)
     tilt (1.0.1)
     treetop (1.4.8)
       polyglot (>= 0.3.1)
-    tzinfo (0.3.22)
+    tzinfo (0.3.23)
     unindent (0.9)
 
 PLATFORMS

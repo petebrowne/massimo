@@ -1,4 +1,6 @@
-pkg
-doc
-.yardoc
+.bundle
+.rvmrc
 .sass-cache
+.yardoc
+doc
+pkg
