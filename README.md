@@ -20,6 +20,8 @@ Massimo is a static website builder that allows you to use dynamic technologies 
     massimo generate my-site
     cd my-site
     massimo build
+    
+For more information, visit http://petebrowne.github.com/massimo/.
 
 ## Copyright
 

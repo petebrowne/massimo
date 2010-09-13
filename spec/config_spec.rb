@@ -1,4 +1,4 @@
-require File.expand_path('../spec_helper', __FILE__)
+require 'spec_helper'
 
 describe Massimo::Config do
   its(:source_path)     { should == File.expand_path('.') }

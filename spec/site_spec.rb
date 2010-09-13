@@ -1,4 +1,4 @@
-require File.expand_path('../spec_helper', __FILE__)
+require 'spec_helper'
 
 describe Massimo::Site do
   describe '#initialize' do
@@ -93,7 +93,7 @@ describe Massimo::Site do
   
   describe '#template_scope' do
     it 'should return an object with the Helpers methods included' do
-      Massimo.site.template_scope.methods.should include('render')
+      Massimo.site.template_scope.methods.map(&:to_s).should include('render')
     end
   end
   

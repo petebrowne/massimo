@@ -1,4 +1,4 @@
-require File.expand_path('../spec_helper', __FILE__)
+require 'spec_helper'
 
 describe Massimo::Resource do
   let(:resource) { Massimo::Resource.new 'file.txt' }

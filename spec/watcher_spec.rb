@@ -1,4 +1,4 @@
-require File.expand_path('../spec_helper', __FILE__)
+require 'spec_helper'
 
 describe Massimo::Watcher do
   let(:site)    { Massimo::Site.new(:lib_path => 'libs') }

@@ -2,11 +2,21 @@ lib = File.expand_path('../../lib', __FILE__)
 $:.unshift(lib) unless $:.include?(lib)
 
 require 'rubygems'
-require 'bundler'
-Bundler.require(:default, :development)
+require 'rspec'
+require 'rr'
+require 'construct'
+require 'rack/test'
+require 'unindent'
+require 'sass'
+require 'less'
+require 'coffee-script'
+require 'sprockets'
+require 'jsmin'
+require 'packr'
+require 'growl'
 require 'massimo'
 
-Spec::Runner.configure do |config|
+RSpec.configure do |config|
   config.include Construct::Helpers
   config.include Rack::Test::Methods
   config.mock_with :rr
