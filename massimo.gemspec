@@ -1,8 +1,5 @@
-lib = File.expand_path('../lib/', __FILE__)
-$:.unshift(lib) unless $:.include?(lib)
-
-require 'massimo'
-require 'bundler'
+# -*- encoding: utf-8 -*-
+require File.expand_path('../lib/massimo/version', __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = 'massimo'
@@ -36,5 +33,4 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'jsmin',          '~> 1.0.0'
   s.add_development_dependency 'packr',          '~> 3.1.0'
   s.add_development_dependency 'growl',          '~> 1.0.0'
-  s.add_development_dependency 'yard',           '~> 0.6.0'
 end

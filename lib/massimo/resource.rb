@@ -41,10 +41,10 @@ module Massimo
       
       protected
         
-        def unprocessable
-          def self.processable?; false; end
-          define_method(:process) { false }
-        end
+      def unprocessable
+        def self.processable?; false; end
+        define_method(:process) { false }
+      end
     end
     
     attr_reader :source_path, :content
@@ -98,8 +98,8 @@ module Massimo
     
     protected
     
-      def read_source
-        @content = source_path.read
-      end
+    def read_source
+      @content = source_path.read
+    end
   end
 end
