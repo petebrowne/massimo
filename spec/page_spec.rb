@@ -116,7 +116,7 @@ describe Massimo::Page do
         within_construct do |c|
           c.file 'page.erb', "---\nlayout: false\n---\nContent"
           c.file 'views/layouts/main.erb', 'Layout'
-          puts page.layout
+          
           page.render.should_not include('Layout')
         end
       end

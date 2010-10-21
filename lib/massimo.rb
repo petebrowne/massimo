@@ -21,7 +21,7 @@ module Massimo
     autoload :Watch,    'massimo/commands/watch'
   end
   
-  VERSION = '0.7.1'
+  VERSION = '0.7.2'
   
   class << self
     def site
