@@ -58,6 +58,5 @@ Within a massimo project, you can generate a new resource file:
         end
       end
     end
-    
   end
 end

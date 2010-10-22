@@ -56,7 +56,6 @@ GEM
       polyglot (>= 0.3.1)
     tzinfo (0.3.23)
     unindent (0.9)
-    yard (0.6.1)
 
 PLATFORMS
   ruby
@@ -81,4 +80,3 @@ DEPENDENCIES
   tilt (~> 1.0.0)
   tzinfo (~> 0.3.0)
   unindent (~> 0.9.0)
-  yard (~> 0.6.0)

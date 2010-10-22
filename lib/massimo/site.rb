@@ -67,43 +67,43 @@ module Massimo
     
     protected
     
-      def add_template_scope_blocks(scope)
-        @template_scope_blocks.each do |block|
-          scope.instance_eval(&block)
-        end
+    def add_template_scope_blocks(scope)
+      @template_scope_blocks.each do |block|
+        scope.instance_eval(&block)
       end
-      
-      def add_template_scope_extensions(scope)
-        @template_scope_extensions.each do |extension|
-          scope.extend(extension)
-        end
-      end
-      
-      def add_template_scope_helpers(scope)
-        config.files_in(:helpers, :rb).each do |file|
-          load(file)
-          if helper = (class_name_of_file(file).constantize rescue nil)
-            scope.extend(helper)
-          end
-        end
-      end
+    end
     
-      def reload_libs
-        if defined? @previous_libs
-          @previous_libs.each do |lib|
-            class_name = class_name_of_file(lib)
-            Object.class_eval do
-              remove_const(class_name) if const_defined?(class_name)
-            end
+    def add_template_scope_extensions(scope)
+      @template_scope_extensions.each do |extension|
+        scope.extend(extension)
+      end
+    end
+    
+    def add_template_scope_helpers(scope)
+      config.files_in(:helpers, :rb).each do |file|
+        load(file)
+        if helper = (class_name_of_file(file).constantize rescue nil)
+          scope.extend(helper)
+        end
+      end
+    end
+  
+    def reload_libs
+      if defined? @previous_libs
+        @previous_libs.each do |lib|
+          class_name = class_name_of_file(lib)
+          Object.class_eval do
+            remove_const(class_name) if const_defined?(class_name)
           end
         end
-        @previous_libs = config.files_in(:lib, :rb).each do |file|
-          load(file)
-        end
       end
-      
-      def class_name_of_file(file)
-        File.basename(file).sub(/\.[^\.]+$/, '').classify
+      @previous_libs = config.files_in(:lib, :rb).each do |file|
+        load(file)
       end
+    end
+    
+    def class_name_of_file(file)
+      File.basename(file).sub(/\.[^\.]+$/, '').classify
+    end
   end
 end
