@@ -98,8 +98,8 @@ module Massimo
     
     protected
     
-    def read_source
-      @content = source_path.read
-    end
+      def read_source
+        @content = source_path.read
+      end
   end
 end

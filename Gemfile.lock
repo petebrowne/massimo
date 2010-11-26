@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    massimo (0.7.2)
+    massimo (0.7.4)
       activesupport (~> 3.0.0)
       i18n (~> 0.4.0)
       rack (~> 1.2.0)

@@ -54,16 +54,16 @@ module Massimo
     
     protected
     
-    def growl(message, title = 'massimo')
-      Growl.notify(message, :title => title) if defined?(Growl)
-    end
+      def growl(message, title = 'massimo')
+        Growl.notify(message, :title => title) if defined?(Growl)
+      end
   
-    def padding
-      @padding ||= 0
-    end
+      def padding
+        @padding ||= 0
+      end
     
-    def padding=(value)
-      @padding = [ 0, value.to_i ].max
-    end
+      def padding=(value)
+        @padding = [ 0, value.to_i ].max
+      end
   end
 end

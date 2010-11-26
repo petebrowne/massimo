@@ -43,54 +43,54 @@ module Massimo
     def output_path
       @output_path ||= begin
         output_path = super.to_s
-        output_path << "index.html" if output_path.ends_with? '/'
+        output_path << 'index.html' if output_path.ends_with? '/'
         Pathname.new output_path
       end
     end
     
     protected
     
-    def read_source
-      case source_path.extname
-      when '.yml', '.yaml'
-        @meta_data = (YAML.load(source_path.read) || {}).symbolize_keys
-        @content   = @meta_data[:content] || ''
-      else
-        @line        = nil
-        @content     = ''
-        front_matter = false
-        meta_data    = ''
+      def read_source
+        case source_path.extname
+        when '.yml', '.yaml'
+          @meta_data = (YAML.load(source_path.read) || {}).symbolize_keys
+          @content   = @meta_data[:content] || ''
+        else
+          @line        = nil
+          @content     = ''
+          front_matter = false
+          meta_data    = ''
         
-        source_path.open do |file|
-          file.each do |line|
-            if line =~ /\A---\s*\Z/
-              front_matter = !front_matter
-            else
-              if front_matter
-                meta_data << line
+          source_path.open do |file|
+            file.each do |line|
+              if line =~ /\A---\s*\Z/
+                front_matter = !front_matter
               else
-                @line ||= file.lineno
-                @content << line
+                if front_matter
+                  meta_data << line
+                else
+                  @line ||= file.lineno
+                  @content << line
+                end
               end
             end
           end
-        end
         
-        @meta_data = (YAML.load(meta_data) || {}).symbolize_keys
-      end
-    end
-    
-    def method_missing(method, *args, &block)
-      if args.length == 0
-        method_name = method.to_s
-        if method_name.chomp! '?'
-          !!@meta_data[method_name.to_sym]
-        else
-          @meta_data[method_name.to_sym]
+          @meta_data = (YAML.load(meta_data) || {}).symbolize_keys
         end
-      else
-        super
       end
-    end
+    
+      def method_missing(method, *args, &block)
+        if args.length == 0
+          method_name = method.to_s
+          if method_name.chomp! '?'
+            !!@meta_data[method_name.to_sym]
+          else
+            @meta_data[method_name.to_sym]
+          end
+        else
+          super
+        end
+      end
   end
 end

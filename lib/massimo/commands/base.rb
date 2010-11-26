@@ -16,7 +16,7 @@ module Massimo
         command.run
       end
       
-      def initialize()
+      def initialize
         @options = {}
         @parser  = OptionParser.new
         
@@ -63,15 +63,13 @@ module Massimo
       end
       
       def site
-        @site ||= begin
-          site = Massimo::Site.new config_file(:yml)
+        @site ||= Massimo::Site.new(config_file(:yml)).tap do |site|
           site.config.environment = options[:environment] if options[:environment]
           site.config.source_path = options[:source_path] if options[:source_path]
           site.config.output_path = options[:output_path] if options[:output_path]
           if config_rb = config_file(:rb)
             site.instance_eval File.read(config_rb)
           end
-          site
         end
       end
       
