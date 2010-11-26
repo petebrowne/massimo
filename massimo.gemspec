@@ -16,10 +16,11 @@ Gem::Specification.new do |s|
   s.executables << 'massimo'
   
   s.add_dependency             'activesupport',  '~> 3.0.0'
+  s.add_dependency             'i18n',           '~> 0.4.0'
   s.add_dependency             'rack',           '~> 1.2.0'
   s.add_dependency             'sinatra_more',   '~> 0.3.0'
   s.add_dependency             'thor',           '~> 0.14.0'
-  s.add_dependency             'tilt',           '~> 1.0.0'
+  s.add_dependency             'tilt',           '~> 1.1.0'
   s.add_dependency             'tzinfo',         '~> 0.3.0'
   s.add_development_dependency 'rspec',          '~> 2.0.0'
   s.add_development_dependency 'rr',             '~> 1.0.0'
