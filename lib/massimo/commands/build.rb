@@ -9,10 +9,10 @@ Builds the site from the source files.
       end
       
       def run
-        Massimo::UI.report_errors do
+        exit Massimo::UI.report_errors {
           site.process
           Massimo::UI.say 'massimo has built your site', :growl => true
-        end
+        }
       end
     end
   end
