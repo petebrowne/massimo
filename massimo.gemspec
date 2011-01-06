@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency             'thor',           '~> 0.14.0'
   s.add_dependency             'tilt',           '~> 1.1.0'
   s.add_dependency             'tzinfo',         '~> 0.3.0'
-  s.add_development_dependency 'rspec',          '~> 2.0.0'
+  s.add_development_dependency 'rspec',          '~> 2.4.0'
   s.add_development_dependency 'rr',             '~> 1.0.0'
   s.add_development_dependency 'test-construct', '~> 1.2.0'
   s.add_development_dependency 'rack-test',      '~> 0.5.0'
