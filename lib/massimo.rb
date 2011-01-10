@@ -8,7 +8,7 @@ module Massimo
   autoload :Site,       'massimo/site'
   autoload :Stylesheet, 'massimo/stylesheet'
   autoload :UI,         'massimo/ui'
-  autoload :Version,    'massimo/version'
+  autoload :VERSION,    'massimo/version'
   autoload :View,       'massimo/view'
   autoload :Watcher,    'massimo/watcher'
   
