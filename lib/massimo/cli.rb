@@ -37,7 +37,7 @@ module Massimo
     def version
       puts Massimo::VERSION
     end
-    map %w( v -v --version ) => :version
+    map %w(v -v --version) => :version
     
     protected
       
