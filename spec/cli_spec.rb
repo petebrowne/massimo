@@ -1,6 +1,38 @@
 require 'spec_helper'
 
 describe Massimo::CLI do
+  describe '#build' do
+    it 'builds the site' do
+      silence(:stdout) do
+        mock(Kernel).exit(true)
+        mock.instance_of(Massimo::CLI).site { mock!(:process) }
+        Massimo::CLI.start(%w(build))
+      end
+    end
+    
+    context 'with errors' do
+      it "exits with status code of 1" do
+        silence(:stdout) do
+          mock(Kernel).exit(false)
+          mock.instance_of(Massimo::CLI).site do
+            mock!(:process) { raise 'Error!' }
+          end
+          Massimo::CLI.start(%w(build))
+        end
+      end
+    end
+    
+    context "with mapping 'b'" do
+      it 'builds the site' do
+        silence(:stdout) do
+          mock(Kernel).exit(true)
+          mock.instance_of(Massimo::CLI).site { mock!(:process) }
+          Massimo::CLI.start(%w(b))
+        end
+      end
+    end
+  end
+  
   describe '#server' do
     it 'starts a server at port 3000' do
       silence(:stdout) do

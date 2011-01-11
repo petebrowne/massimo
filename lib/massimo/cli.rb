@@ -9,8 +9,12 @@ module Massimo
     
     desc 'build', 'Builds the site from the source files'
     def build
-      
+      Kernel.exit Massimo::UI.report_errors {
+        site.process
+        Massimo::UI.say 'massimo has built your site', :growl => true
+      }
     end
+    map 'b' => :build
     
     desc 'generate SITE_NAME', 'Generates a new site with the give name'
     def generate(site_name)
