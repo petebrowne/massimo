@@ -30,10 +30,30 @@ RSpec.configure do |config|
     Massimo.site = nil
   end
   
+  # Builds a construct with a single file in it.
   def with_file(filename, content = nil)
     within_construct do |construct|
       construct.file filename, content
       yield
     end
   end
+  
+  # Captures the given stream and returns it:
+  #
+  #   stream = capture(:stdout) { puts "Cool" }
+  #   stream # => "Cool\n"
+  #
+  def capture(stream)
+    begin
+      stream = stream.to_s
+      eval "$#{stream} = StringIO.new"
+      yield
+      result = eval("$#{stream}").string
+    ensure
+      eval("$#{stream} = #{stream.upcase}")
+    end
+
+    result
+  end
+  alias :silence :capture
 end

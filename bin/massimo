@@ -1,20 +1,4 @@
 #!/usr/bin/env ruby
 
 require 'massimo'
-
-case ARGV.shift
-when 'b', 'build'
-  Massimo::Commands::Build
-when 'g', 'generate'
-  Massimo::Commands::Generate
-when nil, '-h', '--help', 'help'
-  Massimo::Commands::Help
-when 's', 'server'
-  Massimo::Commands::Server
-when '-v', '--version', 'version'
-  Massimo::Commands::Version
-when 'w', 'watch'
-  Massimo::Commands::Watch
-else
-  Massimo::Commands::Help
-end.run
+Massimo::CLI.start
