@@ -1,9 +1,9 @@
 require 'sass'
 require 'sprockets'
 
-# Example configuration
+# This is an example configuration File
+# Look here for all the available options:
 # http://petebrowne.github.com/massimo/configuration/
-# config.output_path = 'output'
 
 if config.environment.production?
   # Use JSMin for javascript compression
