@@ -2,6 +2,10 @@ require 'thor'
 
 module Massimo
   class CLI < Thor
+    include Thor::Actions
+    
+    source_root  File.expand_path('../templates', __FILE__)
+    
     default_task :help
     
     class_option 'environment', :desc => 'Sets the environment',                 :aliases => '-e'
@@ -18,8 +22,9 @@ module Massimo
     
     desc 'generate SITE_NAME', 'Generates a new site with the give name'
     def generate(site_name)
-      
+      directory 'site', site_name
     end
+    map 'g' => :generate
     
     desc 'server [PORT]', 'Runs a local Rack based web server on the given port'
     def server(port = 3000)
