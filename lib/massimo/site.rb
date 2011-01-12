@@ -5,22 +5,25 @@ require 'tilt'
 module Massimo
   class Site
     attr_accessor :config
+    attr_reader   :resources
     
     # Creates a new Site, passing the given options to a new configuration.
     # If a block is given, it is evaluated in the scope of the new Site.
     def initialize(options = nil, &block)
+      @original_options          = options
       @config                    = Config.new(options)
       @template_scope_blocks     = []
       @template_scope_extensions = []
+      @resources                 = [ Massimo::Page, Massimo::Javascript, Massimo::Stylesheet, Massimo::View ]
       Massimo.site               = self
       
       instance_eval File.read(config.config_path) if File.exist?(config.config_path)
       instance_eval(&block) if block_given?
     end
     
-    # The resources used in this Site.
-    def resources
-      @resources ||= [ Massimo::Page, Massimo::Javascript, Massimo::Stylesheet, Massimo::View ]
+    # Sets up the Site from scratch again. Also Reloads the config file again.
+    def reload(&block)
+      initialize @original_options, &block
     end
     
     # Adds a new, custom resource to the Site. If a Class constant is given,

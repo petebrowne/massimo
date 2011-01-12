@@ -9,15 +9,6 @@ describe Massimo::Site do
       end
     end
     
-    context 'with a string' do
-      it 'reads a YAML file for configuration' do
-        with_file 'config.yml', "source_path: source/dir\n" do
-          site = Massimo::Site.new 'config.yml'
-          site.config.source_path.should == File.expand_path('source/dir')
-        end
-      end
-    end
-    
     context 'with a block' do
       it 'configures the site' do
         site = Massimo::Site.new do
@@ -37,9 +28,41 @@ describe Massimo::Site do
     end
   end
   
+  describe 'reload' do
+    it 'reloads the config file' do
+      within_construct do |c|
+        c.file 'config.rb', 'config.output_path = "output/dir"'
+        site = Massimo::Site.new
+        c.file 'config.rb', 'config.output_path = "output"'
+        site.reload
+        site.config.output_path.should == File.expand_path('output')
+      end
+    end
+    
+    it 'resets the resources array' do
+      Post = Class.new(Massimo::Resource)
+      site = Massimo::Site.new
+      site.resource Post
+      site.reload
+      site.resources.should_not include(Post)
+      Object.class_eval { remove_const :Post }
+    end
+    
+    it 'uses original options' do
+      within_construct do |c|
+        c.file 'config.rb', 'config.output_path = "output/dir"'
+        site = Massimo::Site.new :output_path => 'output'
+        c.file 'config.rb', 'config.source_path = "source/dir"'
+        site.reload
+        site.config.output_path.should == File.expand_path('output')
+        site.config.source_path.should == File.expand_path('source/dir')
+      end
+    end
+  end
+  
   describe '#resources' do
     it 'is an array of the default resources' do
-      Massimo::Site.new.resources.should =~ [ Massimo::Page, Massimo::Javascript, Massimo::Stylesheet, Massimo::View]
+      Massimo::Site.new.resources.should =~ [ Massimo::Page, Massimo::Javascript, Massimo::Stylesheet, Massimo::View ]
     end
   end
   
@@ -50,6 +73,7 @@ describe Massimo::Site do
         site = Massimo::Site.new
         site.resource Post
         site.resources.should include(Post)
+        Object.class_eval { remove_const :Post }
       end
     end
     

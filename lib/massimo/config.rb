@@ -21,10 +21,7 @@ module Massimo
     # or a file path to a .yaml file.
     def initialize(options = nil)
       hash = DEFAULT_OPTIONS.dup
-      
-      options = YAML.load_file(options) if options.is_a? String
       hash.merge!(options.symbolize_keys) if options.is_a? Hash
-      
       super hash
     end
     

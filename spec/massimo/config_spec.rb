@@ -18,16 +18,6 @@ describe Massimo::Config do
         config.source_path.should == File.expand_path('source/path')
       end
     end
-    
-    context 'with a string' do
-      it 'should read a YAML file for configuration' do
-        within_construct do |c|
-          c.file 'config.yml', "source_path: source/path\n"
-          config = Massimo::Config.new 'config.yml'
-          config.source_path.should == File.expand_path('source/path')
-        end
-      end
-    end
   end
   
   describe '#path_for' do
