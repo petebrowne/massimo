@@ -25,6 +25,15 @@ describe Massimo::Site do
           site.config.output_path.should == File.expand_path('output/dir')
         end
       end
+      
+      context 'with a specified path' do
+        it 'evals the config file' do
+          with_file 'config/site.rb', 'config.output_path = "output/dir"' do
+            site = Massimo::Site.new :config_path => 'config/site.rb'
+            site.config.output_path.should == File.expand_path('output/dir')
+          end
+        end
+      end
     end
   end
   
