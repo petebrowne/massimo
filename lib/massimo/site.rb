@@ -14,6 +14,7 @@ module Massimo
       @template_scope_extensions = []
       Massimo.site               = self
       
+      instance_eval File.read(config.config_path) if File.exist?(config.config_path)
       instance_eval(&block) if block_given?
     end
     

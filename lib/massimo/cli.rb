@@ -47,10 +47,7 @@ module Massimo
     protected
       
       def site
-        return Massimo.site if defined?(Massimo.site)
-        Massimo::Site.new(:environment => environment).tap do |site|
-          site.instance_eval File.read('config.rb') if File.exist?('config.rb')
-        end
+        Massimo.site || Massimo::Site.new(:environment => environment)
       end
       
       def environment

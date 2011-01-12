@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Massimo::Config do
+  its(:config_path)     { should == File.expand_path('config.rb') }
   its(:source_path)     { should == File.expand_path('.') }
   its(:output_path)     { should == File.expand_path('public') }
   its(:environment)     { should == 'development' }
