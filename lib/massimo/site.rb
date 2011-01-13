@@ -103,20 +103,26 @@ module Massimo
         end
       end
       
-      def reload_consts(cache)
-        @captured_consts ||= {}
+      def reload_consts(cache, &block)
+        @constants ||= {}
         
-        if @captured_consts.key?(cache)
-          @captured_consts[cache].each do |const|
-            Object.class_eval do
-              remove_const(const) if const_defined?(const)
-            end
-          end
-        end
+        @constants[cache].each do |const|
+          Object.send(:remove_const, const) if Object.const_defined?(const)
+        end if @constants.key?(cache)
         
-        old_consts = Object.constants
-        yield
-        @captured_consts[cache] = Object.constants - old_consts
+        @constants[cache]  = capture_constants(&block)
+        @constants[cache] -= @required_constants if @required_constants
+        @constants[cache]
+      end
+      
+      def require(name)
+        @required_constants = capture_constants { super }
+      end
+      
+      def capture_constants
+        previous_constants = Object.constants
+        yield if block_given?
+        Object.constants - previous_constants
       end
   end
 end

@@ -38,16 +38,6 @@ describe Massimo::Site do
   end
   
   describe 'reload' do
-    it 'reloads the config file' do
-      within_construct do |c|
-        c.file 'config.rb', 'config.output_path = "output/dir"'
-        site = Massimo::Site.new
-        c.file 'config.rb', 'config.output_path = "output"'
-        site.reload
-        site.config.output_path.should == File.expand_path('output')
-      end
-    end
-    
     it 'resets the resources array' do
       Post = Class.new(Massimo::Resource)
       site = Massimo::Site.new
@@ -68,15 +58,38 @@ describe Massimo::Site do
       end
     end
     
-    context 'with a config file with a defined resource' do
-      it 'removes old resource constants' do
+    context 'with a config file' do
+      it 'reloads the config file' do
         within_construct do |c|
-          c.file 'config.rb', 'resource :post'
+          c.file 'config.rb', 'config.output_path = "output/dir"'
           site = Massimo::Site.new
-          c.file 'config.rb', 'resource :comment'
+          c.file 'config.rb', 'config.output_path = "output"'
           site.reload
-          defined?(Post).should be_false
-          Object.send(:remove_const, :Comment)
+          site.config.output_path.should == File.expand_path('output')
+        end
+      end
+      
+      context 'with a defined resource' do
+        it 'removes old resource constants' do
+          within_construct do |c|
+            c.file 'config.rb', 'resource :post'
+            site = Massimo::Site.new
+            c.file 'config.rb', 'resource :comment'
+            site.reload
+            defined?(Post).should be_false
+            Object.send(:remove_const, :Comment)
+          end
+        end
+      end
+      
+      context 'with a required gem' do
+        it 'does not remove the gem constant' do
+          within_construct do |c|
+            c.file 'config.rb', 'require "active_record"'
+            site = Massimo::Site.new
+            site.reload
+            defined?(ActiveRecord).should be_true
+          end
         end
       end
     end
