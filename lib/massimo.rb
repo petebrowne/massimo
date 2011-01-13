@@ -13,16 +13,6 @@ module Massimo
   autoload :View,       'massimo/view'
   autoload :Watcher,    'massimo/watcher'
   
-  module Commands
-    autoload :Base,     'massimo/commands/base'
-    autoload :Build,    'massimo/commands/build'
-    autoload :Generate, 'massimo/commands/generate'
-    autoload :Help,     'massimo/commands/help'
-    autoload :Server,   'massimo/commands/server'
-    autoload :Version,  'massimo/commands/version'
-    autoload :Watch,    'massimo/commands/watch'
-  end
-  
   class << self
     def site
       @site ||= Site.new
