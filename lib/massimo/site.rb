@@ -110,7 +110,7 @@ module Massimo
           @captured_consts[cache].each do |const|
             Object.class_eval do
               remove_const(const) if const_defined?(const)
-            end if const.is_a?(Symbol)
+            end
           end
         end
         
