@@ -53,8 +53,8 @@ describe Massimo::Site do
       site = Massimo::Site.new
       site.resource Post
       site.reload
-      site.resources.should_not include(Post)
-      Object.class_eval { remove_const :Post }
+      site.resources.map(&:to_s).should_not include('Post')
+      Object.send(:remove_const, :Post)
     end
     
     it 'uses original options' do
@@ -65,6 +65,19 @@ describe Massimo::Site do
         site.reload
         site.config.output_path.should == File.expand_path('output')
         site.config.source_path.should == File.expand_path('source/dir')
+      end
+    end
+    
+    context 'with a config file with a defined resource' do
+      it 'removes old resource constants' do
+        within_construct do |c|
+          c.file 'config.rb', 'resource :post'
+          site = Massimo::Site.new
+          c.file 'config.rb', 'resource :comment'
+          site.reload
+          defined?(Post).should be_false
+          Object.send(:remove_const, :Comment)
+        end
       end
     end
   end
@@ -82,7 +95,7 @@ describe Massimo::Site do
         site = Massimo::Site.new
         site.resource Post
         site.resources.should include(Post)
-        Object.class_eval { remove_const :Post }
+        Object.send(:remove_const, :Post)
       end
     end
     
@@ -97,9 +110,7 @@ describe Massimo::Site do
       end
       
       after do
-        Object.class_eval do
-          remove_const :Comment
-        end
+        Object.send(:remove_const, :Comment)
       end
       
       it 'creates a class that inherits from Page' do
@@ -220,9 +231,7 @@ describe Massimo::Site do
           Massimo.site.process
           File.delete 'lib/some_constant.rb'
           Massimo.site.process
-          expect {
-            SomeConstant
-          }.to raise_error
+          defined?(SomeConstant).should be_false
         end
       end
     end

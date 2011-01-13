@@ -12,13 +12,15 @@ module Massimo
     def initialize(options = nil, &block)
       @original_options          = options
       @config                    = Config.new(options)
+      @resources                 = [ Massimo::Page, Massimo::Javascript, Massimo::Stylesheet, Massimo::View ]
       @template_scope_blocks     = []
       @template_scope_extensions = []
-      @resources                 = [ Massimo::Page, Massimo::Javascript, Massimo::Stylesheet, Massimo::View ]
       Massimo.site               = self
       
-      instance_eval File.read(config.config_path) if File.exist?(config.config_path)
-      instance_eval(&block) if block_given?
+      reload_consts(:config) do
+        instance_eval File.read(config.config_path) if File.exist?(config.config_path)
+        instance_eval(&block) if block_given?
+      end
     end
     
     # Sets up the Site from scratch again. Also Reloads the config file again.
@@ -82,30 +84,39 @@ module Massimo
       end
     
       def add_template_scope_helpers(scope)
-        config.files_in(:helpers, :rb).each do |file|
-          load(file)
-          if helper = (class_name_of_file(file).constantize rescue nil)
+        reload_consts(:helpers) do
+          config.files_in(:helpers, :rb).each do |file|
+            load(file)
+          end
+        end.each do |const|
+          if (helper = const.to_s.constantize rescue nil)
             scope.extend(helper)
           end
         end
       end
   
       def reload_libs
-        if defined? @previous_libs
-          @previous_libs.each do |lib|
-            class_name = class_name_of_file(lib)
-            Object.class_eval do
-              remove_const(class_name) if const_defined?(class_name)
-            end
+        reload_consts(:libs) do
+          config.files_in(:lib, :rb).each do |file|
+            load(file)
           end
         end
-        @previous_libs = config.files_in(:lib, :rb).each do |file|
-          load(file)
-        end
       end
-    
-      def class_name_of_file(file)
-        File.basename(file).sub(/\.[^\.]+$/, '').classify
+      
+      def reload_consts(cache)
+        @captured_consts ||= {}
+        
+        if @captured_consts.key?(cache)
+          @captured_consts[cache].each do |const|
+            Object.class_eval do
+              remove_const(const) if const_defined?(const)
+            end if const.is_a?(Symbol)
+          end
+        end
+        
+        old_consts = Object.constants
+        yield
+        @captured_consts[cache] = Object.constants - old_consts
       end
   end
 end
