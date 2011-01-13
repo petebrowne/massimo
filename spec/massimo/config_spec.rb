@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Massimo::Config do
+  its(:config_path)     { should == File.expand_path('config.rb') }
   its(:source_path)     { should == File.expand_path('.') }
   its(:output_path)     { should == File.expand_path('public') }
   its(:environment)     { should == 'development' }
@@ -15,16 +16,6 @@ describe Massimo::Config do
       it 'should set the given attributes' do
         config = Massimo::Config.new :source_path => 'source/path'
         config.source_path.should == File.expand_path('source/path')
-      end
-    end
-    
-    context 'with a string' do
-      it 'should read a YAML file for configuration' do
-        within_construct do |c|
-          c.file 'config.yml', "source_path: source/path\n"
-          config = Massimo::Config.new 'config.yml'
-          config.source_path.should == File.expand_path('source/path')
-        end
       end
     end
   end

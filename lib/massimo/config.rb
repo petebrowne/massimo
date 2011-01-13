@@ -6,6 +6,7 @@ require 'yaml'
 module Massimo
   class Config < OpenStruct
     DEFAULT_OPTIONS = {
+      :config_path     => 'config.rb',
       :source_path     => '.',
       :output_path     => 'public',
       :environment     => 'development',
@@ -20,19 +21,21 @@ module Massimo
     # or a file path to a .yaml file.
     def initialize(options = nil)
       hash = DEFAULT_OPTIONS.dup
-      
-      options = YAML.load_file(options) if options.is_a? String
       hash.merge!(options.symbolize_keys) if options.is_a? Hash
-      
       super hash
     end
     
-    # The full, expanded path to the source path.
+    # The full, expanded path to the config file
+    def config_path
+      File.expand_path super
+    end
+    
+    # The full, expanded path to the source directory.
     def source_path
       File.expand_path super
     end
     
-    # The full, expanded path to the output path.
+    # The full, expanded path to the output directory.
     def output_path
       File.expand_path super
     end

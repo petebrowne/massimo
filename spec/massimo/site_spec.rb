@@ -8,14 +8,6 @@ describe Massimo::Site do
         site.config.source_path.should == File.expand_path('source/dir')
       end
     end
-    context 'with a string' do
-      it 'should read a YAML file for configuration' do
-        with_file 'config.yml', "source_path: source/dir\n" do
-          site = Massimo::Site.new 'config.yml'
-          site.config.source_path.should == File.expand_path('source/dir')
-        end
-      end
-    end
     
     context 'with a block' do
       it 'configures the site' do
@@ -25,37 +17,85 @@ describe Massimo::Site do
         site.config.source_path.should == File.expand_path('source/dir')
       end
     end
+    
+    context 'with a config file' do
+      it 'evals the config file' do
+        with_file 'config.rb', 'config.output_path = "output/dir"' do
+          site = Massimo::Site.new
+          site.config.output_path.should == File.expand_path('output/dir')
+        end
+      end
+      
+      context 'with a specified path' do
+        it 'evals the config file' do
+          with_file 'config/site.rb', 'config.output_path = "output/dir"' do
+            site = Massimo::Site.new :config_path => 'config/site.rb'
+            site.config.output_path.should == File.expand_path('output/dir')
+          end
+        end
+      end
+    end
+  end
+  
+  describe 'reload' do
+    it 'reloads the config file' do
+      within_construct do |c|
+        c.file 'config.rb', 'config.output_path = "output/dir"'
+        site = Massimo::Site.new
+        c.file 'config.rb', 'config.output_path = "output"'
+        site.reload
+        site.config.output_path.should == File.expand_path('output')
+      end
+    end
+    
+    it 'resets the resources array' do
+      Post = Class.new(Massimo::Resource)
+      site = Massimo::Site.new
+      site.resource Post
+      site.reload
+      site.resources.map(&:to_s).should_not include('Post')
+      Object.send(:remove_const, :Post)
+    end
+    
+    it 'uses original options' do
+      within_construct do |c|
+        c.file 'config.rb', 'config.output_path = "output/dir"'
+        site = Massimo::Site.new :output_path => 'output'
+        c.file 'config.rb', 'config.source_path = "source/dir"'
+        site.reload
+        site.config.output_path.should == File.expand_path('output')
+        site.config.source_path.should == File.expand_path('source/dir')
+      end
+    end
+    
+    context 'with a config file with a defined resource' do
+      it 'removes old resource constants' do
+        within_construct do |c|
+          c.file 'config.rb', 'resource :post'
+          site = Massimo::Site.new
+          c.file 'config.rb', 'resource :comment'
+          site.reload
+          defined?(Post).should be_false
+          Object.send(:remove_const, :Comment)
+        end
+      end
+    end
   end
   
   describe '#resources' do
-    it 'should be an array' do
-      Massimo::Site.new.resources.should be_an_instance_of(Array)
-    end
-    
-    it 'should include Massimo::Page by default' do
-      Massimo::Site.new.resources.should include(Massimo::Page)
-    end
-    
-    it 'should include Massimo::Javascript by default' do
-      Massimo::Site.new.resources.should include(Massimo::Javascript)
-    end
-    
-    it 'should include Massimo::Stylesheet by default' do
-      Massimo::Site.new.resources.should include(Massimo::Stylesheet)
-    end
-    
-    it 'should include Massimo::View by default' do
-      Massimo::Site.new.resources.should include(Massimo::View)
+    it 'is an array of the default resources' do
+      Massimo::Site.new.resources.should =~ [ Massimo::Page, Massimo::Javascript, Massimo::Stylesheet, Massimo::View ]
     end
   end
   
   describe '#resource' do
     context 'with a Class constant' do
-      it "should add a resource to the site's resources" do
+      it "adds a resource to the site's resources" do
         Post = Class.new(Massimo::Resource)
         site = Massimo::Site.new
         site.resource Post
         site.resources.should include(Post)
+        Object.send(:remove_const, :Post)
       end
     end
     
@@ -70,20 +110,18 @@ describe Massimo::Site do
       end
       
       after do
-        Object.class_eval do
-          remove_const :Comment
-        end
+        Object.send(:remove_const, :Comment)
       end
       
-      it 'should create a class that inherits from Page' do
+      it 'creates a class that inherits from Page' do
         Comment.superclass.should == Massimo::Page
       end
       
-      it "should add the class to the site's resources" do
+      it "adds the class to the site's resources" do
         @site.resources.should include(Comment)
       end
       
-      it 'should add the methods in the class body' do
+      it 'adds the methods in the class body' do
         with_file 'comment.txt' do
           Comment.new('comment.txt').should be_spam
         end
@@ -92,14 +130,14 @@ describe Massimo::Site do
   end
   
   describe '#template_scope' do
-    it 'should return an object with the Helpers methods included' do
+    it 'returns an object with the Helpers methods included' do
       Massimo.site.template_scope.methods.map(&:to_s).should include('render')
     end
   end
   
   describe '#helpers' do
     context 'with a block' do
-      it 'should add the defined methods to the template scope' do
+      it 'adds the defined methods to the template scope' do
         Massimo.site.helpers do
           def hello
             'world'
@@ -110,7 +148,7 @@ describe Massimo::Site do
     end
     
     context 'with a Module' do
-      it 'should extend the template_scope with the given Module' do
+      it 'extends the template_scope with the given Module' do
         module CycleHelper
           def cycle
             'even'
@@ -125,7 +163,7 @@ describe Massimo::Site do
   describe '#process' do
     let(:processed_files) { Dir.glob('public/**/*.*') }
     
-    it 'should process each resource' do
+    it 'processes each resource' do
       within_construct do |c|
         c.file 'pages/index.html'
         c.file 'pages/about-us.html'
@@ -141,7 +179,7 @@ describe Massimo::Site do
       end
     end
     
-    it 'should not process views' do
+    it 'does not process views' do
       with_file 'views/partial.haml' do
         Massimo.site.process
         processed_files.should be_empty
@@ -149,7 +187,7 @@ describe Massimo::Site do
     end
     
     context 'with a custom resource' do
-      it 'should process the resource' do
+      it 'processes the resource' do
         with_file 'videos/keyboard-cat.html' do
           Massimo.site.resource :video
           Massimo.site.process
@@ -159,7 +197,7 @@ describe Massimo::Site do
     end
     
     context 'with lib files' do
-      it 'should load them' do
+      it 'loads them' do
         content = <<-CONTENT.unindent
           class Massimo::Site
             def test
@@ -173,7 +211,7 @@ describe Massimo::Site do
         end
       end
       
-      it 'should reload them' do
+      it 'reloads them' do
         content = <<-CONTENT.unindent
           class Massimo::Site
             def test
@@ -188,20 +226,18 @@ describe Massimo::Site do
         end
       end
       
-      it 'should remove previously loaded libs' do
+      it 'removes previously loaded libs' do
         with_file 'lib/some_constant.rb', 'module SomeConstant; end' do
           Massimo.site.process
           File.delete 'lib/some_constant.rb'
           Massimo.site.process
-          expect {
-            SomeConstant
-          }.to raise_error
+          defined?(SomeConstant).should be_false
         end
       end
     end
     
     context 'with helper files' do
-      it 'should extend the template scope' do
+      it 'extends the template scope' do
         content = <<-CONTENT.unindent
           module SomeHelper
             def helper_method
@@ -215,7 +251,7 @@ describe Massimo::Site do
         end
       end
       
-      it 'should reload the methods in the template scope' do
+      it 'reloads the methods in the template scope' do
         content = <<-CONTENT.unindent
           module Helper
             def testing

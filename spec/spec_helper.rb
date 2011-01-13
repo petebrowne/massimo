@@ -16,6 +16,10 @@ require 'packr'
 require 'growl'
 require 'massimo'
 
+# Requires supporting files with custom matchers and macros, etc,
+# in ./support/ and its subdirectories.
+Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
+
 RSpec.configure do |config|
   config.include Construct::Helpers
   config.include Rack::Test::Methods
@@ -30,10 +34,30 @@ RSpec.configure do |config|
     Massimo.site = nil
   end
   
+  # Builds a construct with a single file in it.
   def with_file(filename, content = nil)
     within_construct do |construct|
       construct.file filename, content
       yield
     end
   end
+  
+  # Captures the given stream and returns it:
+  #
+  #   stream = capture(:stdout) { puts "Cool" }
+  #   stream # => "Cool\n"
+  #
+  def capture(stream)
+    begin
+      stream = stream.to_s
+      eval "$#{stream} = StringIO.new"
+      yield
+      result = eval("$#{stream}").string
+    ensure
+      eval("$#{stream} = #{stream.upcase}")
+    end
+
+    result
+  end
+  alias :silence :capture
 end

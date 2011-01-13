@@ -1,5 +1,6 @@
 module Massimo
   autoload :Config,     'massimo/config'
+  autoload :CLI,        'massimo/cli'
   autoload :Helpers,    'massimo/helpers'
   autoload :Javascript, 'massimo/javascript'
   autoload :Page,       'massimo/page'
@@ -8,7 +9,7 @@ module Massimo
   autoload :Site,       'massimo/site'
   autoload :Stylesheet, 'massimo/stylesheet'
   autoload :UI,         'massimo/ui'
-  autoload :Version,    'massimo/version'
+  autoload :VERSION,    'massimo/version'
   autoload :View,       'massimo/view'
   autoload :Watcher,    'massimo/watcher'
   

@@ -35,7 +35,7 @@ module Massimo
     def report_errors
       begin
         yield
-        0
+        true
       rescue Exception => error
         say 'massimo had a problem', :red
         indent do
@@ -43,7 +43,7 @@ module Massimo
           say error.backtrace.first, :magenta
         end
         growl "#{error.message}\n#{error.backtrace.first}", 'massimo problem'
-        1
+        false
       end
     end
     

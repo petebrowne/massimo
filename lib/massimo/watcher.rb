@@ -8,8 +8,9 @@ module Massimo
     end
     
     def initialize(site)
-      @site  = site
-      @files = []
+      @site           = site
+      @previous_files = []
+      check_config
     end
     
     # Runs a loop, processing the Site whenever files have changed.
@@ -26,8 +27,13 @@ module Massimo
     
     # Processes the Site if any of the files have changed.
     def process
-      if changed?
-        Massimo::UI.report_errors do
+      Massimo::UI.report_errors do
+        if config_changed?
+          Massimo::UI.say 'massimo is reloading your site'
+          @site.reload
+          @site.process
+          Massimo::UI.say 'massimo has built your site', :growl => true
+        elsif changed?
           Massimo::UI.say 'massimo has noticed a change'
           @site.process
           Massimo::UI.say 'massimo has built your site', :growl => true
@@ -37,13 +43,22 @@ module Massimo
     
     # Determine if any of the Site's files have changed.
     def changed?
-      @files != files
+      @previous_files != check_files
+    end
+    
+    # Determine if the Site's config file has chanaged.
+    def config_changed?
+      @previous_config != check_config
     end
     
     protected
     
-      def files
-        @files = Dir[*glob].map { |file| File.mtime(file) }
+      def check_config
+        @previous_config = File.exist?(@site.config.config_path) && File.mtime(@site.config.config_path)
+      end
+    
+      def check_files
+        @previous_files = Dir[*glob].map { |file| File.mtime(file) }
       end
     
       def glob
