@@ -4,6 +4,7 @@ module Massimo
   autoload :Helpers,    'massimo/helpers'
   autoload :Javascript, 'massimo/javascript'
   autoload :Page,       'massimo/page'
+  autoload :Reloader,   'massimo/reloader'
   autoload :Resource,   'massimo/resource'
   autoload :Server,     'massimo/server'
   autoload :Site,       'massimo/site'

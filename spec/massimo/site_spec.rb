@@ -85,7 +85,8 @@ describe Massimo::Site do
       context 'with a required gem' do
         it 'does not remove the gem constant' do
           within_construct do |c|
-            c.file 'config.rb', 'require "active_record"'
+            c.file 'active_record.rb', 'module ActiveRecord; end'
+            c.file 'config.rb', '$: << File.expand_path("..", __FILE__); require "active_record"'
             site = Massimo::Site.new
             site.reload
             defined?(ActiveRecord).should be_true
