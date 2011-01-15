@@ -15,7 +15,7 @@ describe Massimo::Reloader do
     end
   end
   
-  describe '#load' do
+  describe '.load' do
     after :each do
       Object.send(:remove_const, :Constant) if Object.const_defined?(:Constant)
     end
@@ -29,12 +29,12 @@ describe Massimo::Reloader do
     
     it 'stores the loaded feature paths in a cache' do
       within_load_path do |d|
-        feature = d.file 'lib/constant.rb', 'module Constant; end'
+        feature = d.file('lib/constant.rb', 'module Constant; end').expand_path.to_s
         cache = Massimo::Reloader.load do
           require 'lib/constant'
         end
         cache[:constants][0].to_s.should == 'Constant'
-        cache[:features][0].should == feature.expand_path.to_s
+        cache[:features][0].should == feature
       end
     end
     
@@ -45,6 +45,47 @@ describe Massimo::Reloader do
           module Constant; end
         end
         default_cache.should_not === cache
+      end
+    end
+  end
+  
+  describe '.unload' do
+    context 'with a constant defined in .load' do
+      before do
+        Massimo::Reloader.load do
+          module Constant; end
+        end
+      end
+      
+      it 'undefines the constant' do
+        Massimo::Reloader.unload
+        defined?(Constant).should be_false
+      end
+      
+      it 'removes the constant from the cache' do
+        cache = Massimo::Reloader.unload
+        cache[:constants].map(&:to_s).should_not include('Constant')
+      end
+    end
+    
+    context 'with a required feature' do
+      it 'removes the loaded feature' do
+        within_load_path do |d|
+          feature = d.file('lib/constant.rb', 'module Constant; end').expand_path.to_s
+          Massimo::Reloader.load { require 'lib/constant' }
+          $LOADED_FEATURES.should include(feature)
+          Massimo::Reloader.unload
+          $LOADED_FEATURES.should_not include(feature)
+        end
+      end
+      
+      it 'removes the feature from the cache' do
+        within_load_path do |d|
+          feature = d.file('lib/constant.rb', 'module Constant; end').expand_path.to_s
+          Massimo::Reloader.load { require 'lib/constant' }
+          cache = Massimo::Reloader.unload
+          cache[:features].should_not include(feature)
+        end
       end
     end
   end
