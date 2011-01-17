@@ -14,7 +14,7 @@ module Massimo
       cache[name]
     end
     
-    def unload(name = :default, &block)
+    def unload(name = :default)
       return unless cache.key?(name)
       cache[name][:constants].reject! do |const|
         Object.send(:remove_const, const) if Object.const_defined?(const)
@@ -26,7 +26,8 @@ module Massimo
     end
     
     def reload(name = :default, &block)
-      
+      unload(name)
+      load(name, &block)
     end
     
     def cache
