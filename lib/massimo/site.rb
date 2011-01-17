@@ -10,7 +10,7 @@ module Massimo
     # Creates a new Site, passing the given options to a new configuration.
     # If a block is given, it is evaluated in the scope of the new Site.
     def initialize(options = nil, &block)
-      @original_options          = options
+      @original_options        ||= options
       @config                    = Config.new(options)
       @resources                 = [ Massimo::Page, Massimo::Javascript, Massimo::Stylesheet, Massimo::View ]
       @template_scope_blocks     = []

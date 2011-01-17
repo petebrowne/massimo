@@ -93,6 +93,18 @@ describe Massimo::Site do
           end
         end
       end
+      
+      context 'with a helper method' do
+        it 'adds the new helper method' do
+          within_construct do |c|
+            c.file 'config.rb', 'helpers { }'
+            site = Massimo::Site.new
+            c.file 'config.rb', 'helpers { def hello; "hello"; end }'
+            site.reload
+            site.template_scope.hello.should == 'hello'
+          end
+        end
+      end
     end
   end
   
