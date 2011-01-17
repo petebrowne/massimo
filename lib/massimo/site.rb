@@ -17,7 +17,7 @@ module Massimo
       @template_scope_extensions = []
       Massimo.site               = self
       
-      reload_consts(:config) do
+      Massimo::Reloader.reload(:config) do
         instance_eval File.read(config.config_path) if File.exist?(config.config_path)
         instance_eval(&block) if block_given?
       end
@@ -84,45 +84,27 @@ module Massimo
       end
     
       def add_template_scope_helpers(scope)
-        reload_consts(:helpers) do
+        cache = Massimo::Reloader.reload(:helpers) do
           config.files_in(:helpers, :rb).each do |file|
             load(file)
           end
-        end.each do |const|
-          if (helper = const.to_s.constantize rescue nil)
-            scope.extend(helper)
+        end
+        
+        if constants = cache[:constants]
+          constants.each do |const|
+            if (helper = const.to_s.constantize rescue nil)
+              scope.extend(helper)
+            end
           end
         end
       end
   
       def reload_libs
-        reload_consts(:libs) do
+        Massimo::Reloader.reload(:libs) do
           config.files_in(:lib, :rb).each do |file|
             load(file)
           end
         end
-      end
-      
-      def reload_consts(cache, &block)
-        @constants ||= {}
-        
-        @constants[cache].each do |const|
-          Object.send(:remove_const, const) if Object.const_defined?(const)
-        end if @constants.key?(cache)
-        
-        @constants[cache]  = capture_constants(&block)
-        @constants[cache] -= @required_constants if @required_constants
-        @constants[cache]
-      end
-      
-      def require(name)
-        @required_constants = capture_constants { super }
-      end
-      
-      def capture_constants
-        previous_constants = Object.constants
-        yield if block_given?
-        Object.constants - previous_constants
       end
   end
 end
