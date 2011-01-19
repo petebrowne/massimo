@@ -50,12 +50,13 @@ module Massimo
     protected
       
       def site
-        @site ||= Massimo::Site.new(
-          :config_path => options[:config_path],
-          :source_path => options[:source_path],
-          :output_path => options[:output_path],
-          :environment => options[:production] == true  ? 'production' : options[:environment]
-        )
+        @site ||= Massimo::Site.new(site_options)
+      end
+      
+      def site_options
+        options.dup.tap do |o|
+          o[:environment] = 'production' if o.delete(:production) == true
+        end
       end
   end
 end

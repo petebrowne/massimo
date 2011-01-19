@@ -18,10 +18,10 @@ module Massimo
       return unless cache.key?(name)
       cache[name][:constants].reject! do |const|
         Object.send(:remove_const, const) if Object.const_defined?(const)
-      end
+      end if cache[name].key?(:constants)
       cache[name][:features].reject! do |feature|
         $LOADED_FEATURES.delete(feature)
-      end
+      end if cache[name].key?(:features)
       cache[name]
     end
     

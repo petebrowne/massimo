@@ -6,7 +6,7 @@ describe Massimo::CLI do
   end
   
   describe '#site' do
-    before do
+    before :each do
       stub(Kernel).exit
       stub.instance_of(Massimo::Site).process
     end
