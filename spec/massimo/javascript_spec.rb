@@ -84,5 +84,24 @@ describe Massimo::Javascript do
         end
       end
     end
+    
+    context 'using :closure' do
+      it 'compresses using Closure::Compiler' do
+        Massimo.config.javascripts_compressor = :closure
+        with_file 'javascripts/main.js', 'function addTwo(number) { return number + 2; }' do
+          javascript.render.should == 'function addTwo(a){return a+2};'
+        end
+      end
+      
+      context 'with configuration' do
+        it 'pass configuration to Closure::Compiler' do
+          Massimo.config.javascripts_compressor = :closure
+          Massimo.config.closure = { :compilation_level => 'ADVANCED_OPTIMIZATIONS' }
+          with_file 'javascripts/main.js', 'function addTwo(number) { return number + 2; }' do
+            javascript.render.should == '' # because addTwo() is not called...
+          end
+        end
+      end
+    end
   end
 end

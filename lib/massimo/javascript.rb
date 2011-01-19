@@ -36,10 +36,14 @@ module Massimo
           require 'packr' unless defined?(Packr)
           options = { :shrink_vars => true }.merge Massimo.config.options_for(:packr)
           Packr.pack(javascript, options)
-        when 'yui'
+        when 'yui', 'yui-compressor', 'yui/compressor'
           require 'yui/compressor' unless defined?(YUI)
           options = { :munge => true }.merge Massimo.config.options_for(:yui)
           YUI::JavaScriptCompressor.new(options).compress(javascript).strip
+        when 'closure', 'closure-compiler', 'closure/compiler'
+          require 'closure-compiler' unless defined?(Closure)
+          options = Massimo.config.options_for(:closure)
+          Closure::Compiler.new(options).compile(javascript).strip
         else
           javascript
         end
