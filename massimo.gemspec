@@ -12,9 +12,6 @@ Gem::Specification.new do |s|
   s.homepage          = 'http://petebrowne.github.com/massimo/'
   s.rubyforge_project = 'massimo'
   
-  s.files       = Dir['{bin,lib}/**/*'] + %w(LICENSE README.md)
-  s.executables << 'massimo'
-  
   s.add_dependency             'activesupport',  '~> 3.0.0'
   s.add_dependency             'i18n',           '~> 0.4.0'
   s.add_dependency             'rack',           '~> 1.2.0'
@@ -34,4 +31,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'jsmin',          '~> 1.0.0'
   s.add_development_dependency 'packr',          '~> 3.1.0'
   s.add_development_dependency 'growl',          '~> 1.0.0'
+
+  s.files        = `git ls-files`.split("\n")
+  s.executables  = `git ls-files`.split("\n").map{ |f| f =~ /^bin\/(.*)/ ? $1 : nil }.compact
+  s.require_path = 'lib'
 end
