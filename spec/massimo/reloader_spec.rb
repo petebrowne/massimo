@@ -15,6 +15,14 @@ describe Massimo::Reloader do
     end
   end
   
+  def feature_path(path)
+    if RUBY_VERSION.starts_with?('1.8')
+      path.to_s
+    else
+      File.expand_path(path.to_s)
+    end
+  end
+  
   after :each do
     Object.send(:remove_const, :Constant) if Object.const_defined?(:Constant)
   end
@@ -29,12 +37,13 @@ describe Massimo::Reloader do
     
     it 'stores the loaded feature paths in a cache' do
       within_load_path do |d|
-        feature = d.file('lib/constant.rb', 'module Constant; end').expand_path.to_s
+        d.file('lib/constant.rb', 'module Constant; end')
         cache = Massimo::Reloader.load do
           require 'lib/constant'
         end
         cache[:constants].map(&:to_s).should include('Constant')
-        cache[:features].should include(feature)
+        cache[:features].should include(feature_path('lib/constant.rb'))
+        $LOADED_FEATURES.delete(feature_path('lib/constant.rb'))
       end
     end
     
@@ -71,20 +80,20 @@ describe Massimo::Reloader do
     context 'with a required feature' do
       it 'removes the loaded feature' do
         within_load_path do |d|
-          feature = d.file('lib/constant.rb', 'module Constant; end').expand_path.to_s
+          d.file('lib/constant.rb', 'module Constant; end')
           Massimo::Reloader.load { require 'lib/constant' }
-          $LOADED_FEATURES.should include(feature)
+          $LOADED_FEATURES.should include(feature_path('lib/constant.rb'))
           Massimo::Reloader.unload
-          $LOADED_FEATURES.should_not include(feature)
+          $LOADED_FEATURES.should_not include(feature_path('lib/constant.rb'))
         end
       end
       
       it 'removes the feature from the cache' do
         within_load_path do |d|
-          feature = d.file('lib/constant.rb', 'module Constant; end').expand_path.to_s
+          d.file('lib/constant.rb', 'module Constant; end')
           Massimo::Reloader.load { require 'lib/constant' }
           cache = Massimo::Reloader.unload
-          cache[:features].should_not include(feature)
+          cache[:features].should_not include(feature_path('lib/constant.rb'))
         end
       end
     end
