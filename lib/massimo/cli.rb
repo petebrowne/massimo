@@ -8,6 +8,9 @@ module Massimo
     
     default_task :help
     
+    class_option 'config_path', :desc => 'Path to the config file',              :aliases => '-c'
+    class_option 'source_path', :desc => 'Path to the source dir',               :aliases => '-s'
+    class_option 'output_path', :desc => 'Path to the output dir',               :aliases => '-o'
     class_option 'environment', :desc => 'Sets the environment',                 :aliases => '-e'
     class_option 'production',  :desc => "Sets the environment to 'production'", :aliases => '-p', :type => :boolean
     
@@ -47,11 +50,12 @@ module Massimo
     protected
       
       def site
-        Massimo.site || Massimo::Site.new(:environment => environment)
-      end
-      
-      def environment
-        options[:production] == true  ? 'production' : options[:environment]
+        @site ||= Massimo::Site.new(
+          :config_path => options[:config_path],
+          :source_path => options[:source_path],
+          :output_path => options[:output_path],
+          :environment => options[:production] == true  ? 'production' : options[:environment]
+        )
       end
   end
 end
