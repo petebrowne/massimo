@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'sprockets',      '~> 1.0.0'
   s.add_development_dependency 'jsmin',          '~> 1.0.0'
   s.add_development_dependency 'packr',          '~> 3.1.0'
+  s.add_development_dependency 'yui-compressor', '~> 0.9.0'
   s.add_development_dependency 'growl',          '~> 1.0.0'
 
   s.files        = `git ls-files`.split("\n")

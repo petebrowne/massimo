@@ -57,6 +57,7 @@ GEM
       polyglot (>= 0.3.1)
     tzinfo (0.3.24)
     unindent (0.9)
+    yui-compressor (0.9.3)
 
 PLATFORMS
   ruby
@@ -82,3 +83,4 @@ DEPENDENCIES
   tilt (~> 1.1.0)
   tzinfo (~> 0.3.0)
   unindent (~> 0.9.0)
+  yui-compressor (~> 0.9.0)
