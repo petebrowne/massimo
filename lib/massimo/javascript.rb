@@ -31,7 +31,7 @@ module Massimo
         case Massimo.config.javascripts_compressor.to_s
         when 'min', 'jsmin'
           require 'jsmin' unless defined?(JSMin)
-          JSMin.minify(javascript).strip
+          JSMin.minify(javascript)
         when 'pack', 'packr'
           require 'packr' unless defined?(Packr)
           options = { :shrink_vars => true }.merge Massimo.config.options_for(:packr)
@@ -39,14 +39,14 @@ module Massimo
         when 'yui', 'yui-compressor', 'yui/compressor'
           require 'yui/compressor' unless defined?(YUI)
           options = { :munge => true }.merge Massimo.config.options_for(:yui)
-          YUI::JavaScriptCompressor.new(options).compress(javascript).strip
+          YUI::JavaScriptCompressor.new(options).compress(javascript)
         when 'closure', 'closure-compiler', 'closure/compiler'
           require 'closure-compiler' unless defined?(Closure)
           options = Massimo.config.options_for(:closure)
-          Closure::Compiler.new(options).compile(javascript).strip
+          Closure::Compiler.new(options).compile(javascript)
         else
           javascript
-        end
+        end.strip
       end
   end
 end

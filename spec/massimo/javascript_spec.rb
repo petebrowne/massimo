@@ -6,7 +6,7 @@ describe Massimo::Javascript do
     
     it 'copies content' do
       with_file 'javascripts/main.js', 'var number = 42;' do
-        javascript.render.should == "var number = 42;\n"
+        javascript.render.should == "var number = 42;"
       end
     end
     
@@ -14,7 +14,7 @@ describe Massimo::Javascript do
       within_construct do |c|
         c.file 'javascripts/main.js', '//= require "_plugin.js"'
         c.file 'javascripts/_plugin.js', 'var number = 42;'
-        javascript.render.should == "var number = 42;\n"
+        javascript.render.should == "var number = 42;"
       end
     end
   end
@@ -24,7 +24,8 @@ describe Massimo::Javascript do
     
     it 'renders using CoffeeScript' do
       with_file 'javascripts/main.coffee', 'number: 42' do
-        javascript.render.should == "(function(){\n  var number;\n  number = 42;\n})();"
+        mock(CoffeeScript).compile('number: 42', {}) { '' }
+        javascript.render
       end
     end
     
@@ -37,12 +38,14 @@ describe Massimo::Javascript do
   
   context 'with compression' do
     let(:javascript) { Massimo::Javascript.new 'javascripts/main.js' }
+    let(:code)       { "function addTwo(number) { return number + 2; }\n" }
     
     context 'using :min' do
       it 'compresses using JSMin' do
         Massimo.config.javascripts_compressor = :min
-        with_file 'javascripts/main.js', 'function(number) { return number + 2; }' do
-          javascript.render.should == 'function(number){return number+2;}'
+        with_file 'javascripts/main.js', code do
+          mock(JSMin).minify(code) { '' }
+          javascript.render
         end
       end
     end
@@ -50,17 +53,19 @@ describe Massimo::Javascript do
     context 'using :pack' do
       it 'compresses using Packr' do
         Massimo.config.javascripts_compressor = :pack
-        with_file 'javascripts/main.js', 'function(number) { return number + 2; }' do
-          javascript.render.should == 'function(a){return a+2}'
+        with_file 'javascripts/main.js', code do
+          mock(Packr).pack(code, :shrink_vars => true) { '' }
+          javascript.render
         end
       end
       
       context 'with configuration' do
-        it 'pass configuration to Packr' do
+        it 'passes configuration to Packr' do
           Massimo.config.javascripts_compressor = :pack
           Massimo.config.packr = { :shrink_vars => false }
-          with_file 'javascripts/main.js', 'function(number) { return number + 2; }' do
-            javascript.render.should == 'function(number){return number+2}'
+          with_file 'javascripts/main.js', code do
+            mock(Packr).pack(code, :shrink_vars => false) { '' }
+            javascript.render
           end
         end
       end
@@ -69,17 +74,21 @@ describe Massimo::Javascript do
     context 'using :yui' do
       it 'compresses using YUI::JavaScriptCompressor' do
         Massimo.config.javascripts_compressor = :yui
-        with_file 'javascripts/main.js', 'function(number) { return number + 2; }' do
-          javascript.render.should == 'function(a){return a+2};'
+        with_file 'javascripts/main.js', code do
+          compressor = mock!.compress(code) { '' }.subject
+          mock(YUI::JavaScriptCompressor).new(:munge => true) { compressor }
+          javascript.render
         end
       end
       
       context 'with configuration' do
-        it 'pass configuration to YUI::JavaScriptCompressor' do
+        it 'passes configuration to YUI::JavaScriptCompressor' do
           Massimo.config.javascripts_compressor = :yui
           Massimo.config.yui = { :munge => false }
-          with_file 'javascripts/main.js', 'function(number) { return number + 2; }' do
-            javascript.render.should == 'function(number){return number+2};'
+          with_file 'javascripts/main.js', code do
+            compressor = mock!.compress(code) { '' }.subject
+            mock(YUI::JavaScriptCompressor).new(:munge => false) { compressor }
+            javascript.render
           end
         end
       end
@@ -88,17 +97,21 @@ describe Massimo::Javascript do
     context 'using :closure' do
       it 'compresses using Closure::Compiler' do
         Massimo.config.javascripts_compressor = :closure
-        with_file 'javascripts/main.js', 'function addTwo(number) { return number + 2; }' do
-          javascript.render.should == 'function addTwo(a){return a+2};'
+        with_file 'javascripts/main.js', code do
+          compiler = mock!.compile(code) { '' }.subject
+          mock(Closure::Compiler).new({}) { compiler }
+          javascript.render
         end
       end
       
       context 'with configuration' do
-        it 'pass configuration to Closure::Compiler' do
+        it 'passes configuration to Closure::Compiler' do
           Massimo.config.javascripts_compressor = :closure
           Massimo.config.closure = { :compilation_level => 'ADVANCED_OPTIMIZATIONS' }
-          with_file 'javascripts/main.js', 'function addTwo(number) { return number + 2; }' do
-            javascript.render.should == '' # because addTwo() is not called...
+          with_file 'javascripts/main.js', code do
+            compiler = mock!.compile(code) { '' }.subject
+            mock(Closure::Compiler).new(:compilation_level => 'ADVANCED_OPTIMIZATIONS') { compiler }
+            javascript.render
           end
         end
       end
