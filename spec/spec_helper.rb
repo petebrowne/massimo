@@ -13,6 +13,8 @@ require 'coffee-script'
 require 'sprockets'
 require 'jsmin'
 require 'packr'
+require 'yui/compressor'
+require 'closure-compiler'
 require 'growl'
 require 'massimo'
 
