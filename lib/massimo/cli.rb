@@ -1,3 +1,4 @@
+require 'active_support/core_ext/hash/keys'
 require 'thor'
 
 module Massimo
@@ -54,9 +55,9 @@ module Massimo
       end
       
       def site_options
-        options.dup.tap do |o|
-          o[:environment] = 'production' if o.delete(:production) == true
-        end
+        config = {}.merge(options).symbolize_keys
+        config[:environment] = 'production' if config.delete(:production) == true
+        config
       end
   end
 end

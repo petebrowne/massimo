@@ -7,41 +7,40 @@ describe Massimo::CLI do
   
   describe '#site' do
     before :each do
-      stub(Kernel).exit
-      stub.instance_of(Massimo::Site).process
+      stub(Massimo::Watcher).start { is_a(Massimo::Site) }
     end
     
     context "with '--environment staging'" do
       it 'sets the environment option' do
-        massimo 'build --environment staging'
+        massimo 'watch --environment staging'
         Massimo.config.environment.should == 'staging'
       end
     end
     
     context "with '--production'" do
       it 'sets the environment option' do
-        massimo 'build --production'
+        massimo 'watch --production'
         Massimo.config.environment.should == 'production'
       end
     end
     
     context "with '--config_path my_site.rb'" do
       it 'sets the config_path option' do
-        massimo 'build --config_path my_site.rb'
+        massimo 'watch --config_path my_site.rb'
         Massimo.config.config_path.should == File.expand_path('my_site.rb')
       end
     end
     
     context "with '--source_path source'" do
       it 'sets the source_path option' do
-        massimo 'build --source_path source'
+        massimo 'watch --source_path source'
         Massimo.config.source_path.should == File.expand_path('source')
       end
     end
     
     context "with '--output_path output'" do
       it 'sets the output_path option' do
-        massimo 'build --output_path output'
+        massimo 'watch --output_path output'
         Massimo.config.output_path.should == File.expand_path('output')
       end
     end
