@@ -23,6 +23,8 @@ Massimo is a static website builder that allows you to use dynamic technologies 
     
 For more information, visit [http://massimo.petebrowne.com/](http://massimo.petebrowne.com/).
 
+For an example of a site built by massimo, visit [http://github.com/petebrowne/massimo-site](http://github.com/petebrowne/massimo-site).
+
 ## Copyright
 
 Copyright (c) 2009 [Peter Browne](http://petebrowne.com). See LICENSE for details.
