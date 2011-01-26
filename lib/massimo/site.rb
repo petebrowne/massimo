@@ -79,7 +79,7 @@ module Massimo
     
       def add_template_scope_extensions(scope)
         @template_scope_extensions.each do |extension|
-          scope.extend(extension)
+          scope.extend(extension) if extension.instance_of?(Module)
         end
       end
     
@@ -92,9 +92,8 @@ module Massimo
         
         if constants = cache[:constants]
           constants.each do |const|
-            if (helper = const.to_s.constantize rescue nil)
-              scope.extend(helper)
-            end
+            helper = const.to_s.constantize rescue nil
+            scope.extend(helper) if helper.instance_of?(Module)
           end
         end
       end

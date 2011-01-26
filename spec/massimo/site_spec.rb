@@ -184,6 +184,18 @@ describe Massimo::Site do
         Massimo.site.template_scope.cycle.should == 'even'
       end
     end
+    
+    context 'with a Class' do
+      it 'does not extend the template scope' do
+        class CycleClass
+          def does_not_cycle
+            'even'
+          end
+        end
+        Massimo.site.helpers CycleClass
+        Massimo.site.template_scope.should_not respond_to(:does_not_cycle)
+      end
+    end
   end
   
   describe '#process' do
@@ -292,6 +304,22 @@ describe Massimo::Site do
           expect {
             Massimo.site.template_scope.testing
           }.to raise_error
+        end
+      end
+      
+      context 'with a class' do
+        it 'does not extend the template scope' do
+          content = <<-CONTENT.unindent
+            class SomeClass
+              def not_a_helper_method
+                'working'
+              end
+            end
+          CONTENT
+          with_file 'helpers/some_class.rb', content do
+            Massimo.site.process
+            Massimo.site.template_scope.should_not respond_to(:not_a_helper_method)
+          end
         end
       end
     end
