@@ -13,7 +13,7 @@ describe Massimo::Helpers do
   let(:helpers) { Object.new.extend(Massimo::Helpers) }
   
   describe '#render' do
-    it 'should render a view with the given locals' do
+    it 'renders a view with the given locals' do
       with_file 'views/partial.haml', '= local' do
         helpers.render('partial', :local => 'Local').should == "Local\n"
       end
@@ -21,9 +21,16 @@ describe Massimo::Helpers do
   end
   
   describe '#site' do
-    it 'should return the current site instance' do
+    it 'returns the current site instance' do
       site = Massimo::Site.new
       helpers.site.should === site
+    end
+  end
+  
+  describe '#config' do
+    it 'returns the current site configuration' do
+      site = Massimo::Site.new
+      helpers.config.should === site.config
     end
   end
 end

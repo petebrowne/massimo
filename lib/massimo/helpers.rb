@@ -17,6 +17,11 @@ module Massimo
       Massimo.site
     end
     
+    # Returns the current Site configuration
+    def config
+      Massimo.config
+    end
+    
     # Renders a view with the given locals. Kind of like `render :partial` in Rails
     def render(view_name, locals = {})
       view = Massimo::View.find(view_name)
