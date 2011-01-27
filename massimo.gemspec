@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.add_dependency             'activesupport',    '~> 3.0.0'
   s.add_dependency             'i18n',             '~> 0.4.0'
   s.add_dependency             'rack',             '~> 1.2.0'
-  s.add_dependency             'sinatra_more',     '~> 0.3.0'
+  s.add_dependency             'padrino-helpers',  '~> 0.9.0'
   s.add_dependency             'thor',             '~> 0.14.0'
   s.add_dependency             'tilt',             '~> 1.2.0'
   s.add_dependency             'tzinfo',           '~> 0.3.0'
