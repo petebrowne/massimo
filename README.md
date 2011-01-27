@@ -7,7 +7,7 @@ Massimo is a static website builder that allows you to use dynamic technologies 
 ## Features
 
 * Renders templates and views using [Tilt](http://github.com/rtomayko/tilt)
-* Uses familiar helper methods from [Sinatra::More](http://github.com/nesquena/sinatra_more)
+* Uses familiar helper methods from [Padrino::Helpers](http://github.com/padrino/padrino-framework)
 * Supports custom helper methods like [Rails](http://rubyonrails.org/) and [Sinatra](http://www.sinatrarb.com/)
 * Concats javascripts using [Sprockets](http://getsprockets.org/)
   and then minifies them using [JSMin](http://github.com/rgrove/jsmin)
