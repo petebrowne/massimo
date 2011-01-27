@@ -1,11 +1,14 @@
 require 'spec_helper'
 
 describe Massimo::Helpers do
-  it { should include(SinatraMore::OutputHelpers) }
-  it { should include(SinatraMore::TagHelpers) }
-  it { should include(SinatraMore::AssetTagHelpers) }
-  it { should include(SinatraMore::FormHelpers) }
-  it { should include(SinatraMore::FormatHelpers) }
+  it { should include(Padrino::Helpers::DomHelpers) }
+  it { should include(Padrino::Helpers::OutputHelpers) }
+  it { should include(Padrino::Helpers::TagHelpers) }
+  it { should include(Padrino::Helpers::AssetTagHelpers) }
+  it { should include(Padrino::Helpers::FormHelpers) }
+  it { should include(Padrino::Helpers::FormatHelpers) }
+  it { should include(Padrino::Helpers::NumberHelpers) }
+  it { should include(Padrino::Helpers::TranslationHelpers) }
   
   let(:helpers) { Object.new.extend(Massimo::Helpers) }
   
