@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   
   s.authors           = 'Pete Browne'
   s.email             = 'me@petebrowne.com'
-  s.homepage          = 'http://petebrowne.github.com/massimo/'
+  s.homepage          = 'http://massimo.petebrowne.com/'
   s.rubyforge_project = 'massimo'
   
   s.add_dependency             'activesupport',    '~> 3.0.0'
