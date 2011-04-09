@@ -179,6 +179,17 @@ describe Massimo::CLI do
       end
     end
     
+    it 'creates a default rackup file' do
+      within_construct do |c|
+        massimo 'generate my_site'
+        content = <<-EOS.unindent
+          require 'massimo'
+          run Massimo::Server.new
+        EOS
+        'my_site/config.ru'.should be_a_file.with_content(content)
+      end
+    end
+    
     context "with mapping 'g'" do
       it 'creates a massimo site directory' do
         within_construct do |c|
