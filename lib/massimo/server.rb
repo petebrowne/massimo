@@ -5,21 +5,19 @@ module Massimo
   class Server
     class << self
       def start(site, port = 3000)
-        Massimo::UI.say "massimo is serving your site at http://localhost:#{port}", :growl => true
-        trap('INT') do
-          Massimo::UI.say 'massimo is shutting down your server', :growl => true
-          Rack::Handler::WEBrick.shutdown
+        handler = Rack::Handler.default
+        trap(:INT) do
+          if handler.respond_to?(:shutdown)
+            handler.shutdown
+          else
+            exit
+          end
         end
-        
-        app = Rack::Builder.new do
-          use Rack::ShowExceptions
-          run Massimo::Server.new(site)
-        end
-        Rack::Handler::WEBrick.run(app, :Port => port)
+        handler.run(self.new(site), :Port => port)
       end
     end
     
-    def initialize(site)
+    def initialize(site = Massimo.site)
       @site        = site
       @file_server = Rack::File.new(site.config.output_path)
       @watcher     = Massimo::Watcher.new(site)

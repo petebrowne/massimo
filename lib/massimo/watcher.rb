@@ -17,7 +17,7 @@ module Massimo
     def run
       begin
         loop do
-          process
+          Massimo::UI.report_errors { process }
           sleep 0.5
         end
       rescue Interrupt
@@ -27,17 +27,15 @@ module Massimo
     
     # Processes the Site if any of the files have changed.
     def process
-      Massimo::UI.report_errors do
-        if config_changed?
-          Massimo::UI.say 'massimo is reloading your site'
-          @site.reload
-          @site.process
-          Massimo::UI.say 'massimo has built your site', :growl => true
-        elsif changed?
-          Massimo::UI.say 'massimo has noticed a change'
-          @site.process
-          Massimo::UI.say 'massimo has built your site', :growl => true
-        end
+      if config_changed?
+        Massimo::UI.say 'massimo is reloading your site'
+        @site.reload
+        @site.process
+        Massimo::UI.say 'massimo has built your site', :growl => true
+      elsif changed?
+        Massimo::UI.say 'massimo has noticed a change'
+        @site.process
+        Massimo::UI.say 'massimo has built your site', :growl => true
       end
     end
     
