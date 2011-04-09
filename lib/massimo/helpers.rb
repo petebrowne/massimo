@@ -1,4 +1,3 @@
-require 'rack/utils' # needed for sinatra_more...
 require 'padrino-helpers'
 
 module Massimo
