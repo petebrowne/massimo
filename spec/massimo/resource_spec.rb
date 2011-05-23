@@ -48,6 +48,26 @@ describe Massimo::Resource do
         Massimo::Resource.new('url.erb').extension.should == '.erb'
       end
     end
+    
+    it 'should be the first extension of the file' do
+      with_file 'url.html.md.erb' do
+        Massimo::Resource.new('url.html.md.erb').extension.should == '.html'
+      end
+    end
+  end
+  
+  describe '#extensions' do
+    it 'should be the extension of the file' do
+      with_file 'url.erb' do
+        Massimo::Resource.new('url.erb').extensions.should == %w(.erb)
+      end
+    end
+    
+    it 'should be all of the extensions of the file' do
+      with_file 'url.html.md.erb' do
+        Massimo::Resource.new('url.html.md.erb').extensions.should == %w(.html .md .erb)
+      end
+    end
   end
   
   describe '#filename' do
@@ -79,6 +99,14 @@ describe Massimo::Resource do
         end
       end
     end
+    
+    context 'with multiple template extensions' do
+      it 'should only use the first extension' do
+        with_file 'file.html.md.erb' do
+          Massimo::Resource.new('file.html.md.erb').output_path.to_s.should == File.expand_path('public/file.html')
+        end
+      end
+    end
   end
   
   describe '#content' do
@@ -93,6 +121,18 @@ describe Massimo::Resource do
     it "should return the file's content" do
       with_file 'file.txt', 'content' do
         resource.render.should == 'content'
+      end
+    end
+    
+    it 'should render the content using Tilt' do
+      with_file 'file.erb', '<%= "hello" %>' do
+        Massimo::Resource.new('file.erb').render.should == 'hello'
+      end
+    end
+    
+    it 'should render the content using multiple Tilt templates' do
+      with_file 'file.css.scss.erb', '$color: <%= "#999" %>; body { color: $color; }' do
+        Massimo::Resource.new('file.css.scss.erb').render.gsub(/\s/, '').should == 'body{color:#999999;}'
       end
     end
   end

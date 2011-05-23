@@ -64,7 +64,12 @@ module Massimo
     
     # The extension to output with.
     def extension
-      @extension ||= source_path.extname
+      @extension ||= extensions.first
+    end
+    
+    # A list of all the extensions appended to the filename.
+    def extensions
+      @extensions ||= filename.scan /\.[^.]+/
     end
     
     # The url to the resource. This is created by swiching the base path
@@ -72,7 +77,7 @@ module Massimo
     def url
       @url ||= begin
         url = source_path.to_s.sub(/^#{Regexp.escape(self.class.path)}/, '')
-        url = url.sub(/\.[^\.]+$/, extension)
+        url = url.sub(/\..+$/, extension)
         url = File.join(self.class.url, url) unless url.starts_with? self.class.url
         url = url.dasherize
         url
@@ -86,10 +91,14 @@ module Massimo
     
     # Runs the content through any necessary filters, templates, etc.
     def render
-      if template?
-        template.render
-      else
-        content
+      extensions.reverse.inject(content) do |output, ext|
+        if template_type = Tilt[ext]
+          template_options = Massimo.config.options_for(ext[1..-1])
+          template         = template_type.new(source_path.to_s, @line, template_options) { output }
+          template.render(template_scope, template_locals)
+        else
+          output
+        end
       end
     end
     
@@ -107,17 +116,12 @@ module Massimo
         @content = source_path.read
       end
       
-      def template
-        @template ||= begin
-          if template_type = Tilt[filename]
-            options = Massimo.config.options_for(source_path.extname[1..-1])
-            template_type.new(source_path.to_s, @line, options) { content }
-          end
-        end
+      def template_scope
+        Massimo.site.template_scope
       end
       
-      def template?
-        !!Tilt[filename]
+      def template_locals
+        {}
       end
   end
 end
