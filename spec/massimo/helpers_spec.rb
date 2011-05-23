@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Massimo::Helpers do
-  it { should include(Padrino::Helpers::DomHelpers) }
   it { should include(Padrino::Helpers::OutputHelpers) }
   it { should include(Padrino::Helpers::TagHelpers) }
   it { should include(Padrino::Helpers::AssetTagHelpers) }

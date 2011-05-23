@@ -2,7 +2,6 @@ require 'padrino-helpers'
 
 module Massimo
   module Helpers
-    include Padrino::Helpers::DomHelpers
     include Padrino::Helpers::OutputHelpers
     include Padrino::Helpers::TagHelpers
     include Padrino::Helpers::AssetTagHelpers
