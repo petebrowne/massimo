@@ -24,7 +24,7 @@ describe Massimo::Javascript do
     
     it 'renders using CoffeeScript' do
       with_file 'javascripts/main.coffee', 'number: 42' do
-        mock(CoffeeScript).compile('number: 42', {}) { '' }
+        mock(CoffeeScript).compile('number: 42', { :bare => false }) { '' }
         javascript.render
       end
     end

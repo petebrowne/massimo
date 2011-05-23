@@ -2,6 +2,7 @@ require 'active_support/core_ext/string/starts_ends_with'
 require 'active_support/inflector'
 require 'fileutils'
 require 'pathname'
+require 'tilt'
 
 module Massimo
   class Resource
@@ -85,7 +86,11 @@ module Massimo
     
     # Runs the content through any necessary filters, templates, etc.
     def render
-      content
+      if template?
+        template.render
+      else
+        content
+      end
     end
     
     # Writes the rendered content to the output file.
@@ -100,6 +105,19 @@ module Massimo
     
       def read_source
         @content = source_path.read
+      end
+      
+      def template
+        @template ||= begin
+          if template_type = Tilt[filename]
+            options = Massimo.config.options_for(source_path.extname[1..-1])
+            template_type.new(source_path.to_s, @line, options) { content }
+          end
+        end
+      end
+      
+      def template?
+        !!Tilt[filename]
       end
   end
 end

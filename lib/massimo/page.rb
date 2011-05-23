@@ -7,13 +7,11 @@ require 'yaml'
 module Massimo
   class Page < Resource
     def render
-      output = content
-      
-      if template_type = Tilt[filename]
-        options   = Massimo.config.options_for(source_path.extname[1..-1])
-        template  = template_type.new(source_path.to_s, @line, options) { output }
+      output = if template?
         meta_data = @meta_data.merge self.class.resource_name.singularize.to_sym => self
-        output    = template.render Massimo.site.template_scope, meta_data
+        template.render Massimo.site.template_scope, meta_data
+      else
+        content
       end
         
       if found_layout = Massimo::View.find("layouts/#{layout}")
