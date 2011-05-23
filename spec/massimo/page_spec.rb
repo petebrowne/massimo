@@ -84,6 +84,32 @@ describe Massimo::Page do
     end
   end
   
+  describe '#extension' do
+    context 'with multiple extensions' do
+      it 'should return the first extension' do
+        with_file 'file.rss.erb' do
+          Massimo::Page.new('file.rss.erb').extension.should == '.rss'
+        end
+      end
+    end
+    
+    context 'with a single Tilt registered extension' do
+      it 'should default to .html' do
+        with_file 'file.md' do
+          Massimo::Page.new('file.md').extension.should == '.html'
+        end
+      end
+    end
+    
+    context 'with a single unregistered extension' do
+      it 'should be that extension' do
+        with_file 'file.json' do
+          Massimo::Page.new('file.json').extension.should == '.json'
+        end
+      end
+    end
+  end
+  
   describe '#render' do
     let(:page) { Massimo::Page.new 'page.erb' }
     

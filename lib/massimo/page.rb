@@ -7,12 +7,7 @@ require 'yaml'
 module Massimo
   class Page < Resource
     def render
-      output = if template?
-        meta_data = @meta_data.merge self.class.resource_name.singularize.to_sym => self
-        template.render Massimo.site.template_scope, meta_data
-      else
-        content
-      end
+      output = super
         
       if found_layout = Massimo::View.find("layouts/#{layout}")
         output = found_layout.render(:page => self) { output }
@@ -26,7 +21,13 @@ module Massimo
     end
     
     def extension
-      @meta_data[:extension] ||= '.html'
+      if @meta_data[:extension]
+        @meta_data[:extension]
+      elsif Tilt.registered?(super[1..-1])
+        '.html'
+      else
+        super
+      end
     end
     
     def url
@@ -47,6 +48,10 @@ module Massimo
     end
     
     protected
+    
+      def template_locals
+        @meta_data.merge self.class.resource_name.singularize.to_sym => self
+      end
     
       def read_source
         case source_path.extname
