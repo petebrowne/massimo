@@ -2,6 +2,14 @@ require 'sprockets'
 
 module Massimo
   class Javascript < Massimo::Resource
+    def extension
+      if Tilt.registered?(super[1..-1])
+        '.js'
+      else
+        super
+      end
+    end
+    
     def render
       output = if source_path.extname == '.js'
           options = Massimo.config.options_for(:sprockets).merge(
@@ -15,10 +23,6 @@ module Massimo
           super
         end
       compress(output)
-    end
-    
-    def extension
-      @extension ||= '.js'
     end
     
     protected 

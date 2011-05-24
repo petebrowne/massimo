@@ -1,6 +1,32 @@
 require 'spec_helper'
 
 describe Massimo::Javascript do
+  describe '#extension' do
+    context 'with multiple extensions' do
+      it 'should return the first extension' do
+        with_file 'file.js.coffee' do
+          Massimo::Javascript.new('file.js.coffee').extension.should == '.js'
+        end
+      end
+    end
+    
+    context 'with a single Tilt registered extension' do
+      it 'should default to .js' do
+        with_file 'file.coffee' do
+          Massimo::Javascript.new('file.coffee').extension.should == '.js'
+        end
+      end
+    end
+    
+    context 'with a single unregistered extension' do
+      it 'should be that extension' do
+        with_file 'file.json' do
+          Massimo::Javascript.new('file.json').extension.should == '.json'
+        end
+      end
+    end
+  end
+  
   context 'with normal .js files' do
     let(:javascript) { Massimo::Javascript.new 'javascripts/main.js' }
     
