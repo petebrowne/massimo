@@ -8,7 +8,7 @@ describe Massimo::UI do
     end
     
     it 'does not send a Growl notification' do
-      dont_allow(Growl).notify
+      dont_allow(blank_module("Growl")).notify
       Massimo::UI.say 'message'
     end
     
@@ -21,13 +21,13 @@ describe Massimo::UI do
     
     context 'with :growl => true' do
       it 'sends a Growl Notification' do
-        mock(Growl).notify('message', anything)
+        mock_module("Growl").notify('message', anything)
         Massimo::UI.say 'message', :growl => true
       end
       
       context 'and a color' do
         it 'sends an uncolored Growl Notification' do
-          mock(Growl).notify('message', anything)
+          mock_module("Growl").notify('message', anything)
           Massimo::UI.say 'message', :red, :growl => true
         end
       end
