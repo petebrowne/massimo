@@ -1,4 +1,6 @@
+require 'crush'
 require 'sprockets'
+require 'tilt'
 
 module Massimo
   class Javascript < Massimo::Resource
@@ -28,25 +30,11 @@ module Massimo
     protected 
   
       def compress(javascript)
-        case Massimo.config.javascripts_compressor.to_s
-        when 'min', 'jsmin'
-          require 'jsmin' unless defined?(JSMin)
-          JSMin.minify(javascript)
-        when 'pack', 'packr'
-          require 'packr' unless defined?(Packr)
-          options = { :shrink_vars => true }.merge Massimo.config.options_for(:packr)
-          Packr.pack(javascript, options)
-        when 'yui', 'yui-compressor', 'yui/compressor'
-          require 'yui/compressor' unless defined?(YUI)
-          options = { :munge => true }.merge Massimo.config.options_for(:yui)
-          YUI::JavaScriptCompressor.new(options).compress(javascript)
-        when 'closure', 'closure-compiler', 'closure/compiler'
-          require 'closure-compiler' unless defined?(Closure)
-          options = Massimo.config.options_for(:closure)
-          Closure::Compiler.new(options).compile(javascript)
+        if engine_type = Crush.find_by_name(Massimo.config.js_compressor)
+          engine_type.new(source_path.to_s, Massimo.config.js_compressor_options) { javascript }.compress
         else
-          javascript
-        end.strip
+          javascript.strip
+        end
       end
   end
 end
