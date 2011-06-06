@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   s.add_dependency             'padrino-helpers',  '~> 0.9.0'
   s.add_dependency             'thor',             '~> 0.14.0'
   s.add_dependency             'tilt',             '~> 1.3.1'
+  s.add_dependency             'crush',            '~> 0.2.0'
   s.add_dependency             'tzinfo',           '~> 0.3.0'
   s.add_dependency             'sprockets',        '~> 1.0.0'
   s.add_development_dependency 'rake',             '>= 0.8.7'
@@ -29,12 +30,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'haml',             '~> 3.1.0'
   s.add_development_dependency 'sass',             '~> 3.1.0'
   s.add_development_dependency 'less',             '~> 1.2.0'
-  s.add_development_dependency 'coffee-script',    '~> 2.2.0'
-  s.add_development_dependency 'jsmin',            '~> 1.0.0'
-  s.add_development_dependency 'packr',            '~> 3.1.0'
-  s.add_development_dependency 'yui-compressor',   '~> 0.9.0'
-  s.add_development_dependency 'closure-compiler', '~> 0.3.0'
-  s.add_development_dependency 'growl',            '~> 1.0.0'
 
   s.files        = `git ls-files`.split("\n")
   s.executables  = `git ls-files`.split("\n").map{ |f| f =~ /^bin\/(.*)/ ? $1 : nil }.compact

@@ -1,22 +1,8 @@
-lib = File.expand_path('../../lib', __FILE__)
-$:.unshift(lib) unless $:.include?(lib)
-
-require 'rubygems'
-require 'rspec'
-require 'rr'
-require 'construct'
-require 'rack/test'
-require 'unindent'
-require 'sass'
-require 'less'
-require 'coffee-script'
-require 'sprockets'
-require 'jsmin'
-require 'packr'
-require 'yui/compressor'
-require 'closure-compiler'
-require 'growl'
-require 'massimo'
+require "rubygems"
+require "bundler/setup"
+Bundler.require(:default, :development)
+require "rack/test"
+require "construct"
 
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
@@ -29,7 +15,7 @@ RSpec.configure do |config|
   
   config.before :each do
     stub($stdout).puts
-    stub(Growl).notify
+    stub_module("Growl").notify
   end
   
   config.after :each do
@@ -62,4 +48,25 @@ RSpec.configure do |config|
     result
   end
   alias :silence :capture
+  
+  # Creates a blank module with the given name (creating base modules if necessary)
+  def blank_module(name)
+    name.split("::").inject(Object) do |memo, const|
+      if memo.const_defined?(const)
+        memo.const_get(const)
+      else
+        memo.const_set(const, Module.new)
+      end
+    end
+  end
+  
+  # Creates a blank module wraps it as a mock object in rr
+  def mock_module(name)
+    mock(blank_module(name))
+  end
+  
+  # Creates a blank module wraps it as a stubbed object in rr
+  def stub_module(name)
+    stub(blank_module(name))
+  end
 end
