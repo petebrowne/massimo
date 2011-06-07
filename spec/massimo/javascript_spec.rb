@@ -32,7 +32,7 @@ describe Massimo::Javascript do
     
     it 'copies content' do
       with_file 'javascripts/main.js', 'var number = 42;' do
-        javascript.render.should == "var number = 42;"
+        javascript.render.should == "var number = 42;\n"
       end
     end
     
@@ -40,7 +40,7 @@ describe Massimo::Javascript do
       within_construct do |c|
         c.file 'javascripts/main.js', '//= require "_plugin.js"'
         c.file 'javascripts/_plugin.js', 'var number = 42;'
-        javascript.render.should == "var number = 42;"
+        javascript.render.should == "var number = 42;\n"
       end
     end
   end

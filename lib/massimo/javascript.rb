@@ -24,13 +24,14 @@ module Massimo
         else
           super
         end
-      compress(output)
+      output = compress(output) if Massimo.config.compress_js?
+      output
     end
     
     protected 
   
       def compress(javascript)
-        if engine_type = Crush.find_by_name(Massimo.config.js_compressor)
+        if engine_type = Crush['js']
           engine_type.new(source_path.to_s, Massimo.config.js_compressor_options) { javascript }.compress
         else
           javascript.strip
