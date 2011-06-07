@@ -1,5 +1,6 @@
 require 'active_support/core_ext/hash/keys'
 require 'active_support/string_inquirer'
+require 'crush'
 require 'ostruct'
 require 'yaml'
 
@@ -44,6 +45,20 @@ module Massimo
     # query the environment like this: `config.environment.production?`
     def environment
       ActiveSupport::StringInquirer.new(super)
+    end
+    
+    # Determines if we should compress javascripts. Returns true in production
+    # environment, false by default.
+    def compress_js?
+      return compress_js unless compress_js.nil?
+      environment.production?
+    end
+    
+    # Sets the javascript compression engine by name, using Crush,
+    # and sets #compress_js to true.
+    def js_compressor=(name)
+      self.compress_js = true
+      Crush.prefer(name, 'js')
     end
     
     # Get a full, expanded path for the given resource name. This is either set
