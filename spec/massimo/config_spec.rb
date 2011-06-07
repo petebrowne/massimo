@@ -13,7 +13,7 @@ describe Massimo::Config do
   
   describe '#initialize' do
     context 'with an options hash' do
-      it 'should set the given attributes' do
+      it 'sets the given attributes' do
         config = Massimo::Config.new :source_path => 'source/path'
         config.source_path.should == File.expand_path('source/path')
       end
@@ -21,28 +21,28 @@ describe Massimo::Config do
   end
   
   describe '#path_for' do
-    it 'should read the configured option' do
+    it 'reads the configured option' do
       config = Massimo::Config.new :pages_path => 'pages/path'
       config.path_for(:pages).should == File.expand_path('pages/path')
     end
     
-    it 'should default to a path in the #source_path' do
+    it 'defaults to a path in the #source_path' do
       Massimo::Config.new.path_for(:pages).should == File.expand_path('pages')
     end
   end
   
   describe '#url_for' do
-    it 'should read the configured option' do
+    it 'reads the configured option' do
       config = Massimo::Config.new :pages_url => '/pages'
       config.url_for(:pages).should == '/pages'
     end
     
-    it "should default to '/'" do
+    it "defaults to '/'" do
       Massimo::Config.new.url_for(:users).should == '/'
     end
     
     context 'with a custom #base_url' do
-      it 'should prepend the #base_url' do
+      it 'prepends the #base_url' do
         config = Massimo::Config.new :base_url => '/blog'
         config.url_for(:stylesheets).should == '/blog/stylesheets'
       end
@@ -50,7 +50,7 @@ describe Massimo::Config do
   end
   
   describe '#files_in' do
-    it 'should find each file in the given resource dir' do
+    it 'finds each file in the given resource dir' do
       within_construct do |c|
         c.file 'lib/some_file.rb'
         c.file 'lib/another_file.txt'
@@ -59,7 +59,7 @@ describe Massimo::Config do
       end
     end
     
-    it 'should not find directories' do
+    it 'does not find directories' do
       within_construct do |c|
         c.directory 'pages/some_dir'
         files = Massimo::Config.new.files_in(:pages)
@@ -67,7 +67,7 @@ describe Massimo::Config do
       end
     end
     
-    it 'should find files with the given extension' do
+    it 'finds files with the given extension' do
       within_construct do |c|
         c.file 'lib/some_file.rb'
         c.file 'lib/another_file.txt'
@@ -78,20 +78,50 @@ describe Massimo::Config do
   end
   
   describe '#options_for' do
-    it 'should return the options set for the given name' do
+    it 'returns the options set for the given name' do
       config = Massimo::Config.new(:sass => { :style => :compressed })
       config.options_for(:sass).should == { :style => :compressed }
     end
     
-    it 'should return an empty hash if the options have not been set' do
+    it 'returns an empty hash if the options have not been set' do
       Massimo::Config.new.options_for(:sass).should == {}
     end
   end
   
   describe '#environment' do
-    it 'should be a StringInquirer' do
+    it 'is a StringInquirer' do
       config = Massimo::Config.new :environment => 'production'
       config.environment.should be_an_instance_of(ActiveSupport::StringInquirer)
+    end
+  end
+  
+  describe '#compress_js?' do
+    it 'defaults to false' do
+      Massimo::Config.new.compress_js?.should be_false
+    end
+    
+    it 'reads the configured options' do
+      config = Massimo::Config.new :compress_js => true
+      config.compress_js?.should be_true
+    end
+    
+    it 'returns true in a production environment' do
+      config = Massimo::Config.new :environment => 'production'
+      config.compress_js?.should be_true
+    end
+  end
+  
+  describe '#js_compressor=' do
+    it 'prefers the given compressor using Crush' do
+      mock(Crush).prefer(:uglifier, "js")
+      config = Massimo::Config.new
+      config.js_compressor = :uglifier
+    end
+    
+    it 'sets compress_js to true' do
+      config = Massimo::Config.new
+      config.js_compressor = :uglifier
+      config.compress_js?.should be_true
     end
   end
 end
