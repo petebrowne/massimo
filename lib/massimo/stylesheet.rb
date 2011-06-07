@@ -12,13 +12,15 @@ module Massimo
     end
     
     def render
-      compress(super)
+      output = super
+      output = compress(output) if Massimo.config.compress_css?
+      output
     end
     
     protected 
   
       def compress(stylesheet)
-        if engine_type = Crush.find_by_name(Massimo.config.css_compressor)
+        if engine_type = Crush['css']
           engine_type.new(source_path.to_s, Massimo.config.css_compressor_options) { stylesheet }.compress
         else
           stylesheet.strip

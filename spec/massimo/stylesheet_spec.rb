@@ -44,7 +44,7 @@ describe Massimo::Stylesheet do
     it 'should render using Sass' do
       within_construct do |c|
         c.file 'stylesheets/main.sass', "#header\n  font-size: 36px"
-        stylesheet.render.should == "#header {\n  font-size: 36px; }"
+        stylesheet.render.should == "#header {\n  font-size: 36px; }\n"
       end
     end
     
@@ -52,7 +52,7 @@ describe Massimo::Stylesheet do
       within_construct do |c|
         c.file 'stylesheets/main.sass', '@import "base"'
         c.file 'stylesheets/_base.sass', "#header\n  font-size: 36px"
-        stylesheet.render.should == "#header {\n  font-size: 36px; }"
+        stylesheet.render.should == "#header {\n  font-size: 36px; }\n"
       end
     end
     
@@ -67,7 +67,7 @@ describe Massimo::Stylesheet do
       Massimo.config.sass = { :style => :compressed }
       within_construct do |c|
         c.file 'stylesheets/main.sass', "#header\n font-size: 36px"
-        stylesheet.render.should == "#header{font-size:36px}"
+        stylesheet.render.should == "#header{font-size:36px}\n"
       end
     end
   end
@@ -78,7 +78,7 @@ describe Massimo::Stylesheet do
     it 'should render using Sass' do
       within_construct do |c|
         c.file 'stylesheets/main.scss', "$size: 36px;\n#header { font-size: $size; }\n"
-        stylesheet.render.should == "#header {\n  font-size: 36px; }"
+        stylesheet.render.should == "#header {\n  font-size: 36px; }\n"
       end
     end
   end
@@ -89,7 +89,7 @@ describe Massimo::Stylesheet do
     it 'should render using Less' do
       within_construct do |c|
         c.file 'stylesheets/main.less', "@color: #000000;\n#header { color: @color; }"
-        stylesheet.render.should == "#header { color: #000000; }"
+        stylesheet.render.should == "#header { color: #000000; }\n"
       end
     end
     
