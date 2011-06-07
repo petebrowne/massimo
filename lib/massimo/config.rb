@@ -61,6 +61,20 @@ module Massimo
       Crush.prefer(name, 'js')
     end
     
+    # Determines if we should compress stylesheets. Returns true in production
+    # environment, false by default.
+    def compress_css?
+      return compress_css unless compress_css.nil?
+      environment.production?
+    end
+    
+    # Sets the stylesheet compression engine by name, using Crush,
+    # and sets #compress_css to true.
+    def css_compressor=(name)
+      self.compress_css = true
+      Crush.prefer(name, 'css')
+    end
+    
     # Get a full, expanded path for the given resource name. This is either set
     # in the configuration or determined dynamically based on the name.
     def path_for(resource_name)
