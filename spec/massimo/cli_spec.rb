@@ -152,13 +152,23 @@ describe Massimo::CLI do
       end
     end
     
+    it 'creates a default Gemfile' do
+      within_construct do |c|
+        massimo 'generate my_site'
+        content = <<-EOS.unindent
+          source :rubygems
+          
+          gem "massimo", "#{Massimo::VERSION}"
+          gem "sass", "~> 3.1.0"
+        EOS
+        'my_site/Gemfile'.should be_a_file.with_content(content)
+      end
+    end
+    
     it 'creates a default config file' do
       within_construct do |c|
         massimo 'generate my_site'
         content = <<-EOS.unindent
-          require 'sass'
-          require 'sprockets'
-          
           # This is an example configuration File
           # Look here for all the available options:
           # http://massimo.petebrowne.com/configuration/

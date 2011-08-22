@@ -1,0 +1,4 @@
+source :rubygems
+
+gem "massimo", "<%= Massimo::VERSION %>"
+gem "sass", "~> 3.1.0"

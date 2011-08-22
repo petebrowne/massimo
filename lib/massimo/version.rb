@@ -1,3 +1,3 @@
 module Massimo
-  VERSION = '0.9.0'
+  VERSION = '0.10.0.beta1'
 end

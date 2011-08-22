@@ -17,6 +17,8 @@ module Massimo
       @template_scope_extensions = []
       Massimo.site               = self
       
+      setup_bundle unless bundled?
+      
       Massimo::Reloader.reload(:config) do
         instance_eval File.read(config.config_path) if File.exist?(config.config_path)
         instance_eval(&block) if block_given?
@@ -70,6 +72,16 @@ module Massimo
     end
     
     protected
+    
+      def bundled?
+        !!@bundled
+      end
+      
+      def setup_bundle
+        require 'bundler'
+        Bundler.require :default, config.environment.to_sym
+        @bundled = true
+      end
     
       def add_template_scope_blocks(scope)
         @template_scope_blocks.each do |block|
