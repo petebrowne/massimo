@@ -65,6 +65,7 @@ describe Massimo::Javascript do
   context 'with compression' do
     let(:javascript) { Massimo::Javascript.new 'javascripts/main.js' }
     let(:code)       { "function addTwo(number) { return number + 2; }\n" }
+    after            { Tilt.mappings.delete("js") }
     
     context 'using :jsmin' do
       it 'compresses using JSMin' do
@@ -99,7 +100,7 @@ describe Massimo::Javascript do
     
     context 'using :yui' do
       it 'compresses using YUI::JavaScriptCompressor' do
-        Massimo.config.js_compressor = :yui_js
+        Massimo.config.js_compressor = :yui
         with_file 'javascripts/main.js', code do
           compressor = mock!.compress(code) { '' }.subject
           mock_module("YUI::JavaScriptCompressor").new({}) { compressor }
@@ -109,7 +110,7 @@ describe Massimo::Javascript do
       
       context 'with configuration' do
         it 'passes configuration to YUI::JavaScriptCompressor' do
-          Massimo.config.js_compressor = :yui_js
+          Massimo.config.js_compressor = :yui
           Massimo.config.js_compressor_options = { :munge => true }
           with_file 'javascripts/main.js', code do
             compressor = mock!.compress(code) { '' }.subject

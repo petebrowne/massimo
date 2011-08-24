@@ -95,63 +95,19 @@ describe Massimo::Config do
     end
   end
   
-  describe '#compress_js?' do
-    it 'defaults to false' do
-      Massimo::Config.new.compress_js?.should be_false
-    end
-    
-    it 'reads the configured options' do
-      config = Massimo::Config.new :compress_js => true
-      config.compress_js?.should be_true
-    end
-    
-    it 'returns true in a production environment' do
-      config = Massimo::Config.new :environment => 'production'
-      config.compress_js?.should be_true
-    end
-  end
-  
   describe '#js_compressor=' do
     it 'prefers the given compressor using Crush' do
-      mock(Crush).prefer(:uglifier, "js")
+      mock(Tilt).register(Crush::Uglifier, "js")
       config = Massimo::Config.new
       config.js_compressor = :uglifier
-    end
-    
-    it 'sets compress_js to true' do
-      config = Massimo::Config.new
-      config.js_compressor = :uglifier
-      config.compress_js?.should be_true
-    end
-  end
-  
-  describe '#compress_css?' do
-    it 'defaults to false' do
-      Massimo::Config.new.compress_css?.should be_false
-    end
-    
-    it 'reads the configured options' do
-      config = Massimo::Config.new :compress_css => true
-      config.compress_css?.should be_true
-    end
-    
-    it 'returns true in a production environment' do
-      config = Massimo::Config.new :environment => 'production'
-      config.compress_css?.should be_true
     end
   end
   
   describe '#css_compressor=' do
     it 'prefers the given compressor using Crush' do
-      mock(Crush).prefer(:cssmin, "css")
+      mock(Tilt).register(Crush::CSSMin, "css")
       config = Massimo::Config.new
       config.css_compressor = :cssmin
-    end
-    
-    it 'sets compress_js to true' do
-      config = Massimo::Config.new
-      config.css_compressor = :cssmin
-      config.compress_css?.should be_true
     end
   end
 end

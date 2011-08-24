@@ -1,4 +1,3 @@
-require 'crush'
 require 'sprockets'
 require 'tilt'
 
@@ -13,29 +12,16 @@ module Massimo
     end
     
     def render
-      output = if source_path.extname == '.js'
-          options = Massimo.config.options_for(:sprockets).merge(
-            :assert_root  => Massimo.config.output_path,
-            :source_files => [ source_path.to_s ]
-          )
-          secretary = Sprockets::Secretary.new(options)
-          secretary.install_assets
-          secretary.concatenation.to_s
-        else
-          super
-        end
-      output = compress(output) if Massimo.config.compress_js?
-      output
-    end
-    
-    protected 
-  
-      def compress(javascript)
-        if engine_type = Crush['js']
-          engine_type.new(source_path.to_s, Massimo.config.js_compressor_options) { javascript }.compress
-        else
-          javascript.strip
-        end
+      if source_path.extname == '.js'
+        options = Massimo.config.options_for(:sprockets).merge(
+          :assert_root  => Massimo.config.output_path,
+          :source_files => [ source_path.to_s ]
+        )
+        secretary = Sprockets::Secretary.new(options)
+        secretary.install_assets
+        @content = secretary.concatenation.to_s
       end
+      super
+    end
   end
 end

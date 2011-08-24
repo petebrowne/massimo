@@ -2,6 +2,7 @@ require 'active_support/core_ext/hash/keys'
 require 'active_support/string_inquirer'
 require 'crush'
 require 'ostruct'
+require 'tilt'
 require 'yaml'
 
 module Massimo
@@ -17,6 +18,20 @@ module Massimo
       :javascripts_url => '/javascripts',
       :stylesheets_url => '/stylesheets'
     }.freeze
+    
+    JS_COMPRESSORS = {
+      :jsmin    => Crush::JSMin,
+      :packr    => Crush::Packr,
+      :yui      => Crush::YUI::JavaScriptCompressor,
+      :closure  => Crush::Closure::Compiler,
+      :uglifier => Crush::Uglifier
+    }
+    
+    CSS_COMPRESSORS = {
+      :cssmin    => Crush::CSSMin,
+      :rainpress => Crush::Rainpress,
+      :yui       => Crush::YUI::CssCompressor
+    }
     
     # Creates a new configuration. Takes either a hash of options
     # or a file path to a .yaml file.
@@ -47,32 +62,32 @@ module Massimo
       ActiveSupport::StringInquirer.new(super)
     end
     
-    # Determines if we should compress javascripts. Returns true in production
-    # environment, false by default.
-    def compress_js?
-      return compress_js unless compress_js.nil?
-      environment.production?
-    end
-    
     # Sets the javascript compression engine by name, using Crush,
     # and sets #compress_js to true.
-    def js_compressor=(name)
-      self.compress_js = true
-      Crush.prefer(name, 'js')
+    def js_compressor=(compressor)
+      if compressor.respond_to?(:to_sym)
+        compressor = JS_COMPRESSORS[compressor.to_sym]
+      end
+      Tilt.register(compressor, 'js')
     end
     
-    # Determines if we should compress stylesheets. Returns true in production
-    # environment, false by default.
-    def compress_css?
-      return compress_css unless compress_css.nil?
-      environment.production?
+    #
+    def js_compressor_options=(options)
+      self.js = options
     end
     
     # Sets the stylesheet compression engine by name, using Crush,
     # and sets #compress_css to true.
-    def css_compressor=(name)
-      self.compress_css = true
-      Crush.prefer(name, 'css')
+    def css_compressor=(compressor)
+      if compressor.respond_to?(:to_sym)
+        compressor = CSS_COMPRESSORS[compressor.to_sym]
+      end
+      Tilt.register(compressor, 'css')
+    end
+    
+    #
+    def css_compressor_options=(options)
+      self.css = options
     end
     
     # Get a full, expanded path for the given resource name. This is either set
@@ -99,6 +114,7 @@ module Massimo
     # Convience method for getting options for a given library name. For instance,
     # this is how we get the options set for Haml or Sass during processing.
     def options_for(lib_name)
+      return options_for("sass") if lib_name == "scss"
       send(lib_name) || {}
     end
   end

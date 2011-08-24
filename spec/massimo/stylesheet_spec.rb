@@ -104,6 +104,7 @@ describe Massimo::Stylesheet do
   context 'with compression' do
     let(:stylesheet) { Massimo::Stylesheet.new 'stylesheets/main.css' }
     let(:code)       { '#header { font-size: 36px }' }
+    after            { Tilt.mappings.delete("css") }
     
     context 'using :cssmin' do
       it 'compresses using CSSMin' do
@@ -136,9 +137,9 @@ describe Massimo::Stylesheet do
       end
     end
     
-    context 'using :yui_css' do
+    context 'using :yui' do
       it 'compresses using YUI::CssCompressor' do
-        Massimo.config.css_compressor = :yui_css
+        Massimo.config.css_compressor = :yui
         with_file 'stylesheets/main.css', code do
           compressor = mock!.compress(code) { '' }
           mock_module("YUI::CssCompressor").new({}) { compressor }
@@ -148,7 +149,7 @@ describe Massimo::Stylesheet do
       
       context 'with configuration' do
         it 'passes configuration to YUI::CssCompressor' do
-          Massimo.config.css_compressor = :yui_css
+          Massimo.config.css_compressor = :yui
           Massimo.config.css_compressor_options = { :linebreak => 0 }
           with_file 'stylesheets/main.css', code do
             compressor = mock!.compress(code) { '' }
