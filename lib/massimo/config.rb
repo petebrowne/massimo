@@ -63,13 +63,17 @@ module Massimo
     end
     
     # Sets up Massimo to compress both JavaScript and CSS files.
+    #
+    # @param [Boolean] compress Wether or not to compress.
     def compress=(compress)
-      Crush.register
+      Crush.register if compress
     end
     
     # Sets up Massimo to compress JavaScript files. By default,
     # whichever JavaScript compression library is available, is used.
     # To set the one you want to use see #js_compressor=.
+    #
+    # @param [Boolean] compress Wether or not to compress.
     def compress_js=(compress)
       Crush.register_js if compress
     end
@@ -87,6 +91,8 @@ module Massimo
     end
     
     # Sets the options used by the JavaScript compressor.
+    #
+    # @param [Hash] options The hash of options to use.
     def js_compressor_options=(options)
       self.js = options
     end
@@ -94,6 +100,8 @@ module Massimo
     # Sets up Massimo to compress CSS files. By default,
     # whichever CSS compression library is available, is used.
     # To set the one you want to use see #css_compressor=.
+    #
+    # @param [Boolean] compress Wether or not to compress.
     def compress_css=(compress)
       Crush.register_css if compress
     end
@@ -111,6 +119,8 @@ module Massimo
     end
     
     # Sets the options used by the CSS compressor.
+    #
+    # @param [Hash] options The hash of options to use.
     def css_compressor_options=(options)
       self.css = options
     end

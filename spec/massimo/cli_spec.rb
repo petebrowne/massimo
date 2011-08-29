@@ -113,7 +113,7 @@ describe Massimo::CLI do
           <h1><%= title %></h1>
           <p>Find me in pages/index.erb</p>
         EOS
-        'my_site/pages/index.erb'.should be_a_file.with_content(content)
+        'my_site/pages/index.html.erb'.should be_a_file.with_content(content)
       end
     end
     
@@ -126,15 +126,15 @@ describe Massimo::CLI do
           <head lang="en">
             <meta charset="utf-8">
             <title><%= page.title %></title>
-            <%= stylesheet_link_tag 'main' %>
-            <%= javascript_include_tag 'main' %>
+            <%= stylesheet_link_tag "main" %>
+            <%= javascript_include_tag "main" %>
           </head>
           <body>
             <%= yield %>
           </body>
         </html>
         EOS
-        'my_site/views/layouts/main.erb'.should be_a_file.with_content(content)
+        'my_site/views/layouts/main.html.erb'.should be_a_file.with_content(content)
       end
     end
     
@@ -148,7 +148,7 @@ describe Massimo::CLI do
     it 'creates a default stylesheet file' do
       within_construct do |c|
         massimo 'generate my_site'
-        'my_site/stylesheets/main.scss'.should be_a_file
+        'my_site/stylesheets/main.css.scss'.should be_a_file
       end
     end
     
@@ -159,7 +159,11 @@ describe Massimo::CLI do
           source :rubygems
           
           gem "massimo", "#{Massimo::VERSION}"
-          gem "sass", "~> 3.1.0"
+          gem "sass", "~> 3.1"
+          
+          group :production do
+            gem "uglifier", "~> 1.0"
+          end
         EOS
         'my_site/Gemfile'.should be_a_file.with_content(content)
       end
@@ -174,8 +178,8 @@ describe Massimo::CLI do
           # http://massimo.petebrowne.com/configuration/
           
           if config.environment.production?
-            # Use Uglifier for javascript compression
-            # config.js_compressor = :uglifier
+            # Compress javascripts and stylesheets
+            config.compress = true
           end
           
           helpers do
@@ -190,7 +194,7 @@ describe Massimo::CLI do
       within_construct do |c|
         massimo 'generate my_site'
         content = <<-EOS.unindent
-          require 'massimo'
+          require "massimo"
           run Massimo::Server.new
         EOS
         'my_site/config.ru'.should be_a_file.with_content(content)

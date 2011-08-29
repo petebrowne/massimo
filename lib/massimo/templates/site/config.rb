@@ -3,8 +3,8 @@
 # http://massimo.petebrowne.com/configuration/
 
 if config.environment.production?
-  # Use Uglifier for javascript compression
-  # config.js_compressor = :uglifier
+  # Compress javascripts and stylesheets
+  config.compress = true
 end
 
 helpers do

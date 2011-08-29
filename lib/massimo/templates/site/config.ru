@@ -1,2 +1,2 @@
-require 'massimo'
+require "massimo"
 run Massimo::Server.new
