@@ -96,18 +96,24 @@ describe Massimo::Config do
   end
   
   describe '#js_compressor=' do
-    it 'prefers the given compressor using Crush' do
-      mock(Tilt).register(Crush::Uglifier, "js")
+    after { Tilt.mappings.delete('js') }
+    
+    it 'registers and prefers the given compressor' do
       config = Massimo::Config.new
       config.js_compressor = :uglifier
+      Tilt.register Crush::Closure::Compiler, 'js'
+      Tilt['js'].should == Crush::Uglifier
     end
   end
   
   describe '#css_compressor=' do
-    it 'prefers the given compressor using Crush' do
-      mock(Tilt).register(Crush::CSSMin, "css")
+    after { Tilt.mappings.delete('css') }
+    
+    it 'registers and prefers the given compressor' do
       config = Massimo::Config.new
       config.css_compressor = :cssmin
+      Tilt.register Crush::Rainpress, 'css'
+      Tilt['css'].should == Crush::CSSMin
     end
   end
 end

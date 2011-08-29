@@ -62,13 +62,18 @@ module Massimo
       ActiveSupport::StringInquirer.new(super)
     end
     
+    # 
+    # def compress_js=(compress)
+    #   Crush.register_js
+    # end
+    
     # Sets the javascript compression engine by name, using Crush,
     # and sets #compress_js to true.
     def js_compressor=(compressor)
       if compressor.respond_to?(:to_sym)
         compressor = JS_COMPRESSORS[compressor.to_sym]
       end
-      Tilt.register(compressor, 'js')
+      Tilt.prefer compressor, 'js'
     end
     
     #
@@ -82,7 +87,7 @@ module Massimo
       if compressor.respond_to?(:to_sym)
         compressor = CSS_COMPRESSORS[compressor.to_sym]
       end
-      Tilt.register(compressor, 'css')
+      Tilt.prefer compressor, 'css'
     end
     
     #

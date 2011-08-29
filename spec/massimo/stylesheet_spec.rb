@@ -104,13 +104,13 @@ describe Massimo::Stylesheet do
   context 'with compression' do
     let(:stylesheet) { Massimo::Stylesheet.new 'stylesheets/main.css' }
     let(:code)       { '#header { font-size: 36px }' }
-    after            { Tilt.mappings.delete("css") }
+    after            { Tilt.mappings.delete('css') }
     
     context 'using :cssmin' do
       it 'compresses using CSSMin' do
         Massimo.config.css_compressor = :cssmin
         with_file 'stylesheets/main.css', code do
-          mock_module("CSSMin").minify(code) { '' }
+          mock_module('CSSMin').minify(code) { '' }
           stylesheet.render
         end
       end
@@ -120,7 +120,7 @@ describe Massimo::Stylesheet do
       it 'compresses using Rainpress' do
         Massimo.config.css_compressor = :rainpress
         with_file 'stylesheets/main.css', code do
-          mock_module("Rainpress").compress(code, {}) { '' }
+          mock_module('Rainpress').compress(code, {}) { '' }
           stylesheet.render
         end
       end
@@ -130,7 +130,7 @@ describe Massimo::Stylesheet do
           Massimo.config.css_compressor = :rainpress
           Massimo.config.css_compressor_options = { :comments => false }
           with_file 'stylesheets/main.css', code do
-            mock_module("Rainpress").compress(code, :comments => false) { '' }
+            mock_module('Rainpress').compress(code, :comments => false) { '' }
             stylesheet.render
           end
         end
@@ -142,7 +142,7 @@ describe Massimo::Stylesheet do
         Massimo.config.css_compressor = :yui
         with_file 'stylesheets/main.css', code do
           compressor = mock!.compress(code) { '' }
-          mock_module("YUI::CssCompressor").new({}) { compressor }
+          mock_module('YUI::CssCompressor').new({}) { compressor }
           stylesheet.render
         end
       end
@@ -153,7 +153,7 @@ describe Massimo::Stylesheet do
           Massimo.config.css_compressor_options = { :linebreak => 0 }
           with_file 'stylesheets/main.css', code do
             compressor = mock!.compress(code) { '' }
-            mock_module("YUI::CssCompressor").new(:linebreak => 0) { compressor }
+            mock_module('YUI::CssCompressor').new(:linebreak => 0) { compressor }
             stylesheet.render
           end
         end

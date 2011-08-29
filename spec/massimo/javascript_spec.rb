@@ -65,13 +65,13 @@ describe Massimo::Javascript do
   context 'with compression' do
     let(:javascript) { Massimo::Javascript.new 'javascripts/main.js' }
     let(:code)       { "function addTwo(number) { return number + 2; }\n" }
-    after            { Tilt.mappings.delete("js") }
+    after            { Tilt.mappings.delete('js') }
     
     context 'using :jsmin' do
       it 'compresses using JSMin' do
         Massimo.config.js_compressor = :jsmin
         with_file 'javascripts/main.js', code do
-          mock_module("JSMin").minify(code) { '' }
+          mock_module('JSMin').minify(code) { '' }
           javascript.render
         end
       end
@@ -81,7 +81,7 @@ describe Massimo::Javascript do
       it 'compresses using Packr' do
         Massimo.config.js_compressor = :packr
         with_file 'javascripts/main.js', code do
-          mock_module("Packr").pack(code, {}) { '' }
+          mock_module('Packr').pack(code, {}) { '' }
           javascript.render
         end
       end
@@ -91,7 +91,7 @@ describe Massimo::Javascript do
           Massimo.config.js_compressor = :packr
           Massimo.config.js_compressor_options = { :shrink_vars => true }
           with_file 'javascripts/main.js', code do
-            mock_module("Packr").pack(code, :shrink_vars => true) { '' }
+            mock_module('Packr').pack(code, :shrink_vars => true) { '' }
             javascript.render
           end
         end
@@ -103,7 +103,7 @@ describe Massimo::Javascript do
         Massimo.config.js_compressor = :yui
         with_file 'javascripts/main.js', code do
           compressor = mock!.compress(code) { '' }.subject
-          mock_module("YUI::JavaScriptCompressor").new({}) { compressor }
+          mock_module('YUI::JavaScriptCompressor').new({}) { compressor }
           javascript.render
         end
       end
@@ -114,7 +114,7 @@ describe Massimo::Javascript do
           Massimo.config.js_compressor_options = { :munge => true }
           with_file 'javascripts/main.js', code do
             compressor = mock!.compress(code) { '' }.subject
-            mock_module("YUI::JavaScriptCompressor").new(:munge => true) { compressor }
+            mock_module('YUI::JavaScriptCompressor').new(:munge => true) { compressor }
             javascript.render
           end
         end
@@ -126,7 +126,7 @@ describe Massimo::Javascript do
         Massimo.config.js_compressor = :closure
         with_file 'javascripts/main.js', code do
           compiler = mock!.compile(code) { '' }.subject
-          mock_module("Closure::Compiler").new({}) { compiler }
+          mock_module('Closure::Compiler').new({}) { compiler }
           javascript.render
         end
       end
@@ -137,7 +137,7 @@ describe Massimo::Javascript do
           Massimo.config.js_compressor_options = { :compilation_level => 'ADVANCED_OPTIMIZATIONS' }
           with_file 'javascripts/main.js', code do
             compiler = mock!.compile(code) { '' }.subject
-            mock_module("Closure::Compiler").new(:compilation_level => 'ADVANCED_OPTIMIZATIONS') { compiler }
+            mock_module('Closure::Compiler').new(:compilation_level => 'ADVANCED_OPTIMIZATIONS') { compiler }
             javascript.render
           end
         end
@@ -149,7 +149,7 @@ describe Massimo::Javascript do
         Massimo.config.js_compressor = :uglifier
         with_file 'javascripts/main.js', code do
           compiler = mock!.compile(code) { '' }.subject
-          mock_module("Uglifier").new({}) { compiler }
+          mock_module('Uglifier').new({}) { compiler }
           javascript.render
         end
       end
@@ -160,7 +160,7 @@ describe Massimo::Javascript do
           Massimo.config.js_compressor_options = { :mangle => true }
           with_file 'javascripts/main.js', code do
             compiler = mock!.compile(code) { '' }.subject
-            mock_module("Uglifier").new(:mangle => true) { compiler }
+            mock_module('Uglifier').new(:mangle => true) { compiler }
             javascript.render
           end
         end
