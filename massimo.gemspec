@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.homepage          = 'http://massimo.petebrowne.com/'
   s.rubyforge_project = 'massimo'
   
-  s.add_dependency             'activesupport',    '~> 3.0'
+  s.add_dependency             'activesupport',    '>= 3.0'
   s.add_dependency             'i18n',             '~> 0.4'
   s.add_dependency             'rack',             '~> 1.1'
   s.add_dependency             'padrino-helpers',  '~> 0.9'

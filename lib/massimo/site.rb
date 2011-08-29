@@ -78,8 +78,7 @@ module Massimo
       end
       
       def setup_bundle
-        require 'bundler'
-        Bundler.require :default, config.environment.to_sym
+        Bundler.require(:default, config.environment.to_sym) if defined?(Bundler)
         @bundled = true
       end
     
