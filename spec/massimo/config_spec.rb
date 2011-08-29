@@ -95,6 +95,29 @@ describe Massimo::Config do
     end
   end
   
+  describe '#compress=' do
+    after do
+      Tilt.mappings.delete('css')
+      Tilt.mappings.delete('js')
+    end
+    
+    it 'registers all of the compressors' do
+      mock(Crush).register
+      config = Massimo::Config.new
+      config.compress = true
+    end
+  end
+  
+  describe '#compress_js=' do
+    after { Tilt.mappings.delete('js') }
+    
+    it 'registers all of the JavaScript compressors' do
+      mock(Crush).register_js
+      config = Massimo::Config.new
+      config.compress_js = true
+    end
+  end
+  
   describe '#js_compressor=' do
     after { Tilt.mappings.delete('js') }
     
@@ -103,6 +126,16 @@ describe Massimo::Config do
       config.js_compressor = :uglifier
       Tilt.register Crush::Closure::Compiler, 'js'
       Tilt['js'].should == Crush::Uglifier
+    end
+  end
+  
+  describe '#compress_css=' do
+    after { Tilt.mappings.delete('css') }
+    
+    it 'registers all of the CSS compressors' do
+      mock(Crush).register_css
+      config = Massimo::Config.new
+      config.compress_css = true
     end
   end
   

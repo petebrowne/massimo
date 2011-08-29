@@ -62,13 +62,23 @@ module Massimo
       ActiveSupport::StringInquirer.new(super)
     end
     
-    # 
-    # def compress_js=(compress)
-    #   Crush.register_js
-    # end
+    # Sets up Massimo to compress both JavaScript and CSS files.
+    def compress=(compress)
+      Crush.register
+    end
     
-    # Sets the javascript compression engine by name, using Crush,
-    # and sets #compress_js to true.
+    # Sets up Massimo to compress JavaScript files. By default,
+    # whichever JavaScript compression library is available, is used.
+    # To set the one you want to use see #js_compressor=.
+    def compress_js=(compress)
+      Crush.register_js if compress
+    end
+    
+    # Sets the JavaScript compressor to use. The compressor can
+    # be either a symbol mapping to the recognized Crush::Engines
+    # (see JS_COMPRESSORS) or any Tilt::Template.
+    #
+    # @param [Tilt::Template, Symbol] compressor The compressor to use.
     def js_compressor=(compressor)
       if compressor.respond_to?(:to_sym)
         compressor = JS_COMPRESSORS[compressor.to_sym]
@@ -76,13 +86,23 @@ module Massimo
       Tilt.prefer compressor, 'js'
     end
     
-    #
+    # Sets the options used by the JavaScript compressor.
     def js_compressor_options=(options)
       self.js = options
     end
     
-    # Sets the stylesheet compression engine by name, using Crush,
-    # and sets #compress_css to true.
+    # Sets up Massimo to compress CSS files. By default,
+    # whichever CSS compression library is available, is used.
+    # To set the one you want to use see #css_compressor=.
+    def compress_css=(compress)
+      Crush.register_css if compress
+    end
+    
+    # Sets the CSS compressor to use. The compressor can
+    # be either a symbol mapping to the recognized Crush::Engines
+    # (see CSS_COMPRESSORS) or any Tilt::Template.
+    #
+    # @param [Tilt::Template, Symbol] compressor The compressor to use.
     def css_compressor=(compressor)
       if compressor.respond_to?(:to_sym)
         compressor = CSS_COMPRESSORS[compressor.to_sym]
@@ -90,7 +110,7 @@ module Massimo
       Tilt.prefer compressor, 'css'
     end
     
-    #
+    # Sets the options used by the CSS compressor.
     def css_compressor_options=(options)
       self.css = options
     end
