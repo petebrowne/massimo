@@ -17,7 +17,7 @@ module Massimo
     end
     
     def title
-      @meta_data[:title] ||= filename.chomp(source_path.extname).titleize
+      @meta_data[:title] ||= filename.gsub(/\.[^.]+/, '').titleize
     end
     
     def extension

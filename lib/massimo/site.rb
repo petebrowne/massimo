@@ -47,7 +47,7 @@ module Massimo
     # The scope used for templating. It includes helpers from Massimo::Helpers along
     # with any custom helpers.
     def template_scope
-      Object.new.extend(Massimo::Helpers, Tilt::CompileSite).tap do |scope|
+      Object.new.extend(Massimo::Helpers).tap do |scope|
         add_template_scope_blocks(scope)
         add_template_scope_extensions(scope)
         add_template_scope_helpers(scope)
