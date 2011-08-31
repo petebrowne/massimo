@@ -30,7 +30,8 @@ module Massimo
     CSS_COMPRESSORS = {
       :cssmin    => Crush::CSSMin,
       :rainpress => Crush::Rainpress,
-      :yui       => Crush::YUI::CssCompressor
+      :yui       => Crush::YUI::CssCompressor,
+      :sass      => Crush::Sass::Engine
     }
     
     # Creates a new configuration. Takes either a hash of options
@@ -94,7 +95,7 @@ module Massimo
     #
     # @param [Hash] options The hash of options to use.
     def js_compressor_options=(options)
-      self.js = options
+      self.js_options = options
     end
     
     # Sets up Massimo to compress CSS files. By default,
@@ -122,7 +123,7 @@ module Massimo
     #
     # @param [Hash] options The hash of options to use.
     def css_compressor_options=(options)
-      self.css = options
+      self.css_options = options
     end
     
     # Get a full, expanded path for the given resource name. This is either set
@@ -150,7 +151,7 @@ module Massimo
     # this is how we get the options set for Haml or Sass during processing.
     def options_for(lib_name)
       return options_for("sass") if lib_name == "scss"
-      send(lib_name) || {}
+      send("#{lib_name}_options") || send(lib_name) || {}
     end
   end
 end

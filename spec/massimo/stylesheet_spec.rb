@@ -159,5 +159,28 @@ describe Massimo::Stylesheet do
         end
       end
     end
+    
+    context 'using :sass' do
+      it 'compresses using Sass::Engine' do
+        Massimo.config.css_compressor = :sass
+        with_file 'stylesheets/main.css', code do
+          compressor = mock!.render { '' }
+          mock_module('Sass::Engine').new(code, :style  => :compressed, :syntax => :scss) { compressor }
+          stylesheet.render
+        end
+      end
+      
+      context 'with configuration' do
+        it 'passes configuration to Sass::Engine' do
+          Massimo.config.css_compressor = :sass
+          Massimo.config.css_compressor_options = { :cache => false }
+          with_file 'stylesheets/main.css', code do
+            compressor = mock!.render { '' }
+            mock_module('Sass::Engine').new(code, :style  => :compressed, :syntax => :scss, :cache => false) { compressor }
+            stylesheet.render
+          end
+        end
+      end
+    end
   end
 end

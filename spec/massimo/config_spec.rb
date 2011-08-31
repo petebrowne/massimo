@@ -79,6 +79,11 @@ describe Massimo::Config do
   
   describe '#options_for' do
     it 'returns the options set for the given name' do
+      config = Massimo::Config.new(:sass_options => { :style => :compressed })
+      config.options_for(:sass).should == { :style => :compressed }
+    end
+    
+    it 'returns the options set with the alternate syntax' do
       config = Massimo::Config.new(:sass => { :style => :compressed })
       config.options_for(:sass).should == { :style => :compressed }
     end
