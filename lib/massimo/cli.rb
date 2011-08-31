@@ -24,11 +24,11 @@ module Massimo
     end
     map 'b' => :build
     
-    desc 'generate SITE_NAME', 'Generates a new site with the give name'
-    def generate(site_name)
+    desc 'new SITE_NAME', 'Generates a new site with the give name'
+    def new(site_name)
       directory 'site', site_name
     end
-    map 'g' => :generate
+    map %w(n generate g) => :new
     
     desc 'server [PORT]', 'Runs a local Rack based web server on the given port'
     def server(port = 3000)

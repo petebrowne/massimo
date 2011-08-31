@@ -78,17 +78,17 @@ describe Massimo::CLI do
     end
   end
   
-  describe '#generate' do
+  describe '#new' do
     it 'creates a massimo site directory' do
       within_construct do |c|
-        massimo 'generate my_site'
+        massimo 'new my_site'
         'my_site'.should be_a_directory
       end
     end
     
     it 'creates resource directories' do
       within_construct do |c|
-        massimo 'generate my_site'
+        massimo 'new my_site'
         'my_site/pages'.should be_a_directory
         'my_site/views'.should be_a_directory
         'my_site/javascripts'.should be_a_directory
@@ -98,14 +98,14 @@ describe Massimo::CLI do
     
     it 'creates an output path' do
       within_construct do |c|
-        massimo 'generate my_site'
+        massimo 'new my_site'
         'my_site/public'.should be_a_directory
       end
     end
     
     it 'creates an default index page' do
       within_construct do |c|
-        massimo 'generate my_site'
+        massimo 'new my_site'
         content = <<-EOS.unindent
           ---
           title: Home Page
@@ -119,7 +119,7 @@ describe Massimo::CLI do
     
     it 'creates a default layout' do
       within_construct do |c|
-        massimo 'generate my_site'
+        massimo 'new my_site'
         content = <<-EOS.unindent
         <!doctype html>
         <html>
@@ -140,21 +140,21 @@ describe Massimo::CLI do
     
     it 'creates a default javascript file' do
       within_construct do |c|
-        massimo 'generate my_site'
+        massimo 'new my_site'
         'my_site/javascripts/main.js'.should be_a_file
       end
     end
     
     it 'creates a default stylesheet file' do
       within_construct do |c|
-        massimo 'generate my_site'
+        massimo 'new my_site'
         'my_site/stylesheets/main.css.scss'.should be_a_file
       end
     end
     
     it 'creates a default Gemfile' do
       within_construct do |c|
-        massimo 'generate my_site'
+        massimo 'new my_site'
         content = <<-EOS.unindent
           source :rubygems
           
@@ -171,7 +171,7 @@ describe Massimo::CLI do
     
     it 'creates a default config file' do
       within_construct do |c|
-        massimo 'generate my_site'
+        massimo 'new my_site'
         content = <<-EOS.unindent
           # This is an example configuration File
           # Look here for all the available options:
@@ -192,7 +192,7 @@ describe Massimo::CLI do
     
     it 'creates a default rackup file' do
       within_construct do |c|
-        massimo 'generate my_site'
+        massimo 'new my_site'
         content = <<-EOS.unindent
           require "massimo"
           run Massimo::Server.new
@@ -205,7 +205,7 @@ describe Massimo::CLI do
       it 'creates a massimo site directory' do
         within_construct do |c|
           silence(:stdout) do
-            massimo 'g my_site'
+            massimo 'n my_site'
             'my_site'.should be_a_directory
           end
         end

@@ -27,7 +27,7 @@ Getting Started
 ---------------
     
 ``` bash
-$ massimo generate my-site
+$ massimo new my-site
 $ cd my-site
 $ massimo build
 ```
