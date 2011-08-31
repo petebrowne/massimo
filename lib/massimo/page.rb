@@ -6,6 +6,16 @@ require 'yaml'
 
 module Massimo
   class Page < Resource
+    FRONT_MATTER_PARSER = /
+      (
+        \A\s*       # Beginning of file
+        ^---\s*$\n* # Start YAML Block
+        (.*?)\n*    # YAML data
+        ^---\s*$\n* # End YAML Block
+      )
+      (.*)          # Rest of File
+    /mx
+
     def render
       output = super
         
@@ -54,32 +64,28 @@ module Massimo
       end
     
       def read_source
+        super
+        
         case source_path.extname
         when '.yml', '.yaml'
-          @meta_data = (YAML.load(source_path.read) || {}).symbolize_keys
+          @meta_data = load_yaml_data @content
           @content   = @meta_data[:content] || ''
         else
-          @line        = nil
-          @content     = ''
-          front_matter = false
-          meta_data    = ''
-        
-          source_path.open do |file|
-            file.each do |line|
-              if line =~ /\A---\s*\Z/
-                front_matter = !front_matter
-              else
-                if front_matter
-                  meta_data << line
-                else
-                  @line ||= file.lineno
-                  @content << line
-                end
-              end
-            end
+          if FRONT_MATTER_PARSER.match @content
+            @line      = $1.lines.count + 1
+            @meta_data = load_yaml_data $2
+            @content   = $3
           end
+        end
         
-          @meta_data = (YAML.load(meta_data) || {}).symbolize_keys
+        @meta_data ||= {}
+      end
+      
+      def load_yaml_data(data)
+        begin
+          (YAML.load(data) || {}).symbolize_keys
+        rescue => e
+          raise "Error loading front matter from #{source_path}: #{e.message}"
         end
       end
     
