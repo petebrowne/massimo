@@ -60,7 +60,8 @@ describe Massimo::Page do
     let(:page) { Massimo::Page.new 'without_meta_data.erb' }
     
     it 'should create the #title from the filename' do
-      with_file 'without_meta_data.erb' do
+      with_file 'without_meta_data.html.erb' do
+        page = Massimo::Page.new 'without_meta_data.html.erb'
         page.title.should == 'Without Meta Data'
       end
     end
