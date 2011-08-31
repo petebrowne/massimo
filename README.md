@@ -12,7 +12,7 @@ Features
 * Uses familiar helper methods from [Padrino::Helpers](http://github.com/padrino/padrino-framework)
 * Supports custom helper methods like [Rails](http://rubyonrails.org/) and [Sinatra](http://www.sinatrarb.com/)
 * Concats javascripts using [Sprockets](http://getsprockets.org/)
-  and then compresses them using whichever library you want.
+  and then compresses them using whichever library you want
 * Renders stylesheets using either [Sass](http://sass-lang.com/) or [Less](http://lesscss.org/)
 * Automatically creates pretty URLs
 
