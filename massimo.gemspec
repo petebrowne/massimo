@@ -7,8 +7,8 @@ Gem::Specification.new do |s|
   s.summary     = 'Massimo is a static website builder.'
   s.description = 'Massimo builds HTML, Javascript, and CSS Files from your source.'
   
-  s.authors           = 'Pete Browne'
-  s.email             = 'me@petebrowne.com'
+  s.authors           = ['Pete Browne']
+  s.email             = ['me@petebrowne.com']
   s.homepage          = 'http://massimo.petebrowne.com/'
   s.rubyforge_project = 'massimo'
   
