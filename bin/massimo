@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'bundler/setup'
+require 'bundler/setup' if File.exist?('./Gemfile')
 require 'massimo'
 Massimo::CLI.start
