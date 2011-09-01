@@ -1,3 +1,5 @@
+require 'massimo/version'
+
 module Massimo
   autoload :Config,     'massimo/config'
   autoload :CLI,        'massimo/cli'
@@ -10,7 +12,6 @@ module Massimo
   autoload :Site,       'massimo/site'
   autoload :Stylesheet, 'massimo/stylesheet'
   autoload :UI,         'massimo/ui'
-  autoload :VERSION,    'massimo/version'
   autoload :View,       'massimo/view'
   autoload :Watcher,    'massimo/watcher'
   
