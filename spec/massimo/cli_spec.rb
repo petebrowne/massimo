@@ -173,6 +173,9 @@ describe Massimo::CLI do
       within_construct do |c|
         massimo 'new my_site'
         content = <<-EOS.unindent
+          require "bundler"
+          Bundler.require :default, config.environment.to_sym
+          
           # This is an example configuration File
           # Look here for all the available options:
           # http://massimo.petebrowne.com/configuration/
